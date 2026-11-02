@@ -49,6 +49,14 @@ export function ThreeView({ height = 420, setup, deps = [], camera = [4, 3.2, 4]
   const setupRef = useRef(setup);
   setupRef.current = setup;
   const camState = useRef<{ pos: THREE.Vector3; target: THREE.Vector3 } | null>(null);
+  const [vw, setVw] = useState(() => (typeof window !== 'undefined' ? window.innerWidth : 1200));
+  useEffect(() => {
+    const on = () => setVw(window.innerWidth);
+    window.addEventListener('resize', on);
+    return () => window.removeEventListener('resize', on);
+  }, []);
+  // On phones keep the 3D view from filling the whole screen (so the page stays scrollable).
+  const h = vw < 640 ? Math.min(height, Math.round(vw * 0.82)) : height;
 
   useEffect(() => {
     const el = ref.current;
@@ -61,12 +69,20 @@ export function ThreeView({ height = 420, setup, deps = [], camera = [4, 3.2, 4]
     }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     const w = el.clientWidth;
-    renderer.setSize(w, height);
+    renderer.setSize(w, h);
     renderer.setClearColor(0x000000, 0);
     el.prepend(renderer.domElement);
 
     const scene = new THREE.Scene();
-    const cam = new THREE.PerspectiveCamera(40, w / height, 0.05, 200);
+    const cam = new THREE.PerspectiveCamera(40, w / h, 0.05, 200);
+    // Keep the horizontal field of view roughly constant so narrow viewports don't crop the scene.
+    const fitFov = () => {
+      const hFov = 2 * Math.atan(Math.tan((20 * Math.PI) / 180) * 1.6);
+      const v = (2 * Math.atan(Math.tan(hFov / 2) / cam.aspect) * 180) / Math.PI;
+      cam.fov = Math.max(40, Math.min(64, v));
+      cam.updateProjectionMatrix();
+    };
+    fitFov();
     if (camState.current) {
       cam.position.copy(camState.current.pos);
     } else cam.position.set(...camera);
@@ -96,9 +112,9 @@ export function ThreeView({ height = 420, setup, deps = [], camera = [4, 3.2, 4]
     io.observe(el);
     const ro = new ResizeObserver(() => {
       const nw = el.clientWidth;
-      renderer.setSize(nw, height);
-      cam.aspect = nw / height;
-      cam.updateProjectionMatrix();
+      renderer.setSize(nw, h);
+      cam.aspect = nw / h;
+      fitFov();
     });
     ro.observe(el);
 
@@ -133,10 +149,10 @@ export function ThreeView({ height = 420, setup, deps = [], camera = [4, 3.2, 4]
       renderer.domElement.remove();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ok, height, palette, ...deps]);
+  }, [ok, h, palette, ...deps]);
 
   return (
-    <div ref={ref} className={'three-box ' + (className ?? '')} style={{ height }}>
+    <div ref={ref} className={'three-box ' + (className ?? '')} style={{ height: h }}>
       {!ok && <div className="webgl-fallback">이 브라우저에서는 3D(WebGL)를 표시할 수 없습니다.</div>}
       {ok && hint && <span className="three-hint">{hint}</span>}
       {children}

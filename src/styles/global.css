@@ -430,6 +430,10 @@ code {
   padding: 0;
   list-style: none;
 }
+.lesson .learn-list {
+  padding-left: 0;
+  margin-bottom: 0;
+}
 .learn-list li {
   font-size: var(--fs-sm);
   border: 1px solid var(--line);
@@ -487,7 +491,7 @@ code {
 .tex-block {
   overflow-x: auto;
   overflow-y: hidden;
-  margin: 0.4em 0 1.4em;
+  margin-block: 0.4em 1.4em;
   padding: 14px 18px;
   background: var(--surface);
   border: 1px solid var(--line);
@@ -513,7 +517,7 @@ code {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   gap: 4px 14px;
-  margin: 0.6em 0 1.6em;
+  margin-block: 0.6em 1.6em;
   padding: 16px 20px;
   border-radius: var(--radius);
   background: var(--surface-2);
@@ -616,7 +620,7 @@ code {
 @media (max-width: 760px) {
   .fig-split,
   .fig-split.left {
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) !important;
   }
 }
 .canvas-box {
@@ -625,7 +629,7 @@ code {
   border-radius: 8px;
   overflow: hidden;
   background: var(--bg);
-  touch-action: none;
+  touch-action: pan-y pinch-zoom;
 }
 .canvas-box canvas {
   display: block;
@@ -880,7 +884,7 @@ select.select {
 /* data table (small) */
 .tbl-wrap {
   overflow-x: auto;
-  margin: 0.4em 0 1.4em;
+  margin-block: 0.4em 1.4em;
 }
 table.tbl {
   border-collapse: collapse;
@@ -908,7 +912,7 @@ table.tbl td.num {
 
 /* quiz */
 .quiz {
-  margin: 0.6em 0 2em;
+  margin-block: 0.6em 2em;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--surface);

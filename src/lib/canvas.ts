@@ -182,12 +182,21 @@ export function useDrag(ref: RefObject<HTMLElement>, h: DragHandlers) {
     const leave = () => {
       if (active === null) hRef.current.onHover?.(null, -1, -1);
     };
+    // Let the page scroll on touch unless the finger lands on something draggable.
+    const touchStart = (e: TouchEvent) => {
+      const t = e.touches[0];
+      if (!t) return;
+      const p = localPoint(t, el);
+      if (hRef.current.hit(p.x, p.y) !== null) e.preventDefault();
+    };
+    el.addEventListener('touchstart', touchStart, { passive: false });
     el.addEventListener('pointerdown', down);
     el.addEventListener('pointermove', move);
     el.addEventListener('pointerup', up);
     el.addEventListener('pointercancel', up);
     el.addEventListener('pointerleave', leave);
     return () => {
+      el.removeEventListener('touchstart', touchStart);
       el.removeEventListener('pointerdown', down);
       el.removeEventListener('pointermove', move);
       el.removeEventListener('pointerup', up);

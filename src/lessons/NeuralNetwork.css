@@ -1,0 +1,128 @@
+.nnp-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 18px;
+}
+.nnp-top .readouts {
+  flex: 1 1 380px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  max-width: 560px;
+}
+@media (max-width: 520px) {
+  .nnp-top .readouts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.nnp-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+@media (max-width: 820px) {
+  .nnp-main {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.nnp-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+.nnp-layerbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  align-items: center;
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+}
+.nnp-layer {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 4px 2px 10px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  font-size: var(--fs-xs);
+  white-space: nowrap;
+}
+.nnp-layer strong {
+  font-family: var(--font-mono);
+  min-width: 1.2em;
+  text-align: center;
+}
+.nnp-pm {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-grid;
+  place-items: center;
+  padding: 0;
+}
+.nnp-pm:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.nnp-settings {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 14px 22px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+.nnp-feats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+}
+.nnp-diagram canvas {
+  cursor: pointer;
+}
+.nnp-spark {
+  height: 64px;
+}
+.nnp-note {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  line-height: 1.5;
+}
+.challenge-list {
+  list-style: none;
+  padding: 0 !important;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.challenge-list li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  margin: 0 !important;
+}
+.challenge-list .ch-no {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--part-color, var(--accent));
+  padding-top: 3px;
+}
+.challenge-list .ch-ans {
+  display: block;
+  margin-top: 4px;
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+}
