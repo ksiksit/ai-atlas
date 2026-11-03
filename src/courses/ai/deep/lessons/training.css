@@ -1,0 +1,92 @@
+/* 딥러닝 · 학습 기법 (init-norm, regularization) */
+
+.tr-note {
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  min-height: 2.8em;
+  overflow-wrap: anywhere;
+}
+
+/* two models trained side by side */
+.tr-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+@media (max-width: 560px) {
+  .tr-pair {
+    gap: 10px;
+  }
+}
+.tr-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.tr-panel-head {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--ink);
+}
+.tr-panel-head .mono {
+  font-weight: 400;
+  font-size: var(--fs-xs);
+  color: var(--ink-2);
+}
+.tr-panel-head[data-kind='plain'] {
+  color: var(--bad);
+}
+.tr-panel-head[data-kind='good'] {
+  color: var(--good);
+}
+
+/* top bar: buttons + readouts */
+.tr-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 18px;
+}
+.tr-bar .readouts {
+  flex: 1 1 320px;
+  max-width: 560px;
+}
+
+/* a row of controls that wraps on narrow screens */
+.tr-ctl-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 22px;
+  align-items: flex-end;
+}
+.tr-ctl-row > .ctl {
+  flex: 1 1 200px;
+}
+.tr-ctl-row > .tr-seg {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+.tr-seg .seg {
+  flex-wrap: wrap;
+}
+
+.tr-status {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+
+/* four readouts in a row, two on phones */
+.readouts.tr-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+@media (max-width: 560px) {
+  .readouts.tr-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
