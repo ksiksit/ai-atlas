@@ -1,6 +1,5 @@
 import { Suspense, useEffect, useRef, useState, type CSSProperties } from 'react';
-import { BrandMark } from './components/BrandMark';
-import { COURSES, LIBRARY_HREF, courseHref, lessonHref, lessonIndex, lessonNo, lessonNumber, parseRoute, partOf, type Course, type Lesson, type Route } from './courses';
+import { LEVELS, LIBRARY_HREF, SUBJECTS, courseHref, coursesOf, lessonHref, lessonIndex, lessonNo, lessonNumber, parseRoute, partOf, subjectOf, type Course, type Lesson, type Route } from './courses';
 import { markDone, markVisited, useProgress } from './lib/progress';
 import { loadThemeMode, setThemeMode, type ThemeMode } from './lib/theme';
 import Library from './pages/Library';
@@ -15,7 +14,7 @@ function readRoute(): Route {
   }
   const r = parseRoute(hash);
   if (r.kind !== 'redirect') return r;
-  // Rewrite old links (#vectors → #ai/vectors) without adding a history entry.
+  // Rewrite old links (#vectors → #ai-basics/vectors) without adding a history entry.
   history.replaceState(null, '', r.to);
   return parseRoute(r.to.slice(1));
 }
@@ -56,11 +55,13 @@ function CourseRail({ course, current, onNavigate }: { course: Course; current?:
   return (
     <>
       <a className="rail-back" href={LIBRARY_HREF} onClick={onNavigate}>
-        ← 모든 분야
+        ← 모든 과목
       </a>
       <a className="brand" href={courseHref(course.id)} onClick={onNavigate}>
-        <BrandMark course={course} />
-        <span className="brand-sub">{course.tagline}</span>
+        <span className="brand-mark">{course.title}</span>
+        <span className="brand-sub">
+          {subjectOf(course).name} · {LEVELS[course.level].name} · {course.subtitle}
+        </span>
       </a>
       {course.parts.map((p) => (
         <div className="rail-part" key={p.id} style={{ ['--part-color' as string]: p.color } as CSSProperties}>
@@ -89,7 +90,7 @@ function CourseRail({ course, current, onNavigate }: { course: Course; current?:
   );
 }
 
-/** Rail on the library page: the site name and the list of courses. */
+/** Rail on the library page: the site name and every course, grouped by subject. */
 function LibraryRail({ onNavigate }: { onNavigate: () => void }) {
   const progress = useProgress();
   return (
@@ -98,24 +99,30 @@ function LibraryRail({ onNavigate }: { onNavigate: () => void }) {
         <span className="brand-mark">{SITE.name}</span>
         <span className="brand-sub">{SITE.tagline}</span>
       </a>
-      <div className="rail-part">
-        <div className="rail-part-title">분야</div>
-        {COURSES.map((c, i) => {
-          const n = c.lessons.filter((l) => progress[c.id]?.done.includes(l.id)).length;
-          return (
-            <a key={c.id} className="rail-link" href={courseHref(c.id)} onClick={onNavigate}>
-              <span className="num">{String(i + 1).padStart(2, '0')}</span>
-              <span>
-                {c.subject}
-                <span className="en">
-                  {' '}
-                  · {n ? `${n}/${c.lessons.length}장` : `${c.lessons.length}장`}
+      {SUBJECTS.map((s) => (
+        <div className="rail-part" key={s.id} style={{ ['--part-color' as string]: s.color } as CSSProperties}>
+          <div className="rail-part-title">{s.name}</div>
+          {coursesOf(s).map((c) => {
+            const n = c.lessons.filter((l) => progress[c.id]?.done.includes(l.id)).length;
+            return (
+              <a key={c.id} className="rail-link" href={courseHref(c.id)} onClick={onNavigate}>
+                <span className="num" title={`난이도: ${LEVELS[c.level].name}`}>
+                  <span className="level-dots" aria-hidden="true">
+                    {[1, 2, 3].map((i) => (
+                      <i key={i} data-on={i <= c.level || undefined} />
+                    ))}
+                  </span>
                 </span>
-              </span>
-            </a>
-          );
-        })}
-      </div>
+                <span>
+                  {c.title}
+                  <span className="visually-hidden"> (난이도 {LEVELS[c.level].name})</span>
+                  <span className="en"> · {n ? `${n}/${c.lessons.length}장` : `${c.lessons.length}장`}</span>
+                </span>
+              </a>
+            );
+          })}
+        </div>
+      ))}
     </>
   );
 }
@@ -189,7 +196,7 @@ function LessonPage({ course, lesson }: { course: Course; lesson: Lesson }) {
         ) : (
           <a className="next" href={LIBRARY_HREF}>
             <span className="dir">끝까지 왔습니다 →</span>
-            <span className="ttl">다른 분야 둘러보기</span>
+            <span className="ttl">다른 과목 둘러보기</span>
           </a>
         )}
       </nav>
@@ -241,7 +248,7 @@ export default function App() {
 
   return (
     <div className="shell">
-      <nav className="rail" data-open={open} aria-label={course ? '목차' : '분야'}>
+      <nav className="rail" data-open={open} aria-label={course ? '목차' : '과목'}>
         {course ? <CourseRail course={course} current={lesson?.id} onNavigate={close} /> : <LibraryRail onNavigate={close} />}
         <div className="rail-foot">
           <ThemeToggle />
@@ -250,13 +257,13 @@ export default function App() {
       {open && <div className="scrim" onClick={close} />}
       <div style={{ minWidth: 0 }}>
         <header className="topbar">
-          <button className="menu-btn" type="button" aria-label={course ? '목차 열기' : '분야 목록 열기'} onClick={() => setOpen(true)}>
+          <button className="menu-btn" type="button" aria-label={course ? '목차 열기' : '과목 목록 열기'} onClick={() => setOpen(true)}>
             <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
               <path d="M2 4h14M2 9h14M2 14h14" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" fill="none" />
             </svg>
           </button>
           <a className="brand" href={course ? courseHref(course.id) : LIBRARY_HREF} style={{ flexDirection: 'row' }}>
-            {course ? <BrandMark course={course} inline /> : <span className="brand-mark">{SITE.name}</span>}
+            <span className="brand-mark">{course ? course.title : SITE.name}</span>
           </a>
         </header>
         <main className="main">{page}</main>

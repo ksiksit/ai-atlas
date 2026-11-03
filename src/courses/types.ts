@@ -1,5 +1,27 @@
 import type { ComponentType, LazyExoticComponent } from 'react';
 
+/**
+ * Content hierarchy: Subject (분야) → Course (과목) → Part (파트) → Lesson (장).
+ * A subject such as 통계학 can hold several courses at different levels.
+ */
+
+/** A field of study. Groups courses on the library page and gives them a color. */
+export interface Subject {
+  /** Short slug; also the folder name under src/courses/. */
+  id: string;
+  /** Name of the field, e.g. "통계학". */
+  name: string;
+  /** English name, shown as a small label. */
+  en: string;
+  /** Accent color of the field (CSS color or var()). */
+  color: string;
+  /** One sentence about the field for the library. */
+  blurb: string;
+}
+
+/** 1 = 기초, 2 = 중급, 3 = 심화. */
+export type Level = 1 | 2 | 3;
+
 /** A group of lessons inside a course, shown as one section of the table of contents. */
 export interface Part {
   id: string;
@@ -24,24 +46,23 @@ export interface Lesson {
   Component: LazyExoticComponent<ComponentType>;
 }
 
-/** One field of study (AI, statistics, …): its own title, table of contents and cover page. */
+/** One course: its own title, table of contents and cover page. */
 export interface Course {
-  /** URL segment: #<course> is its cover, #<course>/<lesson> a lesson. */
+  /** Globally unique URL slug, "<subject>-<topic>": #<id> is the cover, #<id>/<lesson> a lesson. */
   id: string;
-  /** Full title, used in the browser tab, e.g. "벡터에서 트랜스포머까지". */
-  title: string;
-  /** Title split in two for the brand mark ("벡터에서 → 트랜스포머까지"). Falls back to `title`. */
-  mark?: [string, string];
-  /** Short name of the field, e.g. "인공지능". */
+  /** Id of the Subject this course belongs to. */
   subject: string;
-  /** English name of the field, shown as a small label on the library shelf. */
-  en: string;
-  /** One-line description under the brand mark. */
-  tagline: string;
+  /** Plain name that says what is taught, e.g. "기초 통계학". Shown everywhere the course is named. */
+  title: string;
+  /** The course's span, e.g. "평균에서 p값까지". Shown under the title. */
+  subtitle: string;
+  level: Level;
+  /** Ids of courses to take first. */
+  prerequisites?: string[];
+  /** Earlier URL slugs of this course; links using them are redirected here. */
+  aliases?: string[];
   /** Two or three sentences for the course's card in the library. */
   blurb: string;
-  /** Accent color of the course in the library (CSS color or var()). */
-  color: string;
   /** Number of the first lesson (the AI course starts at 0 with its intro). Defaults to 1. */
   firstNo?: number;
   parts: Part[];
