@@ -1,0 +1,194 @@
+/* 순환 신경망과 LSTM · 트랜스포머 깊이 보기: figure styles that are plain HTML/SVG rather than canvas */
+
+.seq-note {
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  min-height: 3.4em;
+  overflow-wrap: anywhere;
+}
+.seq-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+.seq-sub {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  margin: 0;
+}
+
+/* a segmented control with tighter buttons so 6–7 short options fit */
+.seq-tight .seg button {
+  padding: 0 9px;
+}
+@media (max-width: 560px) {
+  .seq-tight .seg button {
+    padding: 0 7px;
+    font-size: var(--fs-xs);
+  }
+}
+
+/* next-character distributions: two columns of small bars */
+.seq-dists {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 14px;
+}
+.seq-dist h4 {
+  margin: 0 0 6px;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--ink-2);
+}
+.seq-bar {
+  display: grid;
+  grid-template-columns: 1.9em minmax(0, 1fr) 3.2em;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--fs-xs);
+  min-height: 20px;
+}
+.seq-bar .ch {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  text-align: center;
+}
+.seq-bar .track {
+  height: 10px;
+  background: var(--surface-2);
+  position: relative;
+}
+.seq-bar .fill {
+  display: block;
+  height: 100%;
+}
+.seq-bar .pct {
+  font-family: var(--font-mono);
+  text-align: right;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+.seq-bar[data-truth] .ch {
+  color: var(--good);
+}
+
+/* LSTM cell diagram */
+.seq-lstm svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 520px;
+  margin: 0 auto;
+}
+.seq-lstm .part {
+  cursor: pointer;
+  outline: none;
+}
+.seq-lstm .part:focus-visible rect,
+.seq-lstm .part:focus-visible ellipse {
+  stroke: var(--accent);
+  stroke-width: 3;
+}
+.seq-explain {
+  border-left: 3px solid var(--part-color, var(--accent));
+  padding: 4px 0 4px 12px;
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  line-height: 1.65;
+  min-height: 7.5em;
+}
+.seq-explain strong {
+  color: var(--ink);
+}
+
+/* the memory task: one example sequence */
+.seq-example {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+  color: var(--ink-2);
+}
+.seq-example .sig {
+  color: var(--ink);
+  background: var(--hl);
+  color: #1a1a1a;
+  padding: 0 4px;
+  font-weight: 700;
+}
+.seq-example .q {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* parameter breakdown: one labelled bar per part */
+.seq-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.seq-prow {
+  display: grid;
+  grid-template-columns: 5.4em minmax(0, 1fr) max-content;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--fs-xs);
+}
+.seq-prow .name {
+  color: var(--ink-2);
+}
+.seq-prow .track {
+  height: 14px;
+  background: var(--surface-2);
+}
+.seq-prow .fill {
+  display: block;
+  height: 100%;
+  min-width: 1px;
+}
+.seq-prow .num {
+  font-family: var(--font-mono);
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.seq-check {
+  font-size: var(--fs-sm);
+  padding: 8px 12px;
+  border: 1px solid var(--good);
+  background: color-mix(in srgb, var(--good) 10%, var(--surface));
+  overflow-wrap: anywhere;
+}
+.seq-check[data-off] {
+  border-color: var(--line);
+  background: var(--surface);
+  color: var(--ink-3);
+}
+
+/* a group of controls with a small heading, inside a figure */
+.seq-panel {
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+.seq-panel h4 {
+  margin: 0;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--ink);
+}
+.seq-formula {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--ink-2);
+  overflow-wrap: anywhere;
+}
+.seq-grid2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px 24px;
+}
