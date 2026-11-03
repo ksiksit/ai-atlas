@@ -1,0 +1,244 @@
+/* 패킷과 주소: 패킷과 계층, IP 주소와 라우팅 */
+
+/* layer colours, shared by the encapsulation figure and the prose table */
+.net-l-app {
+  --lc: var(--c-cs-3);
+}
+.net-l-tcp {
+  --lc: var(--c-cs-2);
+}
+.net-l-ip {
+  --lc: var(--c-cs-1);
+}
+.net-l-eth {
+  --lc: var(--c-cs-4);
+}
+
+/* encapsulation: the two stacks and the packets between them */
+.encap {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr) 120px;
+  gap: 14px;
+  align-items: stretch;
+}
+.encap-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.encap-stack .ds-label,
+.encap-head {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.encap-layer {
+  border: 1px solid var(--line-strong);
+  padding: 5px 8px;
+  font-size: 0.8125rem;
+  line-height: 1.3;
+  color: var(--ink-2);
+  background: var(--surface);
+  transition: background 0.2s;
+}
+.encap-layer small {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--ink-3);
+}
+.encap-layer[data-on] {
+  border-color: var(--lc);
+  background: color-mix(in srgb, var(--lc) 18%, var(--surface));
+  color: var(--ink);
+  box-shadow: inset 4px 0 0 var(--lc);
+}
+.encap-mid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  justify-content: center;
+}
+.encap-row {
+  display: flex;
+  min-width: 0;
+  height: 34px;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+}
+.encap-row > span {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0 4px;
+  border: 1px solid var(--lc, var(--line-strong));
+  background: color-mix(in srgb, var(--lc, var(--ink-3)) 22%, var(--surface));
+  color: var(--ink);
+  white-space: nowrap;
+  line-height: 1.15;
+  min-width: 0;
+  overflow: hidden;
+}
+.encap-row > span + span {
+  border-left-width: 0;
+}
+.encap-row > .encap-data {
+  flex: 1 1 auto;
+  background: color-mix(in srgb, var(--lc) 10%, var(--surface));
+}
+.encap-row > .encap-pad {
+  --lc: var(--c-cs-4);
+  background: repeating-linear-gradient(45deg, var(--surface), var(--surface) 3px, color-mix(in srgb, var(--lc) 25%, var(--surface)) 3px, color-mix(in srgb, var(--lc) 25%, var(--surface)) 6px);
+}
+.encap-row b {
+  font-weight: 700;
+}
+.encap-more {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.encap-wire {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--ink-3);
+  overflow-wrap: anywhere;
+  line-height: 1.4;
+  max-height: 4.2em;
+  overflow: hidden;
+}
+@media (max-width: 640px) {
+  .encap {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .encap-mid {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  .encap-row {
+    font-size: 0.625rem;
+  }
+}
+
+/* CIDR calculator: 32 bit cells in four octets */
+.cidr-bits {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+.cidr-octet {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.cidr-octet .dec {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  text-align: center;
+}
+.cidr-cells {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+}
+.cidr-cells span {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-align: center;
+  padding: 4px 0;
+  border: 1px solid var(--line);
+  margin-left: -1px;
+  background: var(--surface);
+  color: var(--ink-3);
+}
+.cidr-cells span[data-net] {
+  background: color-mix(in srgb, var(--c-cs-1) 22%, var(--surface));
+  border-color: color-mix(in srgb, var(--c-cs-1) 55%, var(--line));
+  color: var(--ink);
+  font-weight: 700;
+}
+.cidr-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 6px;
+  align-items: center;
+}
+.cidr-err {
+  font-size: var(--fs-xs);
+  color: var(--bad);
+  min-height: 1.4em;
+}
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+@media (max-width: 560px) {
+  .cidr-bits {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* longest prefix match: the forwarding table */
+.lpm-tbl td.mono,
+.lpm-tbl th.mono {
+  white-space: nowrap;
+}
+.lpm-tbl tr[data-m] td {
+  background: color-mix(in srgb, var(--good) 10%, transparent);
+}
+.lpm-tbl tr[data-best] td {
+  background: var(--hl);
+  color: #1a1a1a;
+  font-weight: 600;
+}
+.lpm-tbl tr:not([data-m]) td {
+  color: var(--ink-3);
+}
+.lpm-bits {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.lpm-bits i {
+  font-style: normal;
+  color: var(--ink-3);
+}
+.lpm-bits b {
+  font-weight: 700;
+}
+.lpm-bits u {
+  text-decoration: none;
+  color: var(--bad);
+  font-weight: 700;
+}
+.lpm-tbl tr[data-best] .lpm-bits i {
+  color: #555;
+}
+
+/* link-state routing: link toggles */
+.ls-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.ls-link {
+  font: inherit;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink-2);
+  cursor: pointer;
+}
+.ls-link[aria-pressed='true'] {
+  border-color: var(--bad);
+  border-style: dashed;
+  color: var(--bad);
+  text-decoration: line-through;
+}
+.ls-canvas canvas {
+  cursor: pointer;
+}
