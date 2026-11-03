@@ -23,7 +23,7 @@ const lessons: Lesson[] = [
     title: '분할 정복',
     en: 'Divide & Conquer',
     lede: '문제를 반으로 나눠 각각 풀고 합치면, n번 걸릴 일이 log n번으로 줄어들기도 합니다. 병합 정렬과 빠른 거듭제곱, 그리고 "답을 이분 탐색하는" 기법을 봅니다.',
-    learn: ['나누기, 풀기, 합치기', '재귀 트리로 복잡도 읽기', '답을 이분 탐색하기'],
+    learn: ['재귀 트리로 복잡도 읽기', '빠른 거듭제곱', '답을 이분 탐색하기'],
     Component: lazy(() => import('./lessons/DivideConquer')),
   },
   {
