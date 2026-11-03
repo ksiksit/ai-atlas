@@ -34,8 +34,16 @@ export interface Course {
   mark?: [string, string];
   /** Short name of the field, e.g. "인공지능". */
   subject: string;
+  /** English name of the field, shown as a small label on the library shelf. */
+  en: string;
   /** One-line description under the brand mark. */
   tagline: string;
+  /** Two or three sentences for the course's card in the library. */
+  blurb: string;
+  /** Accent color of the course in the library (CSS color or var()). */
+  color: string;
+  /** Number of the first lesson (the AI course starts at 0 with its intro). Defaults to 1. */
+  firstNo?: number;
   parts: Part[];
   lessons: Lesson[];
   /** The course's landing page (hero + table of contents). */

@@ -162,3 +162,81 @@ export function polyEval(c: number[], x: number): number {
   for (let k = c.length - 1; k >= 0; k--) y = y * x + c[k];
   return y;
 }
+
+/* ───────── Statistics helpers ───────── */
+
+export const mean = (xs: number[]) => (xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : NaN);
+
+/** Variance; `sample` divides by n−1 instead of n. */
+export function variance(xs: number[], sample = false): number {
+  const n = xs.length;
+  if (n < (sample ? 2 : 1)) return NaN;
+  const m = mean(xs);
+  return xs.reduce((s, x) => s + (x - m) ** 2, 0) / (sample ? n - 1 : n);
+}
+
+/** q-quantile of already-sorted values, linear interpolation between order statistics. */
+export function quantileSorted(sorted: number[], q: number): number {
+  if (!sorted.length) return NaN;
+  const pos = (sorted.length - 1) * q;
+  const lo = Math.floor(pos);
+  const hi = Math.ceil(pos);
+  return sorted[lo] + (sorted[hi] - sorted[lo]) * (pos - lo);
+}
+
+/** Inverse of the standard normal CDF (Acklam's rational approximation, |error| < 1.2e-9). */
+export function normalInv(p: number): number {
+  if (p <= 0) return -Infinity;
+  if (p >= 1) return Infinity;
+  const a = [-39.69683028665376, 220.9460984245205, -275.9285104469687, 138.357751867269, -30.66479806614716, 2.506628277459239];
+  const b = [-54.47609879822406, 161.5858368580409, -155.6989798598866, 66.80131188771972, -13.28068155288572];
+  const c = [-0.007784894002430293, -0.3223964580411365, -2.400758277161838, -2.549732539343734, 4.374664141464968, 2.938163982698783];
+  const d = [0.007784695709041462, 0.3224671290700398, 2.445134137142996, 3.754408661907416];
+  const pl = 0.02425;
+  if (p < pl) {
+    const q = Math.sqrt(-2 * Math.log(p));
+    return (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1);
+  }
+  if (p > 1 - pl) return -normalInv(1 - p);
+  const q = p - 0.5;
+  const r = q * q;
+  return ((((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q) / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1);
+}
+
+/** Quantile of Student's t with `df` degrees of freedom (Cornish–Fisher expansion; within ~0.3% for df ≥ 3). */
+export function tInv(p: number, df: number): number {
+  const z = normalInv(p);
+  const z3 = z ** 3;
+  const z5 = z ** 5;
+  const z7 = z ** 7;
+  const z9 = z ** 9;
+  return (
+    z +
+    (z3 + z) / (4 * df) +
+    (5 * z5 + 16 * z3 + 3 * z) / (96 * df ** 2) +
+    (3 * z7 + 19 * z5 + 17 * z3 - 15 * z) / (384 * df ** 3) +
+    (79 * z9 + 776 * z7 + 1482 * z5 - 1920 * z3 - 945 * z) / (92160 * df ** 4)
+  );
+}
+
+/** P(X = k) for k = 0..n, X ~ Binomial(n, p), computed in log space so n can be large. */
+export function binomialPmf(n: number, p: number): number[] {
+  const logFact = [0];
+  for (let i = 1; i <= n; i++) logFact.push(logFact[i - 1] + Math.log(i));
+  const lp = Math.log(p);
+  const lq = Math.log(1 - p);
+  return Array.from({ length: n + 1 }, (_, k) => {
+    if (p <= 0) return k === 0 ? 1 : 0;
+    if (p >= 1) return k === n ? 1 : 0;
+    return Math.exp(logFact[n] - logFact[k] - logFact[n - k] + k * lp + (n - k) * lq);
+  });
+}
+
+/** Two-sided p-value of k heads in n fair flips: P(|X − n/2| ≥ |k − n/2|). */
+export function binomialTwoSidedP(n: number, k: number, p0 = 0.5): number {
+  const pmf = binomialPmf(n, p0);
+  const d = Math.abs(k - n * p0);
+  let s = 0;
+  for (let i = 0; i <= n; i++) if (Math.abs(i - n * p0) >= d - 1e-9) s += pmf[i];
+  return Math.min(1, s);
+}

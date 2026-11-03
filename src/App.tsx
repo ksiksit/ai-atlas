@@ -1,6 +1,10 @@
-import { Suspense, useEffect, useState, type CSSProperties } from 'react';
-import { DEFAULT_COURSE, courseHref, lessonHref, lessonIndex, lessonNo, parseRoute, partOf, type Course, type Lesson, type Route } from './courses';
+import { Suspense, useEffect, useRef, useState, type CSSProperties } from 'react';
+import { BrandMark } from './components/BrandMark';
+import { COURSES, LIBRARY_HREF, courseHref, lessonHref, lessonIndex, lessonNo, lessonNumber, parseRoute, partOf, type Course, type Lesson, type Route } from './courses';
+import { markDone, markVisited, useProgress } from './lib/progress';
 import { loadThemeMode, setThemeMode, type ThemeMode } from './lib/theme';
+import Library from './pages/Library';
+import { SITE } from './site';
 
 function readRoute(): Route {
   let hash = window.location.hash.replace(/^#/, '');
@@ -45,22 +49,15 @@ function ThemeToggle() {
   );
 }
 
-function BrandMark({ course, inline = false }: { course: Course; inline?: boolean }) {
-  if (!course.mark) return <span className="brand-mark">{course.title}</span>;
-  const [a, b] = course.mark;
+/** Table of contents for one course. */
+function CourseRail({ course, current, onNavigate }: { course: Course; current?: string; onNavigate: () => void }) {
+  const progress = useProgress();
+  const done = new Set(progress[course.id]?.done ?? []);
   return (
-    <span className="brand-mark">
-      {a}
-      <span className="arrow">→</span>
-      {!inline && <br />}
-      {b}
-    </span>
-  );
-}
-
-function Rail({ course, current, open, onNavigate }: { course: Course; current?: string; open: boolean; onNavigate: () => void }) {
-  return (
-    <nav className="rail" data-open={open} aria-label="목차">
+    <>
+      <a className="rail-back" href={LIBRARY_HREF} onClick={onNavigate}>
+        ← 모든 분야
+      </a>
       <a className="brand" href={courseHref(course.id)} onClick={onNavigate}>
         <BrandMark course={course} />
         <span className="brand-sub">{course.tagline}</span>
@@ -71,18 +68,55 @@ function Rail({ course, current, open, onNavigate }: { course: Course; current?:
             <span className="dot" />
             {p.title}
           </div>
-          {course.lessons.filter((l) => l.part === p.id).map((l) => (
-            <a key={l.id} className="rail-link" href={lessonHref(course.id, l.id)} aria-current={current === l.id ? 'page' : undefined} onClick={onNavigate}>
-              <span className="num">{lessonNo(course, l)}</span>
-              <span>{l.title}</span>
-            </a>
-          ))}
+          {course.lessons
+            .filter((l) => l.part === p.id)
+            .map((l) => (
+              <a key={l.id} className="rail-link" href={lessonHref(course.id, l.id)} aria-current={current === l.id ? 'page' : undefined} onClick={onNavigate}>
+                <span className="num">{lessonNo(course, l)}</span>
+                <span>
+                  {l.title}
+                  {done.has(l.id) && (
+                    <span className="done-mark" role="img" aria-label="완료">
+                      ✓
+                    </span>
+                  )}
+                </span>
+              </a>
+            ))}
         </div>
       ))}
-      <div className="rail-foot">
-        <ThemeToggle />
+    </>
+  );
+}
+
+/** Rail on the library page: the site name and the list of courses. */
+function LibraryRail({ onNavigate }: { onNavigate: () => void }) {
+  const progress = useProgress();
+  return (
+    <>
+      <a className="brand" href={LIBRARY_HREF} onClick={onNavigate}>
+        <span className="brand-mark">{SITE.name}</span>
+        <span className="brand-sub">{SITE.tagline}</span>
+      </a>
+      <div className="rail-part">
+        <div className="rail-part-title">분야</div>
+        {COURSES.map((c, i) => {
+          const n = c.lessons.filter((l) => progress[c.id]?.done.includes(l.id)).length;
+          return (
+            <a key={c.id} className="rail-link" href={courseHref(c.id)} onClick={onNavigate}>
+              <span className="num">{String(i + 1).padStart(2, '0')}</span>
+              <span>
+                {c.subject}
+                <span className="en">
+                  {' '}
+                  · {n ? `${n}/${c.lessons.length}장` : `${c.lessons.length}장`}
+                </span>
+              </span>
+            </a>
+          );
+        })}
       </div>
-    </nav>
+    </>
   );
 }
 
@@ -92,11 +126,32 @@ function LessonPage({ course, lesson }: { course: Course; lesson: Lesson }) {
   const prev = course.lessons[i - 1];
   const next = course.lessons[i + 1];
   const C = lesson.Component;
+  const pagerRef = useRef<HTMLElement>(null);
+
+  // Remember the lesson as "last opened", and as read once the reader reaches the pager.
+  useEffect(() => {
+    markVisited(course.id, lesson.id);
+    const el = pagerRef.current;
+    if (!el || typeof IntersectionObserver === 'undefined') return;
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) {
+        markDone(course.id, lesson.id);
+        io.disconnect();
+      }
+    });
+    // Wait for the lazy lesson body to render so the pager starts below the fold.
+    const t = window.setTimeout(() => io.observe(el), 800);
+    return () => {
+      window.clearTimeout(t);
+      io.disconnect();
+    };
+  }, [course.id, lesson.id]);
+
   return (
     <article className="lesson" style={{ ['--part-color' as string]: part.color } as CSSProperties}>
       <header className="lesson-head">
         <div className="eyebrow">
-          {part.title} · {Number(lessonNo(course, lesson))}장
+          {part.title} · {lessonNumber(course, lesson)}장
         </div>
         <h1 className="lesson-title">{lesson.title}</h1>
         <p className="lesson-lede">{lesson.lede}</p>
@@ -114,7 +169,7 @@ function LessonPage({ course, lesson }: { course: Course; lesson: Lesson }) {
       <Suspense fallback={<div className="loading">불러오는 중…</div>}>
         <C />
       </Suspense>
-      <nav className="pager" aria-label="이전·다음 장">
+      <nav className="pager" aria-label="이전·다음 장" ref={pagerRef}>
         {prev ? (
           <a href={lessonHref(course.id, prev.id)}>
             <span className="dir">← 이전</span>
@@ -132,9 +187,9 @@ function LessonPage({ course, lesson }: { course: Course; lesson: Lesson }) {
             <span className="ttl">{next.title}</span>
           </a>
         ) : (
-          <a className="next" href={courseHref(course.id)}>
+          <a className="next" href={LIBRARY_HREF}>
             <span className="dir">끝까지 왔습니다 →</span>
-            <span className="ttl">전체 지도로</span>
+            <span className="ttl">다른 분야 둘러보기</span>
           </a>
         )}
       </nav>
@@ -142,7 +197,7 @@ function LessonPage({ course, lesson }: { course: Course; lesson: Lesson }) {
   );
 }
 
-function NotFound({ course }: { course: Course }) {
+function NotFound({ course }: { course?: Course }) {
   return (
     <article className="lesson">
       <header className="lesson-head">
@@ -150,9 +205,9 @@ function NotFound({ course }: { course: Course }) {
         <p className="lesson-lede">주소가 바뀌었거나 없는 장입니다.</p>
       </header>
       <nav className="pager" aria-label="돌아가기">
-        <a href={courseHref(course.id)}>
+        <a href={course ? courseHref(course.id) : LIBRARY_HREF}>
           <span className="dir">← 처음으로</span>
-          <span className="ttl">{course.title}</span>
+          <span className="ttl">{course ? course.title : SITE.name}</span>
         </a>
       </nav>
     </article>
@@ -162,43 +217,49 @@ function NotFound({ course }: { course: Course }) {
 export default function App() {
   const route = useRoute();
   const [open, setOpen] = useState(false);
-  // Until there is a course picker, the site root shows the default course.
-  const course = route.kind === 'course' || route.kind === 'lesson' ? route.course : DEFAULT_COURSE;
+  const course = route.kind === 'course' || route.kind === 'lesson' || route.kind === 'missing' ? route.course : undefined;
   const lesson = route.kind === 'lesson' ? route.lesson : undefined;
-  const Cover = course.Cover;
+  const close = () => setOpen(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'auto' });
     setOpen(false);
-    document.title = lesson ? `${lesson.title} · ${course.title}` : course.title;
+    document.title = lesson ? `${lesson.title} · ${course!.title}` : course ? `${course.title} · ${SITE.name}` : SITE.name;
   }, [route, course, lesson]);
+
+  let page;
+  if (route.kind === 'lesson') page = <LessonPage key={route.course.id + '/' + route.lesson.id} course={route.course} lesson={route.lesson} />;
+  else if (route.kind === 'course') {
+    const Cover = route.course.Cover;
+    page = (
+      <Suspense fallback={<div className="loading">불러오는 중…</div>}>
+        <Cover key={route.course.id} />
+      </Suspense>
+    );
+  } else if (route.kind === 'library') page = <Library />;
+  else page = <NotFound course={course} />;
 
   return (
     <div className="shell">
-      <Rail course={course} current={lesson?.id} open={open} onNavigate={() => setOpen(false)} />
-      {open && <div className="scrim" onClick={() => setOpen(false)} />}
+      <nav className="rail" data-open={open} aria-label={course ? '목차' : '분야'}>
+        {course ? <CourseRail course={course} current={lesson?.id} onNavigate={close} /> : <LibraryRail onNavigate={close} />}
+        <div className="rail-foot">
+          <ThemeToggle />
+        </div>
+      </nav>
+      {open && <div className="scrim" onClick={close} />}
       <div style={{ minWidth: 0 }}>
         <header className="topbar">
-          <button className="menu-btn" type="button" aria-label="목차 열기" onClick={() => setOpen(true)}>
+          <button className="menu-btn" type="button" aria-label={course ? '목차 열기' : '분야 목록 열기'} onClick={() => setOpen(true)}>
             <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
               <path d="M2 4h14M2 9h14M2 14h14" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" fill="none" />
             </svg>
           </button>
-          <a className="brand" href={courseHref(course.id)} style={{ flexDirection: 'row' }}>
-            <BrandMark course={course} inline />
+          <a className="brand" href={course ? courseHref(course.id) : LIBRARY_HREF} style={{ flexDirection: 'row' }}>
+            {course ? <BrandMark course={course} inline /> : <span className="brand-mark">{SITE.name}</span>}
           </a>
         </header>
-        <main className="main">
-          {lesson ? (
-            <LessonPage key={course.id + '/' + lesson.id} course={course} lesson={lesson} />
-          ) : route.kind === 'missing' ? (
-            <NotFound course={course} />
-          ) : (
-            <Suspense fallback={<div className="loading">불러오는 중…</div>}>
-              <Cover key={course.id} />
-            </Suspense>
-          )}
-        </main>
+        <main className="main">{page}</main>
       </div>
     </div>
   );

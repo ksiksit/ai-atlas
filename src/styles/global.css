@@ -24,6 +24,8 @@
   --c-math: #1d4f91;
   --c-ml: #2e6b3f;
   --c-dl: #9c3d22;
+  --c-stats-1: #1c6a6a; /* statistics: describe */
+  --c-stats-2: #6a3f8c; /* statistics: infer */
 
   /* data encodings — shared by every figure (blue/orange differ in lightness too) */
   --pos: #d9661f;
@@ -74,6 +76,8 @@
     --c-math: #8db4ea;
     --c-ml: #7fbf8e;
     --c-dl: #e48d6e;
+    --c-stats-1: #79c3c0;
+    --c-stats-2: #c3a2e3;
     --pos: #f08a4b;
     --neg: #6aa8ee;
     --pos-soft: rgba(240, 138, 75, 0.2);
@@ -104,6 +108,8 @@
   --c-math: #8db4ea;
   --c-ml: #7fbf8e;
   --c-dl: #e48d6e;
+  --c-stats-1: #79c3c0;
+  --c-stats-2: #c3a2e3;
   --pos: #f08a4b;
   --neg: #6aa8ee;
   --pos-soft: rgba(240, 138, 75, 0.2);
@@ -280,6 +286,23 @@ code {
   align-items: center;
   font-size: var(--fs-xs);
   color: var(--ink-3);
+}
+
+/* rail: back link to the library, "read to the end" mark */
+.rail-back {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  text-decoration: none;
+  margin-bottom: -14px;
+}
+.rail-back:hover {
+  color: var(--ink);
+  text-decoration: underline;
+}
+.rail-link .done-mark {
+  color: var(--good);
+  font-size: 0.75rem;
+  margin-left: 6px;
 }
 
 .theme-toggle {
