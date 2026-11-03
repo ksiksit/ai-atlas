@@ -5,6 +5,7 @@ import statsBasics from './stats/basics/course';
 import csSubject from './cs/subject';
 import csAlgorithms from './cs/algorithms/course';
 import csAlgorithmDesign from './cs/design/course';
+import csSystemAlgorithms from './cs/systems/course';
 import { renameCourseProgress } from '../lib/progress';
 import type { Course, Lesson, Level, Part, Subject } from './types';
 
@@ -14,7 +15,7 @@ export type { Course, Lesson, Level, Part, Subject } from './types';
 export const SUBJECTS: Subject[] = [aiSubject, statsSubject, csSubject];
 
 /** Every course. Within a subject the library sorts them by level, then by this order. */
-export const COURSES: Course[] = [aiBasics, statsBasics, csAlgorithms, csAlgorithmDesign];
+export const COURSES: Course[] = [aiBasics, statsBasics, csAlgorithms, csAlgorithmDesign, csSystemAlgorithms];
 
 export const LEVELS: Record<Level, { name: string; en: string }> = {
   1: { name: '기초', en: 'Basic' },
