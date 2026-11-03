@@ -3,6 +3,8 @@
 수학 기초부터 머신러닝, 딥러닝, 트랜스포머와 언어 모델까지 직접 만지며 배우는 인터랙티브 인공지능 입문 사이트입니다.
 모든 시각화와 학습(신경망 훈련 포함)은 브라우저 안에서 계산됩니다.
 
+**사이트:** https://ksiksit.github.io/ai-atlas/
+
 ## 실행
 
 ```bash
@@ -16,6 +18,10 @@ npm run dev        # http://localhost:5173
 npm run build           # dist/ — 일반 정적 사이트 (어느 정적 호스팅에나 업로드 가능)
 npm run build:single    # dist-single/index.html — 파일 하나로 된 버전 (더블클릭으로 열 수 있음)
 ```
+
+## 배포
+
+`main` 브랜치에 푸시하면 GitHub Actions(`.github/workflows/deploy.yml`)가 빌드해서 GitHub Pages에 자동으로 배포합니다.
 
 ## 구성
 
