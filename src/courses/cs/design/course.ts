@@ -31,7 +31,7 @@ const lessons: Lesson[] = [
     part: 'optimize',
     title: '동적 계획법',
     en: 'Dynamic Programming',
-    lede: '같은 계산을 두 번 하지 않도록 답을 표에 적어 두는 것만으로 지수 시간이 다항 시간이 됩니다. 문자열 비교, 배낭 꾸리기, 거스름돈 문제를 표를 채우며 풉니다.',
+    lede: '같은 계산을 두 번 하지 않도록 답을 표에 적어 두는 것만으로 지수 시간이 다항 시간이 됩니다. 편집 거리와 거스름돈 문제를 표를 채우며 풀고, 배낭 문제의 점화식도 세워 봅니다.',
     learn: ['겹치는 부분 문제와 메모이제이션', '상태와 점화식 세우기', '표를 채우고 거꾸로 답 찾기'],
     Component: lazy(() => import('./lessons/DynamicProgramming')),
   },
@@ -41,7 +41,7 @@ const lessons: Lesson[] = [
     title: '탐욕 알고리즘',
     en: 'Greedy Algorithms',
     lede: '매 순간 당장 가장 좋아 보이는 것을 고르는 방법은 빠르고 단순합니다. 언제는 그것이 정답이고 언제는 틀리는지 직접 반례를 찾아봅니다.',
-    learn: ['탐욕 선택이 통하는 조건', '회의실 배정과 끝나는 시간', '탐욕이 틀리는 반례 찾기'],
+    learn: ['탐욕이 통하는 조건과 반례', '회의실 배정과 끝나는 시간', '허프만 부호화'],
     Component: lazy(() => import('./lessons/Greedy')),
   },
   {
