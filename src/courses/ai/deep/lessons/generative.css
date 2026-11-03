@@ -1,0 +1,72 @@
+/* 생성 모델 (오토인코더·VAE·확산 모델): figure styles */
+
+/* two small images side by side under a caption each */
+.gen-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.gen-pair .canvas-box {
+  max-width: 160px;
+}
+.gen-cap {
+  display: block;
+  margin-top: 4px;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  line-height: 1.4;
+}
+
+/* a square canvas that never gets wider than it can be tall */
+.gen-square {
+  max-width: 440px;
+  margin-inline: auto;
+}
+
+/* step / status note under a figure */
+.gen-note {
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  min-height: 3em;
+  line-height: 1.5;
+}
+.gen-note[data-bad] {
+  color: var(--bad);
+}
+
+/* a row of generated thumbnails */
+.gen-strip {
+  width: 100%;
+}
+.gen-strip canvas {
+  display: block;
+  width: 100%;
+}
+
+/* forward process: points, image and schedule side by side */
+.gen-fwd {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.gen-fwd > div {
+  min-width: 0;
+  width: 100%;
+  max-width: 320px;
+  justify-self: center;
+}
+@media (max-width: 560px) {
+  .gen-fwd {
+    gap: 8px;
+  }
+}
+
+/* guidance: measurements for every w */
+.gen-tbl tr[data-cur] td {
+  background: var(--accent-soft);
+  font-weight: 600;
+}
+.gen-tbl td {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
