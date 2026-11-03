@@ -1,0 +1,96 @@
+/* 재귀와 백트래킹 · 분할 정복: figure styles that are plain HTML rather than canvas */
+
+/* fib call stack, top of the stack drawn on top */
+.rc-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.rc-stack .ds-label {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.rc-stack-cells {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-start;
+  gap: 3px;
+}
+.rc-stack-cells .ds-cell {
+  padding: 0 10px;
+  min-width: 72px;
+}
+
+/* pruning comparison reuses the growth rows */
+.rc-prune {
+  margin-block: 4px 8px;
+}
+
+/* fast power: binary digits of n and the exponent after each operation */
+.pw-grid {
+  display: grid;
+  gap: 3px;
+  max-width: 600px;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+.pw-head {
+  font-family: var(--font-body);
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  padding-right: 6px;
+  align-self: center;
+  white-space: nowrap;
+}
+.pw-bit,
+.pw-cell {
+  height: 28px;
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  overflow: hidden;
+}
+.pw-bit {
+  border: 1px solid var(--line-strong);
+  color: var(--ink-3);
+  font-size: 0.875rem;
+}
+.pw-bit[data-one] {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--bg);
+  font-weight: 700;
+}
+.pw-cell {
+  font-size: 0.8125rem;
+  color: var(--ink);
+}
+.pw-cell[data-op='start'] {
+  border: 1px solid var(--ink-3);
+}
+.pw-cell[data-op='sq'] {
+  border: 1px solid var(--pos);
+  background: color-mix(in srgb, var(--pos) 12%, transparent);
+}
+.pw-cell[data-op='mul'] {
+  border: 1px solid var(--pos);
+  background: color-mix(in srgb, var(--pos) 38%, transparent);
+  font-weight: 600;
+}
+@media (max-width: 560px) {
+  .pw-cell {
+    font-size: 0.6875rem;
+    letter-spacing: -0.03em;
+  }
+}
+
+/* ship within days: the packages in order, tinted by the day they go */
+.ship-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+.ship-chips .ds-cell[data-bad] {
+  background: color-mix(in srgb, var(--bad) 30%, var(--surface));
+  border-color: var(--bad);
+}

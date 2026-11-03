@@ -1,0 +1,136 @@
+/* 알고리즘 설계: union-find / MST and topological-sort figures (HTML parts; the graphs themselves are canvas) */
+
+/* union-find: the parent array under the forest */
+.uf-arr {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  align-items: flex-end;
+}
+.uf-arr .ds-label {
+  width: 100%;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.uf-slot {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.uf-idx {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-3);
+}
+.uf-slot[data-root] .ds-cell {
+  border-width: 2px;
+  font-weight: 700;
+}
+.uf-slot[data-hot] .ds-cell {
+  background: var(--hl);
+  border-color: var(--hl);
+  color: #1a1a1a;
+}
+
+/* union-find: union(a, b) and find(x) pickers */
+.uf-ops {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+}
+.uf-ops .select {
+  min-width: 52px;
+}
+.uf-ops .btn,
+.uf-ops > .select {
+  justify-self: start;
+}
+
+/* edge lists: Kruskal's sorted edges, Prim's candidate heap */
+.edge-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-height: 28px;
+}
+.edge-list .ds-label {
+  width: 100%;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.edge-chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  padding: 2px 6px;
+  border: 1px solid var(--line-strong);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  white-space: nowrap;
+  color: var(--ink-2);
+  background: var(--surface);
+}
+.edge-chip b {
+  font-weight: 600;
+  color: var(--ink);
+}
+.edge-chip[data-s='take'] {
+  border-color: var(--ink);
+  color: var(--ink);
+  font-weight: 600;
+}
+.edge-chip[data-s='take']::before {
+  content: '✓';
+  color: var(--good);
+}
+.edge-chip[data-s='skip'] {
+  color: var(--bad);
+  text-decoration: line-through;
+  border-style: dashed;
+  border-color: var(--bad);
+}
+.edge-chip[data-s='skip'] b {
+  color: var(--bad);
+}
+.edge-chip[data-s='unused'] {
+  opacity: 0.45;
+}
+.edge-chip[data-s='cur'] {
+  background: var(--hl);
+  border-color: var(--hl);
+  color: #1a1a1a;
+  text-decoration: none;
+}
+.edge-chip[data-s='cur'] b {
+  color: #1a1a1a;
+}
+.edge-chip[data-s='cur']::before {
+  content: none;
+}
+
+/* step notes under a figure */
+.step-note {
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  min-height: 3.2em;
+}
+.step-note[data-bad] {
+  color: var(--bad);
+}
+
+/* topological sort: tasks the reader may pick next */
+.pick-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.topo-out .ds-cell {
+  padding: 0 6px;
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+}

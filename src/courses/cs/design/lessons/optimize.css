@@ -1,0 +1,255 @@
+/* 동적 계획법 · 탐욕 알고리즘: figure styles that are plain HTML rather than canvas */
+
+.opt-note {
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  min-height: 3.4em;
+  overflow-wrap: anywhere;
+}
+
+/* two word inputs side by side */
+.opt-inputs {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 10px;
+}
+
+/* a row of small chips: edit operations, review order */
+.opt-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  font-size: var(--fs-xs);
+  min-height: 28px;
+}
+.opt-chips .lbl {
+  width: 100%;
+  color: var(--ink-3);
+}
+.opt-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 0 7px;
+  border: 1px solid var(--line-strong);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  background: var(--surface);
+  white-space: nowrap;
+}
+.opt-chip[data-kind='change'] {
+  border-color: var(--pos);
+  background: var(--pos-soft);
+}
+.opt-chip[data-kind='same'] {
+  color: var(--ink-3);
+}
+.opt-chip[data-state='cur'] {
+  background: var(--hl);
+  border-color: var(--hl);
+  color: #1a1a1a;
+}
+.opt-chip[data-state='chosen'] {
+  background: var(--good);
+  border-color: var(--good);
+  color: var(--surface);
+}
+.opt-chip[data-state='rejected'] {
+  color: var(--ink-3);
+  text-decoration: line-through;
+}
+
+/* coin change: the dp array, ten cells per row */
+.coin-grid {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 3px;
+}
+.coin-cell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding-top: 9px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  font-family: var(--font-mono);
+  min-width: 0;
+}
+.coin-cell .idx {
+  position: absolute;
+  top: 2px;
+  left: 3px;
+  font-size: 10px;
+  color: var(--ink-3);
+  line-height: 1;
+}
+.coin-cell .val {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.coin-cell .via {
+  font-size: 9.5px;
+  color: var(--ink-3);
+  line-height: 1;
+  min-height: 1em;
+}
+.coin-cell[data-empty] .val {
+  color: var(--ink-3);
+  font-weight: 400;
+}
+.coin-cell[data-role='cand'] {
+  background: var(--neg-soft);
+  border-color: var(--neg);
+}
+.coin-cell[data-role='best'] {
+  background: color-mix(in srgb, var(--neg) 40%, var(--surface));
+  border-color: var(--neg);
+}
+.coin-cell[data-role='cur'] {
+  background: var(--hl);
+  border-color: var(--hl);
+  color: #1a1a1a;
+}
+.coin-cell[data-role='cur'] .idx,
+.coin-cell[data-role='cur'] .via {
+  color: #1a1a1a;
+}
+.coin-cell[data-role='chain'] {
+  background: var(--pos-soft);
+  border-color: var(--pos);
+  border-width: 2px;
+}
+.coin-cell .tag {
+  position: absolute;
+  top: 2px;
+  right: 3px;
+  font-size: 10px;
+  line-height: 1;
+  color: var(--neg);
+  font-weight: 700;
+}
+@media (max-width: 560px) {
+  .coin-cell {
+    min-height: 42px;
+  }
+  .coin-cell .idx,
+  .coin-cell .tag {
+    font-size: 9px;
+    top: 1px;
+  }
+  .coin-cell .idx {
+    left: 2px;
+  }
+  .coin-cell .tag {
+    right: 2px;
+  }
+  .coin-cell .val {
+    font-size: 0.8125rem;
+  }
+  .coin-cell .via {
+    font-size: 8.5px;
+  }
+}
+
+/* greedy vs optimal change, side by side */
+.change-panels {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+}
+.change-panel {
+  border: 1px solid var(--line);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.change-panel[data-worse] {
+  border-color: var(--bad);
+  box-shadow: inset 0 0 0 1px var(--bad);
+}
+.change-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  font-size: var(--fs-xs);
+  color: var(--ink-2);
+}
+.change-head strong {
+  color: var(--ink);
+  font-size: var(--fs-sm);
+}
+.change-count {
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.change-coins {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  align-items: center;
+  min-height: 40px;
+}
+.coin-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--ink-2);
+}
+.coin {
+  display: inline-grid;
+  place-items: center;
+  min-width: 34px;
+  height: 34px;
+  padding: 0 4px;
+  border-radius: 999px;
+  border: 1.5px solid var(--ink);
+  background: color-mix(in srgb, var(--hl) 28%, var(--surface));
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+.change-left {
+  font-size: var(--fs-xs);
+  color: var(--bad);
+}
+@media (max-width: 560px) {
+  .change-panels {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Huffman code table */
+.huff-table td.huff-code {
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+}
+.huff-table td,
+.huff-table th {
+  padding: 5px 8px;
+  white-space: nowrap;
+}
+.huff-table td.num {
+  text-align: right;
+  font-family: var(--font-mono);
+}
+
+/* a segmented control with tighter buttons, so four short options fit on one line */
+.seg-tight .seg button {
+  padding: 0 9px;
+}
+.seg-tight.small .seg button {
+  font-size: var(--fs-xs);
+}
