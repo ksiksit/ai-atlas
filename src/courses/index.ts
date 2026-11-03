@@ -10,6 +10,7 @@ import csAlgorithmDesign from './cs/design/course';
 import csSystemAlgorithms from './cs/systems/course';
 import netSubject from './net/subject';
 import netBasics from './net/basics/course';
+import netSecurity from './net/security/course';
 import { renameCourseProgress } from '../lib/progress';
 import type { Course, Lesson, Level, Part, Subject } from './types';
 
@@ -19,7 +20,7 @@ export type { Course, Lesson, Level, Part, Subject } from './types';
 export const SUBJECTS: Subject[] = [aiSubject, statsSubject, csSubject, netSubject];
 
 /** Every course. Within a subject the library sorts them by level, then by this order. */
-export const COURSES: Course[] = [aiBasics, aiDeepLearning, aiLlm, statsBasics, csAlgorithms, csAlgorithmDesign, csSystemAlgorithms, netBasics];
+export const COURSES: Course[] = [aiBasics, aiDeepLearning, aiLlm, statsBasics, csAlgorithms, csAlgorithmDesign, csSystemAlgorithms, netBasics, netSecurity];
 
 export const LEVELS: Record<Level, { name: string; en: string }> = {
   1: { name: '기초', en: 'Basic' },

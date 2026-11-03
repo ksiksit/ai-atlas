@@ -1,0 +1,24 @@
+/* input line above the hash grid on the 네트워크 보안 cover */
+.sec-hero-input {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin-bottom: 8px;
+}
+.sec-hero-label {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.sec-hero-msg {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-right: auto;
+}
+.sec-hero-msg span[data-flip] {
+  color: var(--pos);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
