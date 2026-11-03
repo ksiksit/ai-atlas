@@ -1,0 +1,65 @@
+/* BPE merge animation on the 대형 언어 모델 cover */
+.bpe-hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 22px;
+  min-height: 300px;
+  padding: 22px 18px;
+}
+.bpe-rule {
+  font-size: 0.875rem;
+  color: var(--ink-3);
+  min-height: 1.4em;
+}
+.bpe-sentence {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 16px;
+  align-items: center;
+}
+.bpe-word {
+  display: inline-flex;
+  gap: 3px;
+}
+.bpe-tok {
+  --len: 1;
+  display: inline-grid;
+  place-items: center;
+  min-width: 34px;
+  height: 40px;
+  padding: 0 7px;
+  font-size: 1.15rem;
+  border: 1px solid color-mix(in srgb, var(--c-dl) calc(25% + var(--len) * 15%), var(--line));
+  background: color-mix(in srgb, var(--c-dl) calc(var(--len) * 9% - 9%), var(--surface));
+  color: var(--ink);
+  transition: background 0.2s, border-color 0.2s;
+}
+.bpe-tok[data-hl] {
+  background: var(--hl);
+  border-color: var(--hl);
+  color: #1a1a1a;
+}
+.bpe-count {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+}
+.bpe-count strong {
+  font-size: 1.35rem;
+  color: var(--ink);
+}
+@media (max-width: 560px) {
+  .bpe-hero {
+    min-height: 0;
+    padding: 18px 14px;
+  }
+  .bpe-tok {
+    min-width: 28px;
+    height: 34px;
+    padding: 0 5px;
+    font-size: 1rem;
+  }
+}
