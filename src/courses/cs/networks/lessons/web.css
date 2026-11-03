@@ -1,0 +1,335 @@
+/* 웹이 동작하는 길: DNS, HTTP */
+
+/* DNS: the messages of one lookup */
+.dns-msgs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: var(--fs-xs);
+}
+.lesson .dns-msgs {
+  margin: 0;
+  padding: 0;
+}
+.dns-msgs li {
+  margin: 0;
+}
+.dns-msgs button {
+  font: inherit;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1.6em 9.5em minmax(0, 1fr);
+  gap: 6px;
+  align-items: baseline;
+  text-align: left;
+  padding: 3px 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+.dns-msgs button:hover {
+  border-color: var(--line-strong);
+}
+.dns-msgs li[data-s='future'] button {
+  opacity: 0.4;
+}
+.dns-msgs li[data-cur] button {
+  background: var(--hl);
+  color: #1a1a1a;
+}
+.dns-msgs .no {
+  font-family: var(--font-mono);
+  color: inherit;
+  opacity: 0.7;
+}
+.dns-msgs .who {
+  white-space: nowrap;
+}
+.dns-msgs .what {
+  font-family: var(--font-mono);
+  overflow-wrap: anywhere;
+}
+.dns-msgs li[data-k='referral'] .what {
+  color: var(--c-cs-2);
+}
+.dns-msgs li[data-k='answer'] .what {
+  color: var(--good);
+}
+.dns-msgs li[data-k='nx'] .what {
+  color: var(--bad);
+}
+.dns-msgs li[data-cur] .what {
+  color: #1a1a1a;
+}
+@media (max-width: 520px) {
+  .dns-msgs button {
+    grid-template-columns: 1.6em minmax(0, 1fr);
+  }
+  .dns-msgs .what {
+    grid-column: 2;
+  }
+}
+
+/* small tables inside figures (cache, records) */
+.mini-tbl-wrap {
+  overflow-x: auto;
+}
+table.mini-tbl {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: var(--fs-xs);
+}
+table.mini-tbl th,
+table.mini-tbl td {
+  padding: 3px 8px 3px 0;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+table.mini-tbl th {
+  color: var(--ink-3);
+  font-weight: 600;
+}
+table.mini-tbl td {
+  font-family: var(--font-mono);
+  overflow-wrap: anywhere;
+}
+table.mini-tbl td.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+table.mini-tbl tr[data-new] td {
+  background: var(--hl);
+  color: #1a1a1a;
+}
+.mini-empty {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.panel-title {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+/* DNS tree: the selected name */
+.tree-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  min-width: 0;
+}
+.tree-info .full {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+.tree-info dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 2px 10px;
+  font-size: var(--fs-xs);
+}
+.tree-info dt {
+  color: var(--ink-3);
+}
+.tree-info dd {
+  margin: 0;
+  font-family: var(--font-mono);
+  overflow-wrap: anywhere;
+}
+.name-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.name-chips .op-chip[aria-pressed='true'] {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--bg);
+}
+
+/* HTTP: raw request and response */
+.http-pair {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+}
+.http-msg {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  min-width: 0;
+}
+.http-msg-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--line);
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.http-msg-head strong {
+  color: var(--ink);
+}
+.http-lines {
+  margin: 0;
+  padding: 6px 0;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  line-height: 1.6;
+  overflow-x: auto;
+}
+.http-line {
+  display: block;
+  padding: 0 10px 0 8px;
+  border-left: 4px solid transparent;
+  white-space: pre;
+  color: var(--ink-2);
+}
+.http-line[data-r='start'] {
+  border-left-color: var(--c-cs-3);
+  color: var(--ink);
+  font-weight: 700;
+}
+.http-line[data-r='header'] {
+  border-left-color: var(--c-cs-2);
+}
+.http-line[data-r='header'] .k {
+  color: var(--c-cs-2);
+  font-weight: 600;
+}
+.http-line[data-r='blank'] {
+  border-left-color: var(--line-strong);
+  color: var(--ink-3);
+  font-style: italic;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+}
+.http-line[data-r='body'] {
+  border-left-color: var(--c-cs-1);
+  background: var(--surface-2);
+}
+.http-note {
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+}
+
+/* Diffie–Hellman: three people side by side */
+.dh-cols {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+@media (max-width: 640px) {
+  .dh-cols {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.dh-col {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  font-size: var(--fs-sm);
+}
+.dh-col[data-who='eve'] {
+  border-style: dashed;
+  border-color: var(--bad);
+}
+.dh-col h4 {
+  margin: 0;
+  font-size: var(--fs-sm);
+}
+.dh-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: var(--fs-xs);
+  color: var(--ink-2);
+}
+.dh-row .mono {
+  color: var(--ink);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.dh-row[data-secret] .mono {
+  color: var(--pos);
+}
+.dh-row[data-secret='b'] .mono {
+  color: var(--neg);
+}
+.dh-row[data-shared] {
+  border-top: 1px solid var(--line);
+  padding-top: 6px;
+}
+.dh-row[data-shared] .mono {
+  background: var(--hl);
+  color: #1a1a1a;
+  padding: 0 4px;
+}
+
+/* HTTP: time to first byte, one stacked bar per protocol */
+.wf-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: var(--fs-xs);
+}
+.wf-row {
+  display: grid;
+  grid-template-columns: 9.5em minmax(0, 1fr) 4.2em;
+  gap: 8px;
+  align-items: center;
+  color: var(--ink-2);
+  background: transparent;
+  border: 0;
+  font: inherit;
+  font-size: var(--fs-xs);
+  padding: 2px 0;
+  text-align: left;
+  cursor: pointer;
+}
+.wf-row[aria-pressed='true'] {
+  color: var(--ink);
+  font-weight: 700;
+}
+.wf-track {
+  display: flex;
+  height: 14px;
+  background: var(--surface-2);
+}
+.wf-row[aria-pressed='true'] .wf-track {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+}
+.wf-track span {
+  display: block;
+  height: 100%;
+}
+.wf-track span + span {
+  border-left: 1px solid var(--surface);
+}
+.wf-ms {
+  font-family: var(--font-mono);
+  text-align: right;
+  white-space: nowrap;
+}
+@media (max-width: 520px) {
+  .wf-row {
+    grid-template-columns: 6.8em minmax(0, 1fr) 3.8em;
+  }
+}
