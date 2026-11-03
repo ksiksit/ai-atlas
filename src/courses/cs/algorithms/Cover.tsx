@@ -116,7 +116,7 @@ export default function Cover() {
             문제를 풉니다.
           </h1>
           <p className="hero-lede">
-            미로에서 출구를 찾는 방법은 여러 가지입니다. 미로 그림은 출발점에서 가까운 칸부터 한 겹씩 넓혀 가는 너비 우선 탐색입니다. 같은 문제라도 어떤 순서로 푸느냐에 따라 1초와 하루가 갈립니다. 입문 개발자가 꼭 알아야 할 복잡도, 정렬, 탐색, 그래프를 {course.lessons.length}개의 장에서 코드와 그림으로 따라갑니다.
+            미로에서 출구를 찾는 방법은 여러 가지입니다. 미로 그림은 출발점에서 가까운 칸부터 한 겹씩 넓혀 가는 너비 우선 탐색입니다. 같은 문제라도 어떤 순서로 푸느냐에 따라 1초와 하루가 갈립니다. 입문 개발자가 꼭 알아야 할 복잡도, 정렬, 탐색, 자료구조, 그래프를 {course.lessons.length}개의 장에서 코드와 그림으로 따라갑니다.
           </p>
           <div className="btn-row">
             <a className="btn primary" href={lessonHref(course.id, start.id)}>

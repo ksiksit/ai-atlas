@@ -21,18 +21,24 @@ export interface Stepper {
 /**
  * `resetKey` identifies the run: when it (or `total`) changes, playback starts over.
  * With `atEnd`, a new run is shown finished (its last frame) until the reader presses play.
+ * With `autoPlay`, a new run (after the first) starts playing from its first frame by itself.
  */
-export function useStepper(total: number, initialSpeed = 6, resetKey: unknown = null, atEnd = false): Stepper {
+export function useStepper(total: number, initialSpeed = 6, resetKey: unknown = null, atEnd = false, autoPlay = false): Stepper {
   const [i, setI] = useState(atEnd ? Math.max(0, total - 1) : 0);
   const [playing, setPlaying] = useState(false);
   const [speed, setSpeed] = useState(initialSpeed);
   const acc = useRef(0);
+  const prevRun = useRef<[number, unknown] | null>(null);
   const last = Math.max(0, total - 1);
 
   // a new run (different input or algorithm) starts from the first frame
   useEffect(() => {
-    setI(atEnd ? last : 0);
-    setPlaying(false);
+    // compare with the previous run rather than "first effect" so StrictMode's double effect doesn't autoplay on mount
+    const p = prevRun.current;
+    const play = autoPlay && p !== null && (p[0] !== total || p[1] !== resetKey) && last > 0;
+    prevRun.current = [total, resetKey];
+    setI(atEnd && !play ? last : 0);
+    setPlaying(play);
     acc.current = 0;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [total, resetKey]);

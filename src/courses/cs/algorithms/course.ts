@@ -4,6 +4,7 @@ import type { Course, Lesson, Part } from '../../types';
 const parts: Part[] = [
   { id: 'analysis', title: '효율 재기', en: 'Analysis', color: 'var(--c-cs-1)', blurb: '알고리즘이 얼마나 빠른지를 입력 크기에 대한 함수로 재는 법. Big-O.' },
   { id: 'sort-search', title: '정렬과 탐색', en: 'Sorting & Searching', color: 'var(--c-cs-2)', blurb: '데이터를 줄 세우고, 그 안에서 원하는 것을 빨리 찾는 법.' },
+  { id: 'structures', title: '자료구조', en: 'Data Structures', color: 'var(--c-cs-4)', blurb: '데이터를 어떤 순서로 넣고 꺼낼지 정하는 그릇. 스택, 큐, 힙.' },
   { id: 'graph', title: '그래프', en: 'Graphs', color: 'var(--c-cs-3)', blurb: '지도, 친구 관계, 웹 페이지처럼 연결된 데이터를 탐색하는 법.' },
 ];
 
@@ -36,6 +37,15 @@ const lessons: Lesson[] = [
     Component: lazy(() => import('./lessons/SearchHash')),
   },
   {
+    id: 'stack-queue-heap',
+    part: 'structures',
+    title: '스택, 큐, 힙',
+    en: 'Stacks, Queues & Heaps',
+    lede: '세 자료구조는 모두 넣고 꺼내기만 할 줄 압니다. 가장 최근 것, 가장 오래된 것, 가장 작은 것 중 무엇을 먼저 꺼내느냐가 다를 뿐인데, 그 차이가 실행 취소와 작업 대기열과 길 찾기를 가릅니다.',
+    learn: ['스택(LIFO)과 큐(FIFO)', '괄호 짝 맞추기와 호출 스택', '우선순위 큐와 이진 힙'],
+    Component: lazy(() => import('./lessons/StackQueueHeap')),
+  },
+  {
     id: 'graph-search',
     part: 'graph',
     title: '그래프 탐색',
@@ -52,7 +62,7 @@ const course: Course = {
   title: '기초 알고리즘',
   subtitle: 'Big-O에서 길 찾기까지',
   level: 1,
-  blurb: '입문 개발자를 위한 알고리즘 첫걸음. 복잡도를 읽는 법에서 시작해 정렬, 이진 탐색과 해시 테이블, 그래프 탐색까지 코드와 그림으로 따라갑니다.',
+  blurb: '입문 개발자를 위한 알고리즘 첫걸음. 복잡도를 읽는 법에서 시작해 정렬, 이진 탐색과 해시 테이블, 스택·큐·힙, 그래프 탐색까지 코드와 그림으로 따라갑니다.',
   parts,
   lessons,
   Cover: lazy(() => import('./Cover')),
