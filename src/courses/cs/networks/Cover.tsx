@@ -150,7 +150,7 @@ function NetHero() {
       for (const [a, b] of EDGES) {
         const k = edgeKey(a, b);
         const isDown = k === down;
-        ctx.strokeStyle = isDown ? P.bad : onPath.has(k) ? alpha(P.pos, 0.85) : P.lineStrong;
+        ctx.strokeStyle = isDown ? P.bad : onPath.has(k) ? alpha(P.neg, 0.85) : P.lineStrong;
         ctx.lineWidth = onPath.has(k) && !isDown ? 3 : 1.5;
         ctx.setLineDash(isDown ? [6, 5] : []);
         ctx.beginPath();
@@ -233,7 +233,7 @@ function NetHero() {
         <canvas ref={canvasRef} />
       </div>
       <div className="hero-figure-cap">
-        <strong style={{ color: down && !routed ? 'var(--bad)' : 'var(--pos)' }}>{status}</strong>: <span className="mono">{path.map(nodeName).join(' → ')}</span>
+        <strong style={{ color: down && !routed ? 'var(--bad)' : 'var(--neg)' }}>{status}</strong>: <span className="mono">{path.map(nodeName).join(' → ')}</span>
         {!still && (
           <>
             {' '}
