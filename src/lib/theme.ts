@@ -20,6 +20,8 @@ export interface Palette {
   math: string;
   ml: string;
   dl: string;
+  stats1: string;
+  stats2: string;
   pos: string;
   neg: string;
   posSoft: string;
@@ -47,6 +49,8 @@ const VARS: Record<Exclude<keyof Palette, 'dark'>, string> = {
   math: '--c-math',
   ml: '--c-ml',
   dl: '--c-dl',
+  stats1: '--c-stats-1',
+  stats2: '--c-stats-2',
   pos: '--pos',
   neg: '--neg',
   posSoft: '--pos-soft',
