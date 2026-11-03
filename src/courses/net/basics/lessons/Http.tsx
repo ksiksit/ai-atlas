@@ -77,10 +77,10 @@ function AnatomyFigure() {
       </div>
       <Legend
         items={[
-          { color: 'var(--c-cs-3)', label: ROLE_NAME.start, shape: 'sq' },
-          { color: 'var(--c-cs-2)', label: ROLE_NAME.header, shape: 'sq' },
+          { color: 'var(--c-net-3)', label: ROLE_NAME.start, shape: 'sq' },
+          { color: 'var(--c-net-2)', label: ROLE_NAME.header, shape: 'sq' },
           { color: 'var(--line-strong)', label: ROLE_NAME.blank, shape: 'sq' },
-          { color: 'var(--c-cs-1)', label: ROLE_NAME.body, shape: 'sq' },
+          { color: 'var(--c-net-1)', label: ROLE_NAME.body, shape: 'sq' },
         ]}
       />
     </Figure>
@@ -514,7 +514,7 @@ export default function Http() {
     <>
       <h2>요청 하나, 응답 하나</h2>
       <p>
-        <a href="#cs-networks/dns">DNS</a>로 서버의 주소를 알아낸 브라우저는 그 주소로 연결을 열고 <T en="HyperText Transfer Protocol">HTTP</T> 요청을 보냅니다. HTTP의 모양은 단순합니다. 클라이언트가 <T en="request">요청</T>을 보내면 서버가 <T en="response">응답</T>을 하나 돌려줍니다. 웹 페이지 하나를 띄울 때는 이 주고받기가 HTML, 스타일시트, 스크립트, 이미지마다 되풀이되어 수십에서 수백 번 일어납니다.
+        <a href="#net-basics/dns">DNS</a>로 서버의 주소를 알아낸 브라우저는 그 주소로 연결을 열고 <T en="HyperText Transfer Protocol">HTTP</T> 요청을 보냅니다. HTTP의 모양은 단순합니다. 클라이언트가 <T en="request">요청</T>을 보내면 서버가 <T en="response">응답</T>을 하나 돌려줍니다. 웹 페이지 하나를 띄울 때는 이 주고받기가 HTML, 스타일시트, 스크립트, 이미지마다 되풀이되어 수십에서 수백 번 일어납니다.
       </p>
       <AnatomyFigure />
       <p>
@@ -604,7 +604,7 @@ export default function Http() {
 
       <h2>첫 바이트까지의 왕복</h2>
       <p>
-        HTTPS로 처음 접속하는 데는 시간이 듭니다. 먼저 TCP 연결을 맺는 <a href="#cs-networks/tcp">3-way 핸드셰이크</a>에 1 RTT, 그다음 TLS 핸드셰이크로 열쇠를 나누고 인증서를 확인하는 데 TLS 1.2는 2 RTT가 걸립니다. 그 뒤에야 요청을 보내고 응답을 기다리는 1 RTT가 시작됩니다. 2018년에 나온 TLS 1.3은 클라이언트가 첫 메시지(ClientHello)에 디피–헬먼 공개 값을 미리 실어 보내게 해서 핸드셰이크를 1 RTT로 줄였습니다.
+        HTTPS로 처음 접속하는 데는 시간이 듭니다. 먼저 TCP 연결을 맺는 <a href="#net-basics/tcp">3-way 핸드셰이크</a>에 1 RTT, 그다음 TLS 핸드셰이크로 열쇠를 나누고 인증서를 확인하는 데 TLS 1.2는 2 RTT가 걸립니다. 그 뒤에야 요청을 보내고 응답을 기다리는 1 RTT가 시작됩니다. 2018년에 나온 TLS 1.3은 클라이언트가 첫 메시지(ClientHello)에 디피–헬먼 공개 값을 미리 실어 보내게 해서 핸드셰이크를 1 RTT로 줄였습니다.
       </p>
       <WaterfallFigure />
       <p>

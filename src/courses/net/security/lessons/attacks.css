@@ -1,0 +1,185 @@
+/* 공격과 방어: DDoS, 웹 보안 */
+
+/* origin comparison rows */
+.so-rows {
+  display: grid;
+  grid-template-columns: auto minmax(0, 0.8fr) minmax(0, 1.6fr) minmax(0, 0.9fr);
+  gap: 4px 10px;
+  font-size: var(--fs-sm);
+  align-items: center;
+}
+.so-rows .so-head {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.so-rows .so-cell {
+  font-family: var(--font-mono);
+  padding: 3px 6px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  overflow-wrap: anywhere;
+}
+.so-rows .so-cell[data-same='no'] {
+  border-color: var(--bad);
+  color: var(--bad);
+  font-weight: 600;
+}
+.so-verdict {
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  padding: 6px 10px;
+  border-left: 3px solid var(--line-strong);
+  background: var(--surface-2);
+}
+.so-verdict[data-v='yes'] {
+  border-left-color: var(--good);
+}
+.so-verdict[data-v='no'] {
+  border-left-color: var(--bad);
+}
+.so-url {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.so-url .text-input {
+  width: 100%;
+}
+
+/* CSRF scenario: the request the browser would send */
+.csrf-req {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  background: var(--surface-2);
+  border-left: 2px solid var(--part-color, var(--accent));
+  padding: 10px 12px;
+  margin: 0;
+}
+.csrf-req .hit {
+  background: color-mix(in srgb, var(--hl) 35%, transparent);
+}
+.csrf-req .miss {
+  color: var(--ink-3);
+  text-decoration: line-through;
+}
+.csrf-outcome {
+  font-weight: 700;
+  padding: 8px 12px;
+  border: 1.5px solid var(--line-strong);
+  font-size: var(--fs-sm);
+}
+.csrf-outcome[data-v='bad'] {
+  border-color: var(--bad);
+  color: var(--bad);
+}
+.csrf-outcome[data-v='good'] {
+  border-color: var(--good);
+  color: var(--good);
+}
+
+/* injection: HTML source and how a browser would read it */
+.inj-src {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  background: var(--surface-2);
+  border-left: 2px solid var(--part-color, var(--accent));
+  padding: 10px 12px;
+  margin: 0;
+}
+.inj-src .user {
+  background: color-mix(in srgb, var(--hl) 30%, transparent);
+}
+.inj-src .tag-danger {
+  color: var(--bad);
+  font-weight: 700;
+  text-decoration: underline wavy;
+  text-underline-offset: 3px;
+}
+.inj-nodes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: var(--fs-xs);
+}
+.lesson .inj-nodes {
+  margin: 0;
+  padding: 0;
+}
+.inj-nodes li {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 6.5em minmax(0, 1fr);
+  gap: 8px;
+  padding: 4px 8px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+.inj-nodes li[data-danger] {
+  border-color: var(--bad);
+}
+.inj-nodes .k {
+  color: var(--ink-3);
+}
+.inj-nodes .v {
+  font-family: var(--font-mono);
+  overflow-wrap: anywhere;
+}
+.inj-nodes li[data-danger] .v {
+  color: var(--bad);
+  font-weight: 600;
+}
+.inj-label {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.inj-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+/* SQL: the users table with matched rows */
+.sql-tbl td,
+.sql-tbl th {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+}
+.sql-tbl tr[data-hit] td {
+  background: color-mix(in srgb, var(--bad) 16%, transparent);
+  font-weight: 600;
+}
+.sql-tbl tr[data-hit='ok'] td {
+  background: color-mix(in srgb, var(--good) 16%, transparent);
+}
+
+/* passwords: unsalted vs salted hashes */
+.pw-tbl td {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  overflow-wrap: anywhere;
+}
+.pw-tbl td:first-child {
+  white-space: nowrap;
+  overflow-wrap: normal;
+}
+.pw-tbl td[data-dup] {
+  color: var(--bad);
+  font-weight: 700;
+}
+.pw-tbl td[data-cracked] {
+  background: color-mix(in srgb, var(--bad) 14%, transparent);
+}
+
+@media (max-width: 560px) {
+  .so-rows .so-cell {
+    font-size: var(--fs-xs);
+  }
+}

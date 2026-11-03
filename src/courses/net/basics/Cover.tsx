@@ -250,10 +250,10 @@ const sumLen = (path: number[], upto: number) => path.slice(0, upto).reduce((acc
 export default function Cover() {
   const start = course.lessons[0];
   return (
-    <div className="home" style={{ ['--part-color' as string]: 'var(--c-cs-2)' }}>
+    <div className="home" style={{ ['--part-color' as string]: 'var(--c-net-2)' }}>
       <section className="hero">
         <div className="hero-text">
-          <div className="eyebrow" style={{ color: 'var(--c-cs-2)' }}>
+          <div className="eyebrow" style={{ color: 'var(--c-net-2)' }}>
             {course.title} · {course.subtitle}
           </div>
           <h1 className="hero-title">

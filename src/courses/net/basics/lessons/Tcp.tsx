@@ -3,9 +3,9 @@ import { Button, Callout, Figure, Legend, M, MB, Quiz, Readout, Seg, Slider, T }
 import { useCanvas2D } from '../../../../lib/canvas';
 import { Plot, drawArrow } from '../../../../lib/plot';
 import { alpha, usePalette, type Palette } from '../../../../lib/theme';
-import { StepControls, useStepper } from '../../shared';
+import { StepControls, useStepper } from '../../../cs/shared';
 import { ISN_C, ISN_S, LADDER, MSS, fmtBps, fmtBytes, SW_DELAY, SW_RTO, SW_SEGS, slidingWindow, windowThroughput, type LadderMsg } from './transport';
-import '../../systems/lessons/saving.css';
+import '../../../cs/systems/lessons/saving.css';
 import './transport.css';
 
 function tag(ctx: CanvasRenderingContext2D, P: Palette, text: string, x: number, y: number, color: string, size = 11) {
@@ -442,7 +442,7 @@ export default function Tcp() {
     <>
       <h2>IP가 약속하지 않는 것</h2>
       <p>
-        <a href="#cs-networks/ip-routing">앞 장</a>에서 본 IP는 패킷을 목적지 쪽으로 한 칸씩 넘길 뿐, 도착을 보장하지 않습니다. 이런 방식을 <T en="best effort">최선 노력</T> 전달이라고 합니다. 라우터의 버퍼가 넘치면 패킷은 그냥 버려지고, 경로가 바뀌면 뒤에 보낸 패킷이 먼저 도착하기도 하며, 드물게는 같은 패킷이 두 번 오거나 비트가 깨져 옵니다. 그런데 웹 페이지나 파일은 한 바이트만 빠져도 쓸 수 없습니다.
+        <a href="#net-basics/ip-routing">앞 장</a>에서 본 IP는 패킷을 목적지 쪽으로 한 칸씩 넘길 뿐, 도착을 보장하지 않습니다. 이런 방식을 <T en="best effort">최선형 전달</T>이라고 합니다. 라우터의 버퍼가 넘치면 패킷은 그냥 버려지고, 경로가 바뀌면 뒤에 보낸 패킷이 먼저 도착하기도 하며, 드물게는 같은 패킷이 두 번 오거나 비트가 깨져 옵니다. 그런데 웹 페이지나 파일은 한 바이트만 빠져도 쓸 수 없습니다.
       </p>
       <p>
         <T en="Transmission Control Protocol">TCP</T>는 이 불안한 패킷 전달 위에 <strong>빠짐없고, 순서대로이며, 중복 없는 바이트 흐름</strong>을 만들어 줍니다. 응용 프로그램은 파일에 쓰듯 바이트를 밀어 넣고, 반대쪽은 같은 바이트를 같은 순서로 읽습니다. 이 장은 TCP가 그 약속을 어떻게 지키는지 봅니다.
@@ -478,7 +478,7 @@ export default function Tcp() {
             </tr>
             <tr>
               <td>네트워크가 붐빈다</td>
-              <td>손실을 신호로 보내는 양을 줄인다(혼잡 제어, <a href="#cs-networks/congestion">다음 장</a>)</td>
+              <td>손실을 신호로 보내는 양을 줄인다(혼잡 제어, <a href="#net-basics/congestion">다음 장</a>)</td>
             </tr>
           </tbody>
         </table>
@@ -500,7 +500,7 @@ export default function Tcp() {
         왜 두 번이 아니라 세 번일까요? 번호는 방향마다 따로 있습니다. 클라이언트의 번호는 SYN과 SYN-ACK로, 서버의 번호는 SYN-ACK와 마지막 ACK로 확인되므로, 양쪽 번호가 모두 확인되려면 세 번이 필요합니다. 시작 번호를 무작위로 고르는 이유도 있습니다. 예전 연결에서 늦게 도착한 세그먼트가 새 연결의 데이터로 오인되지 않게 하고, 번호를 모르는 공격자가 가짜 세그먼트를 끼워 넣기 어렵게 하려는 것입니다.
       </p>
       <p>
-        핸드셰이크에는 대가가 있습니다. 요청을 보내기까지 1 왕복을 먼저 써야 합니다. 서울에서 미국 서버까지 왕복이 150ms라면 아무 데이터도 오가기 전에 150ms가 지나갑니다. 연결을 한 번 열어 여러 요청에 다시 쓰는 것이 중요한 이유이고, <a href="#cs-networks/http">HTTP 장</a>에서 이 왕복을 줄이는 방법들을 봅니다. 닫을 때는 양쪽이 FIN을 하나씩 보내고 확인받습니다. 방향마다 따로 닫으므로, 한쪽이 다 보낸 뒤에도 반대쪽은 계속 보낼 수 있습니다.
+        핸드셰이크에는 대가가 있습니다. 요청을 보내기까지 1 왕복을 먼저 써야 합니다. 서울에서 미국 서버까지 왕복이 150ms라면 아무 데이터도 오가기 전에 150ms가 지나갑니다. 연결을 한 번 열어 여러 요청에 다시 쓰는 것이 중요한 이유이고, <a href="#net-basics/http">HTTP 장</a>에서 이 왕복을 줄이는 방법들을 봅니다. 닫을 때는 양쪽이 FIN을 하나씩 보내고 확인받습니다. 방향마다 따로 닫으므로, 한쪽이 다 보낸 뒤에도 반대쪽은 계속 보낼 수 있습니다.
       </p>
 
       <h2>순서 번호와 누적 ACK</h2>
@@ -557,7 +557,7 @@ export default function Tcp() {
 
       <h2>UDP: 아무것도 약속하지 않는 쪽</h2>
       <p>
-        모든 통신에 TCP가 맞는 것은 아닙니다. <T en="User Datagram Protocol">UDP</T>는 8바이트 헤더에 포트 번호와 길이, 체크섬만 담고, 연결도 재전송도 순서 맞추기도 하지 않습니다. 대신 핸드셰이크 없이 바로 보내고, 사라진 패킷 때문에 뒤의 패킷이 기다리는 일도 없습니다. 짧은 질문과 답 하나로 끝나는 <a href="#cs-networks/dns">DNS</a>, 0.2초 늦게 온 음성은 어차피 쓸모없는 화상 통화, 최신 위치만 중요한 게임이 UDP를 씁니다. HTTP/3의 QUIC처럼, UDP 위에 필요한 만큼의 신뢰성을 프로그램이 직접 만들어 얹기도 합니다.
+        모든 통신에 TCP가 맞는 것은 아닙니다. <T en="User Datagram Protocol">UDP</T>는 8바이트 헤더에 포트 번호와 길이, 체크섬만 담고, 연결도 재전송도 순서 맞추기도 하지 않습니다. 대신 핸드셰이크 없이 바로 보내고, 사라진 패킷 때문에 뒤의 패킷이 기다리는 일도 없습니다. 짧은 질문과 답 하나로 끝나는 <a href="#net-basics/dns">DNS</a>, 0.2초 늦게 온 음성은 어차피 쓸모없는 화상 통화, 최신 위치만 중요한 게임이 UDP를 씁니다. HTTP/3의 QUIC처럼, UDP 위에 필요한 만큼의 신뢰성을 프로그램이 직접 만들어 얹기도 합니다.
       </p>
 
       <Callout kind="key">

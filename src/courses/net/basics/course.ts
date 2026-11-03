@@ -2,9 +2,9 @@ import { lazy } from 'react';
 import type { Course, Lesson, Part } from '../../types';
 
 const parts: Part[] = [
-  { id: 'packets', title: '패킷과 주소', en: 'Packets & Addresses', color: 'var(--c-cs-1)', blurb: '데이터를 작은 패킷으로 나누고, 주소를 보고 한 칸씩 목적지까지 옮기는 법.' },
-  { id: 'transport', title: '믿을 수 있는 전달', en: 'Reliable Delivery', color: 'var(--c-cs-2)', blurb: '패킷이 사라지고 뒤섞이는 네트워크 위에서 빠짐없이, 그리고 서로 양보하며 보내는 법. TCP.' },
-  { id: 'web', title: '웹이 동작하는 길', en: 'How the Web Works', color: 'var(--c-cs-3)', blurb: '주소창에 이름을 입력하고 페이지가 뜨기까지. DNS와 HTTP, HTTPS.' },
+  { id: 'packets', title: '패킷과 주소', en: 'Packets & Addresses', color: 'var(--c-net-1)', blurb: '데이터를 작은 패킷으로 나누고, 주소를 보고 한 칸씩 목적지까지 옮기는 법.' },
+  { id: 'transport', title: '믿을 수 있는 전달', en: 'Reliable Delivery', color: 'var(--c-net-2)', blurb: '패킷이 사라지고 뒤섞이는 네트워크 위에서 빠짐없이, 그리고 서로 양보하며 보내는 법. TCP.' },
+  { id: 'web', title: '웹이 동작하는 길', en: 'How the Web Works', color: 'var(--c-net-3)', blurb: '주소창에 이름을 입력하고 페이지가 뜨기까지. DNS와 HTTP, HTTPS.' },
 ];
 
 const lessons: Lesson[] = [
@@ -65,12 +65,13 @@ const lessons: Lesson[] = [
 ];
 
 const course: Course = {
-  id: 'cs-networks',
-  subject: 'cs',
-  title: '컴퓨터 네트워크',
+  id: 'net-basics',
+  subject: 'net',
+  title: '기초 네트워크',
   subtitle: '패킷에서 HTTPS까지',
-  level: 2,
+  level: 1,
   prerequisites: ['cs-algorithms'],
+  aliases: ['cs-networks'],
   blurb: '웹 페이지 하나가 화면에 뜨기까지 네트워크에서 일어나는 일을 아래 계층부터 따라갑니다. 패킷과 계층, IP 주소와 라우팅, TCP의 재전송과 혼잡 제어, DNS, HTTP와 HTTPS를 브라우저 안의 시뮬레이션으로 직접 돌려 봅니다.',
   parts,
   lessons,
