@@ -3,9 +3,9 @@ import { Button, Callout, Figure, Legend, Quiz, Readout, Seg, Slider, T } from '
 import { localPoint, useCanvas2D } from '../../../../lib/canvas';
 import { Plot, drawArrow } from '../../../../lib/plot';
 import { alpha, usePalette, type Palette } from '../../../../lib/theme';
-import { StepControls, useStepper } from '../../shared';
+import { StepControls, useStepper } from '../../../cs/shared';
 import { DNS_RTT, TREE, TTL_BIN, TTL_CHANGE, TTL_DURATION, TTL_RESOLVERS, ZONES, recordsOf, replayLookups, simulateTtl, zoneOf, zonePath, type DnsNode, type Rec } from './web';
-import '../../systems/lessons/saving.css';
+import '../../../cs/systems/lessons/saving.css';
 import './web.css';
 
 /* ─────────────── Figure 1: the name tree and its zones ─────────────── */
@@ -524,7 +524,7 @@ export default function Dns() {
     <>
       <h2>이름은 사람을 위해, 주소는 라우터를 위해</h2>
       <p>
-        라우터는 패킷을 <a href="#cs-networks/ip-routing">IP 주소</a>로만 보냅니다. 하지만 사람은 192.0.2.10보다 www.example.com을 훨씬 잘 기억하고, 서비스 쪽에서도 이름이 있어야 편합니다. 서버를 다른 데이터센터로 옮겨 주소가 바뀌어도 이름은 그대로 둘 수 있고, 이름 하나에 주소 여러 개를 달아 부하를 나눌 수도 있습니다. 그래서 웹 요청은 거의 언제나 <strong>이름을 주소로 바꾸는 일</strong>로 시작합니다. 이 일을 하는 시스템이 <T en="Domain Name System">DNS</T>입니다.
+        라우터는 패킷을 <a href="#net-basics/ip-routing">IP 주소</a>로만 보냅니다. 하지만 사람은 192.0.2.10보다 www.example.com을 훨씬 잘 기억하고, 서비스 쪽에서도 이름이 있어야 편합니다. 서버를 다른 데이터센터로 옮겨 주소가 바뀌어도 이름은 그대로 둘 수 있고, 이름 하나에 주소 여러 개를 달아 부하를 나눌 수도 있습니다. 그래서 웹 요청은 거의 언제나 <strong>이름을 주소로 바꾸는 일</strong>로 시작합니다. 이 일을 하는 시스템이 <T en="Domain Name System">DNS</T>입니다.
       </p>
       <p>
         처음부터 DNS가 있었던 것은 아닙니다. 1970년대 아파넷(ARPANET)에서는 스탠퍼드 연구소(SRI)의 네트워크 정보 센터가 모든 컴퓨터의 이름과 주소를 적은 HOSTS.TXT 파일 하나를 관리했고, 각 컴퓨터가 이 파일을 주기적으로 내려받았습니다. 컴퓨터가 늘어나자 파일은 커지고, 변경 요청은 한곳에 몰리고, 이름이 겹치는 일도 막기 어려워졌습니다. 1983년 폴 모카페트리스(Paul Mockapetris)가 제안한 DNS는 이 표를 <strong>나무 모양으로 쪼개서 여러 관리자에게 나눠 맡기는</strong> 방법입니다. 지금도 대부분의 운영체제에는 hosts 파일이 남아 있어서, 거기 적은 이름은 DNS보다 먼저 쓰입니다.

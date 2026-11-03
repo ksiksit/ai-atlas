@@ -54,7 +54,7 @@
   overflow-wrap: anywhere;
 }
 .dns-msgs li[data-k='referral'] .what {
-  color: var(--c-cs-2);
+  color: var(--c-net-2);
 }
 .dns-msgs li[data-k='answer'] .what {
   color: var(--good);
@@ -198,15 +198,15 @@ table.mini-tbl tr[data-new] td {
   color: var(--ink-2);
 }
 .http-line[data-r='start'] {
-  border-left-color: var(--c-cs-3);
+  border-left-color: var(--c-net-3);
   color: var(--ink);
   font-weight: 700;
 }
 .http-line[data-r='header'] {
-  border-left-color: var(--c-cs-2);
+  border-left-color: var(--c-net-2);
 }
 .http-line[data-r='header'] .k {
-  color: var(--c-cs-2);
+  color: var(--c-net-2);
   font-weight: 600;
 }
 .http-line[data-r='blank'] {
@@ -217,7 +217,7 @@ table.mini-tbl tr[data-new] td {
   font-size: 0.72rem;
 }
 .http-line[data-r='body'] {
-  border-left-color: var(--c-cs-1);
+  border-left-color: var(--c-net-1);
   background: var(--surface-2);
 }
 .http-note {

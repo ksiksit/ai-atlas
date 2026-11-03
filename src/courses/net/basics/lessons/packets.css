@@ -2,16 +2,16 @@
 
 /* layer colours, shared by the encapsulation figure and the prose table */
 .net-l-app {
-  --lc: var(--c-cs-3);
+  --lc: var(--c-net-3);
 }
 .net-l-tcp {
-  --lc: var(--c-cs-2);
+  --lc: var(--c-net-2);
 }
 .net-l-ip {
-  --lc: var(--c-cs-1);
+  --lc: var(--c-net-1);
 }
 .net-l-eth {
-  --lc: var(--c-cs-4);
+  --lc: var(--c-net-4);
 }
 
 /* encapsulation: the two stacks and the packets between them */
@@ -88,7 +88,7 @@
   background: color-mix(in srgb, var(--lc) 10%, var(--surface));
 }
 .encap-row > .encap-pad {
-  --lc: var(--c-cs-4);
+  --lc: var(--c-net-4);
   background: repeating-linear-gradient(45deg, var(--surface), var(--surface) 3px, color-mix(in srgb, var(--lc) 25%, var(--surface)) 3px, color-mix(in srgb, var(--lc) 25%, var(--surface)) 6px);
 }
 .encap-row b {
@@ -152,8 +152,8 @@
   color: var(--ink-3);
 }
 .cidr-cells span[data-net] {
-  background: color-mix(in srgb, var(--c-cs-1) 22%, var(--surface));
-  border-color: color-mix(in srgb, var(--c-cs-1) 55%, var(--line));
+  background: color-mix(in srgb, var(--c-net-1) 22%, var(--surface));
+  border-color: color-mix(in srgb, var(--c-net-1) 55%, var(--line));
   color: var(--ink);
   font-weight: 700;
 }

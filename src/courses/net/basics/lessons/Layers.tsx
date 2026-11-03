@@ -3,10 +3,10 @@ import { Button, Callout, Figure, Legend, M, MB, Quiz, Readout, Seg, Slider, T }
 import { useCanvas2D } from '../../../../lib/canvas';
 import { Plot } from '../../../../lib/plot';
 import { alpha, usePalette } from '../../../../lib/theme';
-import { StepControls, humanTime, useStepper } from '../../shared';
+import { StepControls, humanTime, useStepper } from '../../../cs/shared';
 import { ETH_FCS, ETH_HEADER, IP_HEADER, MSS, PER_PACKET, TCP_HEADER, bdpBytes, bestPayload, ethPadding, overhead, pipeline, pipelineTotal, propagationDelay, segmentSizes, transmissionDelay } from './packets';
-import '../../algorithms/lessons/algorithms.css';
-import '../../systems/lessons/saving.css';
+import '../../../cs/algorithms/lessons/algorithms.css';
+import '../../../cs/systems/lessons/saving.css';
 import './packets.css';
 
 const n0 = (v: number) => Math.round(v).toLocaleString('ko-KR');
@@ -207,10 +207,10 @@ function EncapFigure() {
       </div>
       <Legend
         items={[
-          { color: 'var(--c-cs-3)', label: '응용 데이터', shape: 'sq' },
-          { color: 'var(--c-cs-2)', label: 'TCP 헤더', shape: 'sq' },
-          { color: 'var(--c-cs-1)', label: 'IP 헤더', shape: 'sq' },
-          { color: 'var(--c-cs-4)', label: '이더넷 헤더·FCS', shape: 'sq' },
+          { color: 'var(--c-net-3)', label: '응용 데이터', shape: 'sq' },
+          { color: 'var(--c-net-2)', label: 'TCP 헤더', shape: 'sq' },
+          { color: 'var(--c-net-1)', label: 'IP 헤더', shape: 'sq' },
+          { color: 'var(--c-net-4)', label: '이더넷 헤더·FCS', shape: 'sq' },
         ]}
       />
     </Figure>

@@ -3,8 +3,8 @@ import { Button, Callout, Code, Figure, Legend, M, Quiz, Readout, Seg, Slider, T
 import { localPoint, useCanvas2D } from '../../../../lib/canvas';
 import { alpha, usePalette } from '../../../../lib/theme';
 import { addressKind, bitsOf, broadcastOf, commonBits, formatIPv4, longestMatch, maskOf, matches, networkOf, parseIPv4, parsePrefix, pathTo, spf, usableHosts, type Link, type Route } from './packets';
-import '../../algorithms/lessons/algorithms.css';
-import '../../systems/lessons/saving.css';
+import '../../../cs/algorithms/lessons/algorithms.css';
+import '../../../cs/systems/lessons/saving.css';
 import './packets.css';
 
 const n0 = (v: number) => Math.round(v).toLocaleString('ko-KR');
@@ -65,7 +65,7 @@ function CidrFigure() {
           </div>
           <div className="readouts" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))' }}>
             <Readout label="서브넷 마스크" value={formatIPv4(maskOf(len))} />
-            <Readout label="네트워크 주소" value={`${formatIPv4(net)}/${len}`} color="var(--c-cs-1)" />
+            <Readout label="네트워크 주소" value={`${formatIPv4(net)}/${len}`} color="var(--c-net-1)" />
             <Readout label="브로드캐스트 주소" value={len >= 31 ? '없음' : formatIPv4(bc)} />
             <Readout label="쓸 수 있는 범위" value={hosts === 1 ? formatIPv4(net) : `${formatIPv4(first)} – ${formatIPv4(last)}`} />
             <Readout label="쓸 수 있는 주소 수" value={`${n0(hosts)}개`} />
@@ -80,7 +80,7 @@ function CidrFigure() {
             <input id="cidr-ip" className="text-input mono" type="text" inputMode="decimal" value={text} spellCheck={false} autoComplete="off" onChange={(e) => type(e.target.value)} aria-invalid={bad} />
             <span className="cidr-err">{bad ? '0~255 사이의 수 네 개를 점으로 이어 주세요' : ''}</span>
           </div>
-          <Slider id="cidr-len" label="프리픽스 길이" value={len} min={0} max={32} step={1} onChange={setLen} format={(v) => `/${v}`} color="var(--c-cs-1)" />
+          <Slider id="cidr-len" label="프리픽스 길이" value={len} min={0} max={32} step={1} onChange={setLen} format={(v) => `/${v}`} color="var(--c-net-1)" />
           <div className="ctl">
             <span className="ctl-label">
               <span>예시</span>
