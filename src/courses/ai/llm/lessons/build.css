@@ -1,0 +1,199 @@
+/* 대형 언어 모델 · 만들기 (토크나이저, 스케일링 법칙): figure parts that are plain HTML */
+
+.tk-input {
+  width: 100%;
+  font: inherit;
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+  padding: 8px 10px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink);
+  border-radius: 0;
+  resize: vertical;
+}
+.tk-input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.tk-note {
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  min-height: 3em;
+  overflow-wrap: anywhere;
+}
+
+.tk-sub {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  margin-bottom: 4px;
+}
+
+/* a run of text cut into token chips */
+.tk-flow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 6px;
+  align-items: flex-start;
+  padding: 10px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  min-height: 52px;
+}
+.tk-word {
+  display: inline-flex;
+  gap: 1px;
+  max-width: 100%;
+  flex-wrap: wrap;
+}
+.tk-chip {
+  --chip: var(--c-math);
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 0 5px;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.2;
+  white-space: pre;
+  color: var(--ink);
+  background: color-mix(in srgb, var(--chip) 16%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--chip) 42%, transparent);
+  border-bottom-width: 2px;
+}
+.tk-chip[data-c='1'] {
+  --chip: var(--pos);
+}
+.tk-chip[data-c='2'] {
+  --chip: var(--c-ml);
+}
+.tk-chip[data-c='3'] {
+  --chip: var(--c-stats-2);
+}
+.tk-chip .sp {
+  color: var(--ink-3);
+}
+/* the token created by the latest merge */
+.tk-chip[data-new] {
+  background: var(--hl);
+  border-color: var(--hl);
+  color: #1a1a1a;
+}
+.tk-chip[data-new] .sp {
+  color: #1a1a1a;
+  opacity: 0.6;
+}
+/* the two halves that the next merge will join */
+.tk-chip[data-next] {
+  border-bottom-color: var(--accent);
+  border-bottom-width: 3px;
+}
+/* a token that is only part of a character (byte-level BPE) */
+.tk-chip[data-partial] {
+  background: var(--surface);
+  border-style: dashed;
+  color: var(--ink-2);
+  font-size: 0.75rem;
+}
+
+/* pair counts as small bars */
+.tk-pairs {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 4px 8px;
+  align-items: center;
+  font-size: var(--fs-xs);
+}
+.tk-pairs .pair {
+  font-family: var(--font-mono);
+  white-space: pre;
+  color: var(--ink);
+}
+.tk-pairs .bar {
+  height: 10px;
+  background: color-mix(in srgb, var(--accent) 35%, transparent);
+}
+.tk-pairs .bar[data-top] {
+  background: var(--accent);
+}
+.tk-pairs .cnt {
+  font-family: var(--font-mono);
+  color: var(--ink-2);
+  text-align: right;
+}
+
+/* the learned vocabulary */
+.tk-vocab {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  align-items: center;
+  font-size: var(--fs-xs);
+  min-height: 28px;
+}
+.tk-vocab .lbl {
+  color: var(--ink-3);
+  margin-right: 4px;
+}
+.tk-vocab .tk-chip {
+  min-height: 22px;
+  font-size: 0.8125rem;
+}
+.tk-vocab .tk-chip[data-base] {
+  --chip: var(--ink-3);
+}
+
+/* characters with their UTF-8 bytes underneath */
+.tk-bytes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.tk-byte-group {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  padding: 2px 4px;
+  min-width: 26px;
+}
+.tk-byte-group .ch {
+  font-size: 0.9375rem;
+  line-height: 1.3;
+  white-space: pre;
+}
+.tk-byte-group .hx {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+.tk-byte-group[data-multi] {
+  border-color: color-mix(in srgb, var(--pos) 55%, transparent);
+}
+
+.tk-readouts4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+@media (max-width: 520px) {
+  .tk-readouts4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.tk-progress {
+  height: 4px;
+  background: var(--line);
+}
+.tk-progress > div {
+  height: 100%;
+  background: var(--accent);
+}
+
+@media (max-width: 760px) {
+  .tk-flow {
+    padding: 8px;
+  }
+}

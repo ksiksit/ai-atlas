@@ -1,0 +1,163 @@
+/* 대형 언어 모델 · 쓰기 (RAG, 추론 최적화): figure styles that are plain HTML rather than canvas */
+
+.sv-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+.lesson .sv-sub {
+  margin: 0;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--ink-2);
+}
+.sv-note {
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  min-height: 1.7em;
+  overflow-wrap: anywhere;
+}
+.sv-tight .seg button {
+  padding: 0 9px;
+}
+@media (max-width: 560px) {
+  .sv-tight .seg button {
+    padding: 0 7px;
+    font-size: var(--fs-xs);
+  }
+}
+
+/* retrieved chunks */
+.lesson .sv-hits {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.lesson .sv-hit {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 2.2em minmax(0, 1fr);
+  gap: 4px 8px;
+  padding: 6px 8px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+}
+.sv-hit[data-out] {
+  opacity: 0.55;
+  border-style: dashed;
+}
+.sv-hit .rk {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--ink);
+}
+.sv-hit .meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.sv-hit .meta .mono {
+  white-space: nowrap;
+}
+.sv-hit .txt {
+  grid-column: 2;
+  overflow-wrap: anywhere;
+}
+mark.sv-ans {
+  background: var(--hl);
+  color: #1a1a1a;
+  padding: 0 1px;
+}
+
+/* the assembled prompt */
+.sv-prompt {
+  margin: 0;
+  padding: 10px 12px;
+  max-height: 240px;
+  overflow: auto;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: var(--ink);
+}
+
+/* per-question table in figure 2 */
+.sv-qtbl td:first-child {
+  min-width: 10em;
+}
+.sv-qtbl td.ok {
+  color: var(--good);
+  font-weight: 600;
+}
+.sv-qtbl td.miss {
+  color: var(--bad);
+  font-weight: 600;
+}
+.sv-qtbl tr[data-para] td:first-child::after {
+  content: ' (바꿔 말함)';
+  color: var(--ink-3);
+  font-size: var(--fs-xs);
+}
+
+/* speculative decoding: rows of rounds */
+.sv-rounds {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 9.5em;
+}
+.sv-round {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 3px;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
+.sv-round .n {
+  width: 4.4em;
+  white-space: nowrap;
+  color: var(--ink-3);
+  font-size: var(--fs-xs);
+}
+.sv-tok {
+  min-width: 24px;
+  height: 24px;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid var(--ink);
+  background: var(--surface);
+  color: var(--ink);
+}
+.sv-tok[data-k='acc'] {
+  background: var(--good);
+  border-color: var(--good);
+  color: var(--surface);
+}
+.sv-tok[data-k='rej'] {
+  border-color: var(--bad);
+  color: var(--bad);
+  text-decoration: line-through;
+}
+.sv-tok[data-k='fix'] {
+  background: var(--pos);
+  border-color: var(--pos);
+  color: var(--surface);
+}
+.sv-tok[data-k='bonus'] {
+  background: var(--hl);
+  border-color: var(--hl);
+  color: #1a1a1a;
+}
