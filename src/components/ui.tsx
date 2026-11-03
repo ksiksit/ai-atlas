@@ -148,24 +148,32 @@ export function Legend({ items }: { items: { color: string; label: ReactNode; sh
 
 /* ───────── Quiz ───────── */
 
+const CIRCLED = ['①', '②', '③', '④', '⑤', '⑥', '⑦', '⑧'];
+
 export function Quiz({ q, options, answer, explain }: { q: ReactNode; options: ReactNode[]; answer: number; explain: ReactNode }) {
   const [picked, setPicked] = useState<number | null>(null);
+  const correct = picked === answer;
   return (
-    <div className="quiz">
+    <div className="quiz" style={picked !== null ? ({ ['--quiz-color' as string]: correct ? 'var(--good)' : 'var(--bad)' } as CSSProperties) : undefined}>
       <div className="quiz-q">
         <span className="tag">확인 문제</span>
         <span>{q}</span>
       </div>
       <div className="quiz-opts">
-        {options.map((o, i) => (
-          <button key={i} type="button" className="quiz-opt" data-state={picked === null ? undefined : i === answer ? (picked === i || picked !== null ? 'right' : undefined) : picked === i ? 'wrong' : undefined} onClick={() => setPicked(i)}>
-            {o}
-          </button>
-        ))}
+        {options.map((o, i) => {
+          const state = picked === null ? undefined : i === answer ? 'right' : picked === i ? 'wrong' : undefined;
+          return (
+            <button key={i} type="button" className="quiz-opt" data-state={state} onClick={() => setPicked(i)}>
+              <span aria-hidden="true">{CIRCLED[i] ?? `${i + 1}.`}</span>
+              <span>{o}</span>
+              <span className="mark">{state === 'right' ? '정답' : state === 'wrong' ? '고른 답' : ''}</span>
+            </button>
+          );
+        })}
       </div>
       {picked !== null && (
         <div className="quiz-explain">
-          <strong style={{ color: picked === answer ? 'var(--good)' : 'var(--bad)' }}>{picked === answer ? '정답입니다. ' : '아쉬워요. '}</strong>
+          <strong style={{ color: correct ? 'var(--good)' : 'var(--bad)' }}>{correct ? '정답입니다. ' : '다시 보기. '}</strong>
           {explain}
         </div>
       )}
