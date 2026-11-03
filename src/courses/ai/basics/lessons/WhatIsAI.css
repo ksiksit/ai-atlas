@@ -62,14 +62,15 @@
 .tl-track {
   position: relative;
   display: grid;
-  grid-template-columns: repeat(8, minmax(0, 1fr));
+  grid-template-columns: repeat(var(--tl-n, 8), minmax(0, 1fr));
   padding-top: 6px;
 }
 .tl-track::before {
   content: '';
   position: absolute;
-  left: 6%;
-  right: 6%;
+  /* from the centre of the first dot to the centre of the last */
+  left: calc(50% / var(--tl-n, 8));
+  right: calc(50% / var(--tl-n, 8));
   top: 17px;
   height: 2px;
   background: var(--line-strong);
@@ -98,7 +99,7 @@
 }
 .tl-dot span {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: min(0.72rem, 2.9vw);
   font-variant-numeric: tabular-nums;
 }
 .tl-dot[aria-pressed='true'] i {

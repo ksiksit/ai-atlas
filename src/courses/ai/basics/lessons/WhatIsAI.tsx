@@ -374,6 +374,7 @@ const EVENTS: { year: string; era: keyof typeof ERA; title: string; text: string
   { year: '2012', era: 'deep', title: 'AlexNet', text: 'GPU로 학습한 합성곱 신경망 AlexNet이 이미지 인식 대회 ImageNet에서 오류율을 2위보다 10%p 넘게 낮추며 우승했습니다. 딥러닝 붐이 여기서 시작됩니다.', link: { id: 'cnn', label: '합성곱 신경망' } },
   { year: '2017', era: 'deep', title: '트랜스포머', text: '구글 연구진의 논문 「Attention Is All You Need」가 어텐션만으로 만든 트랜스포머 구조를 제안했습니다. 오늘날 거의 모든 대형 언어 모델의 뼈대입니다.', link: { id: 'attention', label: '어텐션과 트랜스포머' } },
   { year: '2022', era: 'deep', title: 'ChatGPT', text: 'OpenAI가 대화형 언어 모델 ChatGPT를 공개했고, 두 달 만에 사용자 1억 명을 넘긴 것으로 알려졌습니다. 다음 단어를 예측하도록 학습한 모델이 일상의 도구가 되었습니다.', link: { id: 'language-model', label: '언어 모델' } },
+  { year: '2024', era: 'deep', title: '노벨상을 받은 인공지능 연구', text: '인공 신경망으로 학습하는 기계의 기초를 놓은 존 홉필드와 제프리 힌턴이 노벨 물리학상을 받았습니다. 같은 해 단백질 구조를 예측하는 AlphaFold를 만든 데미스 허사비스와 존 점퍼가 단백질 설계 연구자 데이비드 베이커와 함께 노벨 화학상을 받았습니다. 인공지능이 과학 연구의 도구로 자리 잡았음을 보여 준 해입니다.', link: { id: 'neural-network', label: '신경망 놀이터' } },
 ];
 
 function TimelineFigure() {
@@ -382,7 +383,7 @@ function TimelineFigure() {
   const era = ERA[e.era];
   return (
     <Figure no={3} title="인공지능 70년" hint="연도를 눌러 보세요" caption="점 사이 간격은 실제 시간 간격과 비례하지 않습니다. 색은 시대를 나타냅니다.">
-      <div className="tl-track" role="group" aria-label="연표">
+      <div className="tl-track" role="group" aria-label="연표" style={{ ['--tl-n' as string]: EVENTS.length } as CSSProperties}>
         {EVENTS.map((ev, k) => (
           <button key={ev.year} type="button" className="tl-dot" aria-pressed={k === i} onClick={() => setI(k)} style={{ ['--tl-color' as string]: ERA[ev.era].color } as CSSProperties} aria-label={`${ev.year}년 ${ev.title}`}>
             <i />
@@ -396,7 +397,7 @@ function TimelineFigure() {
         </span>
         <h3>{e.title}</h3>
         <p>{e.text}</p>
-        {e.link && <a href={lessonHref('ai-basics', e.link.id)}>이 사이트의 「{e.link.label}」 장에서 자세히 →</a>}
+        {e.link && <a href={lessonHref('ai-basics', e.link.id)}>「{e.link.label}」 장에서 자세히 →</a>}
       </div>
       <div className="btn-row">
         <Button small onClick={() => setI((k) => Math.max(0, k - 1))} disabled={i === 0}>
@@ -438,7 +439,7 @@ export default function WhatIsAI() {
         조금 더 정확히 말하면, 머신러닝은 입력 <M>{'x'}</M>를 받아 출력 <M>{'y'}</M>를 내놓는 <T en="function">함수</T>를 데이터로 찾는 일입니다. 메일(입력)을 받아 스팸일 확률(출력)을 내놓는 함수, 사진을 받아 "고양이"라는 이름을 내놓는 함수, 문장을 받아 다음 단어를 내놓는 함수가 모두 그렇습니다.
       </p>
       <MB note="θ(세타)는 모델 안의 조정 가능한 숫자들, 즉 파라미터입니다. 위 그림에서는 w₁, w₂, b 세 개였고 대형 언어 모델에서는 수천억 개입니다.">{'\\hat{y} = f(x;\\ \\theta)'}</MB>
-      <p>이 함수를 찾는 과정에는 언제나 세 가지 재료가 들어갑니다. 이 사이트의 머신러닝과 딥러닝 장들은 모두 이 세 가지를 바꿔 가며 반복하는 이야기입니다.</p>
+      <p>이 함수를 찾는 과정에는 언제나 세 가지 재료가 들어갑니다. 이 과목의 머신러닝과 딥러닝 장들은 모두 이 세 가지를 바꿔 가며 반복하는 이야기입니다.</p>
       <div className="ingredients">
         <div>
           <span className="ing-q">어떤 모양의 함수인가?</span>
@@ -462,7 +463,7 @@ export default function WhatIsAI() {
       <p>인공지능의 역사는 규칙을 직접 쓰는 쪽과 데이터에서 배우는 쪽이 번갈아 주목받은 역사이기도 합니다. 학습하는 기계에 대한 아이디어는 1950년대부터 있었지만, 데이터와 계산 능력이 충분해진 2010년대에야 본격적으로 꽃을 피웠습니다.</p>
       <TimelineFigure />
 
-      <h2>이 사이트의 길</h2>
+      <h2>이 과목의 길</h2>
       <p>
         이제부터 걸어갈 길은 세 구간입니다. <strong>수학 기초</strong>에서는 데이터를 담는 벡터와 행렬, 변화를 재는 미분, 불확실성을 다루는 확률을 익힙니다. <strong>머신러닝</strong>에서는 그 도구로 직선을 긋고, 오차를 줄이고, 모델을 평가합니다. <strong>딥러닝</strong>에서는 뉴런을 쌓아 신경망을 만들고, 이미지와 언어를 다루는 구조를 거쳐 언어 모델이 문장을 만들어 내는 과정까지 갑니다.
       </p>
