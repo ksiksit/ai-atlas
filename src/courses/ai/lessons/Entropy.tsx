@@ -1,9 +1,9 @@
 import { useRef, useState } from 'react';
-import { Button, Callout, Figure, Legend, M, MB, Quiz, Readout, Seg, Slider, T } from '../components/ui';
-import { useCanvas2D, useDrag } from '../lib/canvas';
-import { Plot, fmt } from '../lib/plot';
-import { alpha, usePalette } from '../lib/theme';
-import { softmax } from '../lib/math';
+import { Button, Callout, Figure, Legend, M, MB, Quiz, Readout, Seg, Slider, T } from '../../../components/ui';
+import { useCanvas2D, useDrag } from '../../../lib/canvas';
+import { Plot, fmt } from '../../../lib/plot';
+import { alpha, usePalette } from '../../../lib/theme';
+import { softmax } from '../../../lib/math';
 
 const log2 = (x: number) => Math.log(x) / Math.LN2;
 

@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import { Button, Callout, Check, Figure, Legend, M, MB, Quiz, Readout, Seg, Slider, T } from '../components/ui';
-import { useAnimationFrame, useCanvas2D, useDrag, useInView } from '../lib/canvas';
-import { Plot, drawArrow, fmt } from '../lib/plot';
-import { usePalette, alpha, lerpColor, type Palette } from '../lib/theme';
-import { ThreeView, surfaceMesh, axes3, color3, THREE } from '../lib/three';
+import { Button, Callout, Check, Figure, Legend, M, MB, Quiz, Readout, Seg, Slider, T } from '../../../components/ui';
+import { useAnimationFrame, useCanvas2D, useDrag, useInView } from '../../../lib/canvas';
+import { Plot, drawArrow, fmt } from '../../../lib/plot';
+import { usePalette, alpha, lerpColor, type Palette } from '../../../lib/theme';
+import { ThreeView, surfaceMesh, axes3, color3, THREE } from '../../../lib/three';
 
 interface Fn2 {
   id: string;

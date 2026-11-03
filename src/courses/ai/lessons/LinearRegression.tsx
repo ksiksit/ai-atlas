@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Button, Callout, Check, Figure, Legend, M, MB, Quiz, Readout, Slider, T } from '../components/ui';
-import { useCanvas2D, useDrag } from '../lib/canvas';
-import { Plot, fmt } from '../lib/plot';
-import { alpha, lerpColor, usePalette } from '../lib/theme';
-import { gauss, rng } from '../lib/math';
+import { Button, Callout, Check, Figure, Legend, M, MB, Quiz, Readout, Slider, T } from '../../../components/ui';
+import { useCanvas2D, useDrag } from '../../../lib/canvas';
+import { Plot, fmt } from '../../../lib/plot';
+import { alpha, lerpColor, usePalette } from '../../../lib/theme';
+import { gauss, rng } from '../../../lib/math';
 
 type P2 = { x: number; y: number };
 
@@ -433,7 +433,7 @@ export default function LinearRegression() {
       </p>
       <MB note="x̄, ȳ는 평균. 기울기는 x와 y가 함께 변하는 정도(공분산)를 x의 퍼짐(분산)으로 나눈 값입니다.">{'w^* = \\frac{\\sum_i (x_i - \\bar{x})(y_i - \\bar{y})}{\\sum_i (x_i - \\bar{x})^2}, \\qquad b^* = \\bar{y} - w^*\\bar{x}'}</MB>
       <Callout kind="intuition">
-        공식으로 바로 풀 수 있는 것은 모델이 직선이고 손실이 제곱이라 지형이 매끈한 그릇이기 때문입니다. 신경망처럼 파라미터가 수백만 개이고 지형이 울퉁불퉁하면 이런 공식이 없습니다. 그때는 지형의 기울기를 따라 조금씩 내려가야 하는데, 이것이 다음 장의 <a href="#gradient-descent">경사하강법</a>입니다.
+        공식으로 바로 풀 수 있는 것은 모델이 직선이고 손실이 제곱이라 지형이 매끈한 그릇이기 때문입니다. 신경망처럼 파라미터가 수백만 개이고 지형이 울퉁불퉁하면 이런 공식이 없습니다. 그때는 지형의 기울기를 따라 조금씩 내려가야 하는데, 이것이 다음 장의 <a href="#ai/gradient-descent">경사하강법</a>입니다.
       </Callout>
 
       <h2>손실 함수의 선택은 가치 판단이다</h2>

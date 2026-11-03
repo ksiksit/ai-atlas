@@ -1,4 +1,4 @@
-import { gauss, rng } from '../lib/math';
+import { gauss, rng } from '../../../lib/math';
 
 export type Act = 'relu' | 'tanh' | 'sigmoid';
 

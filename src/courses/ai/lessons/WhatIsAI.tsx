@@ -1,9 +1,10 @@
 import { useMemo, useRef, useState, type CSSProperties } from 'react';
-import { Button, Callout, Figure, Legend, M, MB, Quiz, Readout, Seg, Slider, T } from '../components/ui';
-import { useAnimationFrame, useCanvas2D, useInView } from '../lib/canvas';
-import { Plot, fmt } from '../lib/plot';
-import { usePalette, alpha, parseColor } from '../lib/theme';
-import { gauss, rng, sigmoid } from '../lib/math';
+import { Button, Callout, Figure, Legend, M, MB, Quiz, Readout, Seg, Slider, T } from '../../../components/ui';
+import { useAnimationFrame, useCanvas2D, useInView } from '../../../lib/canvas';
+import { Plot, fmt } from '../../../lib/plot';
+import { usePalette, alpha, parseColor } from '../../../lib/theme';
+import { gauss, rng, sigmoid } from '../../../lib/math';
+import { lessonHref } from '../../index';
 import './WhatIsAI.css';
 
 /* ─────────────── Figure 1: AI ⊃ ML ⊃ DL ─────────────── */
@@ -99,7 +100,7 @@ function RingsFigure() {
           {r.links.length > 0 && (
             <div className="ai-chips">
               {r.links.map((l) => (
-                <a key={l.id} href={'#' + l.id}>
+                <a key={l.id} href={lessonHref('ai', l.id)}>
                   {l.label} 장 →
                 </a>
               ))}
@@ -395,7 +396,7 @@ function TimelineFigure() {
         </span>
         <h3>{e.title}</h3>
         <p>{e.text}</p>
-        {e.link && <a href={'#' + e.link.id}>이 사이트의 「{e.link.label}」 장에서 자세히 →</a>}
+        {e.link && <a href={lessonHref('ai', e.link.id)}>이 사이트의 「{e.link.label}」 장에서 자세히 →</a>}
       </div>
       <div className="btn-row">
         <Button small onClick={() => setI((k) => Math.max(0, k - 1))} disabled={i === 0}>

@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { Button, Callout, Check, Figure, Legend, M, MB, Quiz, Readout, Seg, Slider, T } from '../components/ui';
-import { useCanvas2D } from '../lib/canvas';
-import { Plot, fmt } from '../lib/plot';
-import { alpha, parseColor, usePalette } from '../lib/theme';
-import { relu, sigmoid } from '../lib/math';
+import { Button, Callout, Check, Figure, Legend, M, MB, Quiz, Readout, Seg, Slider, T } from '../../../components/ui';
+import { useCanvas2D } from '../../../lib/canvas';
+import { Plot, fmt } from '../../../lib/plot';
+import { alpha, parseColor, usePalette } from '../../../lib/theme';
+import { relu, sigmoid } from '../../../lib/math';
 
 type ActId = 'step' | 'sigmoid' | 'tanh' | 'relu';
 const ACTS: Record<ActId, { name: string; f: (z: number) => number; df: (z: number) => number; range: [number, number]; tex: string }> = {
@@ -353,7 +353,7 @@ export default function Neuron() {
         1969년 민스키와 페퍼트는 책 『퍼셉트론』에서 바로 이 XOR 문제를 들어 단층 퍼셉트론의 한계를 증명했습니다. 이 지적은 신경망 연구가 한동안 침체되는 계기가 되었습니다.
       </p>
       <p>
-        해결책은 뉴런을 여러 층으로 쌓는 것입니다. 첫 번째 층의 뉴런 둘이 각각 OR과 NAND(AND의 반대)를 계산하고, 두 번째 층의 뉴런이 그 둘을 AND로 합치면 XOR이 됩니다. 직선 두 개를 조합해 띠 모양 영역을 만드는 셈입니다. 이렇게 층을 쌓은 신경망이 어떤 경계까지 그릴 수 있는지는 다음 장 <a href="#neural-network">신경망 놀이터</a>에서 직접 확인해 보세요.
+        해결책은 뉴런을 여러 층으로 쌓는 것입니다. 첫 번째 층의 뉴런 둘이 각각 OR과 NAND(AND의 반대)를 계산하고, 두 번째 층의 뉴런이 그 둘을 AND로 합치면 XOR이 됩니다. 직선 두 개를 조합해 띠 모양 영역을 만드는 셈입니다. 이렇게 층을 쌓은 신경망이 어떤 경계까지 그릴 수 있는지는 다음 장 <a href="#ai/neural-network">신경망 놀이터</a>에서 직접 확인해 보세요.
       </p>
       <MB note="은닉층 두 뉴런(h₁ = OR, h₂ = NAND)과 출력 뉴런 하나로 만든 XOR. 계단 함수 기준입니다.">{'\\text{XOR}(x_1,x_2) = \\text{AND}\\big(\\,\\underbrace{\\text{OR}(x_1,x_2)}_{h_1},\\ \\underbrace{\\text{NAND}(x_1,x_2)}_{h_2}\\,\\big)'}</MB>
       <Callout kind="key">

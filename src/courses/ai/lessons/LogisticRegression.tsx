@@ -1,9 +1,9 @@
 import { useMemo, useRef, useState, type RefObject } from 'react';
-import { Button, Callout, Figure, Legend, M, MB, Quiz, Readout, Seg, Slider, T } from '../components/ui';
-import { useAnimationFrame, useCanvas2D, useDrag, useInView } from '../lib/canvas';
-import { Plot, fmt } from '../lib/plot';
-import { alpha, parseColor, usePalette } from '../lib/theme';
-import { clamp, makeDataset, rng, sigmoid, type Pt } from '../lib/math';
+import { Button, Callout, Figure, Legend, M, MB, Quiz, Readout, Seg, Slider, T } from '../../../components/ui';
+import { useAnimationFrame, useCanvas2D, useDrag, useInView } from '../../../lib/canvas';
+import { Plot, fmt } from '../../../lib/plot';
+import { alpha, parseColor, usePalette } from '../../../lib/theme';
+import { clamp, makeDataset, rng, sigmoid, type Pt } from '../../../lib/math';
 
 /* ─────────────── Figure 1: the sigmoid ─────────────── */
 
@@ -366,7 +366,7 @@ export default function LogisticRegression() {
       </p>
       <MB note="정답이 1이면 −log p̂, 정답이 0이면 −log(1−p̂)만 남습니다. 정답에 준 확률이 0에 가까워지면 손실은 무한히 커집니다.">{'L = -\\frac{1}{N}\\sum_{i=1}^{N} \\Big[ y_i \\log \\hat{p}_i + (1 - y_i)\\log(1 - \\hat{p}_i) \\Big]'}</MB>
       <p>
-        이 식을 <T en="binary cross-entropy">이진 크로스엔트로피</T> 또는 로그 손실이라고 부릅니다. 왜 하필 로그인지는 <a href="#entropy">정보량과 엔트로피</a> 장에서 "놀라움의 양"으로 자세히 설명했습니다. 아래 그림에서 w와 b를 바꿔 가며 손실이 가장 작아지는 곡선을 찾아보세요.
+        이 식을 <T en="binary cross-entropy">이진 크로스엔트로피</T> 또는 로그 손실이라고 부릅니다. 왜 하필 로그인지는 <a href="#ai/entropy">정보량과 엔트로피</a> 장에서 "놀라움의 양"으로 자세히 설명했습니다. 아래 그림에서 w와 b를 바꿔 가며 손실이 가장 작아지는 곡선을 찾아보세요.
       </p>
       <StudyFigure />
       <Callout kind="intuition">
@@ -383,7 +383,7 @@ export default function LogisticRegression() {
       </p>
       <MB>{'\\frac{\\partial L}{\\partial w_j} = \\frac{1}{N}\\sum_{i=1}^N (\\hat{p}_i - y_i)\\,x_{ij}, \\qquad \\frac{\\partial L}{\\partial b} = \\frac{1}{N}\\sum_{i=1}^N (\\hat{p}_i - y_i)'}</MB>
       <Callout kind="warn" label="한계">
-        그림 3에서 원형 데이터를 불러와 학습시켜 보세요. 결정 경계가 직선이라서 안쪽 원과 바깥 고리를 나눌 수 없습니다. 이 한계를 넘으려면 특징을 새로 만들어 주거나(<M>{'x_1^2 + x_2^2'}</M> 같은), 경계를 스스로 구부릴 수 있는 <a href="#neural-network">신경망</a>이 필요합니다.
+        그림 3에서 원형 데이터를 불러와 학습시켜 보세요. 결정 경계가 직선이라서 안쪽 원과 바깥 고리를 나눌 수 없습니다. 이 한계를 넘으려면 특징을 새로 만들어 주거나(<M>{'x_1^2 + x_2^2'}</M> 같은), 경계를 스스로 구부릴 수 있는 <a href="#ai/neural-network">신경망</a>이 필요합니다.
       </Callout>
       <Callout kind="key">
         로지스틱 회귀 = 선형 모델 + 시그모이드 + 로그 손실. 이 조합은 사실 뉴런 하나와 똑같습니다. 딥러닝 분류 모델의 마지막 층도 거의 항상 이 구조(여러 클래스라면 소프트맥스)로 끝납니다.

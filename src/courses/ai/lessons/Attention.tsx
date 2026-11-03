@@ -1,9 +1,9 @@
 import { useMemo, useRef, useState, type KeyboardEvent } from 'react';
-import { Callout, Check, Figure, Legend, M, MB, Quiz, Seg, Slider, T } from '../components/ui';
-import { useCanvas2D, useDrag } from '../lib/canvas';
-import { Plot, fmt } from '../lib/plot';
-import { usePalette, alpha } from '../lib/theme';
-import { softmax } from '../lib/math';
+import { Callout, Check, Figure, Legend, M, MB, Quiz, Seg, Slider, T } from '../../../components/ui';
+import { useCanvas2D, useDrag } from '../../../lib/canvas';
+import { Plot, fmt } from '../../../lib/plot';
+import { usePalette, alpha } from '../../../lib/theme';
+import { softmax } from '../../../lib/math';
 
 /* ─────────────── Figure 1: attention viewer ─────────────── */
 
@@ -430,7 +430,7 @@ export default function Attention() {
     <>
       <h2>같은 단어, 다른 의미</h2>
       <p>
-        "배가 고파서 배를 깎아 먹고 배를 타러 갔다." 이 문장에서 세 번 나온 "배"는 모두 뜻이 다릅니다. 사람은 주변 단어를 보고 자연스럽게 구별하지만, <a href="#embeddings">임베딩</a> 표는 세 "배"에게 같은 벡터를 줍니다. 단어의 뜻을 제대로 알려면 문맥을 봐야 합니다.
+        "배가 고파서 배를 깎아 먹고 배를 타러 갔다." 이 문장에서 세 번 나온 "배"는 모두 뜻이 다릅니다. 사람은 주변 단어를 보고 자연스럽게 구별하지만, <a href="#ai/embeddings">임베딩</a> 표는 세 "배"에게 같은 벡터를 줍니다. 단어의 뜻을 제대로 알려면 문맥을 봐야 합니다.
       </p>
       <p>
         예전의 언어 모델(RNN)은 문장을 앞에서부터 한 단어씩 읽으며 기억을 갱신했습니다. 그러다 보니 문장이 길어지면 앞부분을 잊어버리기 쉬웠습니다. 2017년 논문 「Attention Is All You Need」가 소개한 <T en="Transformer">트랜스포머</T>는 방식을 바꿨습니다. 모든 단어가 문장의 모든 단어를 한 번에, 직접 볼 수 있게 한 것입니다. 이때 누구를 얼마나 볼지 정하는 장치가 <T en="attention">어텐션</T>입니다.
@@ -454,7 +454,7 @@ export default function Attention() {
         </li>
       </ul>
       <p>
-        세 벡터는 단어의 임베딩 <M>{'\\mathbf{x}'}</M>에 학습되는 행렬 세 개를 곱해서 만듭니다. <M>{'\\mathbf{q} = W_Q\\mathbf{x}'}</M>, <M>{'\\mathbf{k} = W_K\\mathbf{x}'}</M>, <M>{'\\mathbf{v} = W_V\\mathbf{x}'}</M>입니다. 그다음 내 질문과 각 단어의 열쇠를 <a href="#vectors">내적</a>해서 점수를 매기고, 소프트맥스로 확률처럼 바꾼 뒤, 그 비율대로 값들을 섞습니다.
+        세 벡터는 단어의 임베딩 <M>{'\\mathbf{x}'}</M>에 학습되는 행렬 세 개를 곱해서 만듭니다. <M>{'\\mathbf{q} = W_Q\\mathbf{x}'}</M>, <M>{'\\mathbf{k} = W_K\\mathbf{x}'}</M>, <M>{'\\mathbf{v} = W_V\\mathbf{x}'}</M>입니다. 그다음 내 질문과 각 단어의 열쇠를 <a href="#ai/vectors">내적</a>해서 점수를 매기고, 소프트맥스로 확률처럼 바꾼 뒤, 그 비율대로 값들을 섞습니다.
       </p>
       <QKVFigure />
       <p>이 과정을 모든 단어에 대해 한꺼번에 행렬로 계산하면 트랜스포머 논문의 그 유명한 식이 됩니다.</p>

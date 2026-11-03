@@ -1,9 +1,10 @@
-import { type CSSProperties } from 'react';
-import { LESSONS, PARTS, lessonNo } from '../curriculum';
-import { ThreeView, surfaceMesh, color3, THREE } from '../lib/three';
-import { rng } from '../lib/math';
-import { prefersReducedMotion } from '../lib/canvas';
-import './home.css';
+import { ThreeView, surfaceMesh, color3, THREE } from '../../lib/three';
+import { rng } from '../../lib/math';
+import { prefersReducedMotion } from '../../lib/canvas';
+import { CourseMap } from '../../components/CourseMap';
+import { lessonHref } from '../index';
+import course from './course';
+import '../../styles/cover.css';
 
 /** A bumpy loss landscape with a few valleys. */
 function loss(x: number, y: number) {
@@ -98,8 +99,8 @@ function HeroLandscape() {
   );
 }
 
-export default function Home() {
-  const start = LESSONS[0];
+export default function Cover() {
+  const start = course.lessons[0];
   return (
     <div className="home">
       <section className="hero">
@@ -119,10 +120,10 @@ export default function Home() {
             오른쪽 곡면은 모델이 틀린 정도, 즉 손실을 높이로 그린 지형입니다. 주황색 공은 기울기만 보고 한 걸음씩 아래로 굴러가요. 신경망이 학습하는 방식도 정확히 이렇습니다. 이 사이트는 이 장면을 이해하는 데 필요한 수학부터 트랜스포머까지, 19개의 장을 직접 만지며 따라가도록 만들었습니다.
           </p>
           <div className="btn-row">
-            <a className="btn primary" href={'#' + start.id}>
+            <a className="btn primary" href={lessonHref(course.id, start.id)}>
               처음부터 시작하기
             </a>
-            <a className="btn" href="#neural-network">
+            <a className="btn" href={lessonHref(course.id, 'neural-network')}>
               신경망 놀이터 열기
             </a>
           </div>
@@ -150,30 +151,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="map" aria-labelledby="map-title">
-        <h2 id="map-title" className="map-title">
-          전체 지도
-        </h2>
-        {PARTS.map((p) => (
-          <div className="map-part" key={p.id} style={{ ['--part-color' as string]: p.color } as CSSProperties}>
-            <div className="map-part-head">
-              <span className="map-part-en">{p.en}</span>
-              <h3>{p.title}</h3>
-              <p>{p.blurb}</p>
-            </div>
-            <div className="map-cards">
-              {LESSONS.filter((l) => l.part === p.id).map((l) => (
-                <a className="map-card" key={l.id} href={'#' + l.id}>
-                  <span className="map-card-no">{lessonNo(l)}</span>
-                  <span className="map-card-title">{l.title}</span>
-                  <span className="map-card-en">{l.en}</span>
-                  <span className="map-card-learn">{l.learn.join(' · ')}</span>
-                </a>
-              ))}
-            </div>
-          </div>
-        ))}
-      </section>
+      <CourseMap course={course} />
       <footer className="home-foot">
         모든 그림은 브라우저 안에서 직접 계산됩니다. 서버로 전송되는 데이터는 없습니다.
       </footer>

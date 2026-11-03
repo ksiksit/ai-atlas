@@ -1,9 +1,9 @@
 import { useMemo, useRef, useState, type CSSProperties } from 'react';
-import { Callout, Figure, Legend, M, MB, Quiz, Readout, Seg, Slider, T } from '../components/ui';
-import { useCanvas2D, useDrag } from '../lib/canvas';
-import { Plot, fmt } from '../lib/plot';
-import { alpha, usePalette } from '../lib/theme';
-import { clamp, gauss, rng } from '../lib/math';
+import { Callout, Figure, Legend, M, MB, Quiz, Readout, Seg, Slider, T } from '../../../components/ui';
+import { useCanvas2D, useDrag } from '../../../lib/canvas';
+import { Plot, fmt } from '../../../lib/plot';
+import { alpha, usePalette } from '../../../lib/theme';
+import { clamp, gauss, rng } from '../../../lib/math';
 
 /* ─────────────── shared metric helpers ─────────────── */
 

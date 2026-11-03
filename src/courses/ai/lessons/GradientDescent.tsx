@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Button, Callout, Check, Figure, M, MB, Quiz, Readout, Slider, T } from '../components/ui';
-import { useAnimationFrame, useCanvas2D, useDrag, useInView } from '../lib/canvas';
-import { Plot, fmt } from '../lib/plot';
-import { alpha, lerpColor, usePalette } from '../lib/theme';
-import { gauss, rng } from '../lib/math';
-import { ThreeView, surfaceMesh, color3, THREE } from '../lib/three';
+import { Button, Callout, Check, Figure, M, MB, Quiz, Readout, Slider, T } from '../../../components/ui';
+import { useAnimationFrame, useCanvas2D, useDrag, useInView } from '../../../lib/canvas';
+import { Plot, fmt } from '../../../lib/plot';
+import { alpha, lerpColor, usePalette } from '../../../lib/theme';
+import { gauss, rng } from '../../../lib/math';
+import { ThreeView, surfaceMesh, color3, THREE } from '../../../lib/three';
 
 /* ─────────────── Figure 1: 1D gradient descent and the learning rate ─────────────── */
 
@@ -508,7 +508,7 @@ export default function GradientDescent() {
         짙은 안개 속 산꼭대기에 서 있다고 상상해 보세요. 지도도 없고 몇 미터 앞도 보이지 않습니다. 그래도 내려갈 방법은 있습니다. 발밑의 경사를 느끼고, 가장 가파르게 내려가는 쪽으로 한 걸음 옮기고, 다시 경사를 느끼는 일을 반복하면 됩니다. 이것이 <T en="gradient descent">경사하강법</T>의 전부입니다.
       </p>
       <p>
-        여기서 산은 <a href="#linear-regression">선형회귀</a>에서 본 손실 지형이고, 내 위치는 모델의 파라미터 <M>{'\\theta'}</M>, 발밑의 경사는 손실의 기울기(<a href="#gradients">그래디언트</a>)입니다. 그래디언트는 가장 가파르게 올라가는 방향이므로 그 반대로 움직입니다.
+        여기서 산은 <a href="#ai/linear-regression">선형회귀</a>에서 본 손실 지형이고, 내 위치는 모델의 파라미터 <M>{'\\theta'}</M>, 발밑의 경사는 손실의 기울기(<a href="#ai/gradients">그래디언트</a>)입니다. 그래디언트는 가장 가파르게 올라가는 방향이므로 그 반대로 움직입니다.
       </p>
       <MB note="η(에타)는 학습률. 한 걸음을 얼마나 크게 디딜지 정하는 값입니다.">{'\\theta \\leftarrow \\theta - \\eta\\, \\nabla_{\\theta} L(\\theta)'}</MB>
 

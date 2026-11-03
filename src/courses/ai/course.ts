@@ -1,35 +1,14 @@
-import { lazy, type ComponentType, type LazyExoticComponent } from 'react';
+import { lazy } from 'react';
+import type { Course, Lesson, Part } from '../types';
 
-export type PartId = 'intro' | 'math' | 'ml' | 'dl';
-
-export interface Part {
-  id: PartId;
-  title: string;
-  en: string;
-  color: string; // CSS var reference
-  blurb: string;
-}
-
-export interface Lesson {
-  id: string;
-  part: PartId;
-  title: string;
-  en: string;
-  /** One-line summary for cards and the lesson lede. */
-  lede: string;
-  /** What the reader will be able to do / know, shown as chips. */
-  learn: string[];
-  Component: LazyExoticComponent<ComponentType>;
-}
-
-export const PARTS: Part[] = [
+const parts: Part[] = [
   { id: 'intro', title: '시작하기', en: 'Start', color: 'var(--c-intro)', blurb: '인공지능, 머신러닝, 딥러닝이 서로 어떤 관계인지 큰 그림부터 봅니다.' },
   { id: 'math', title: '수학 기초', en: 'Math', color: 'var(--c-math)', blurb: '벡터, 행렬, 미분, 확률. 모델이 생각하는 언어를 손으로 만져 봅니다.' },
   { id: 'ml', title: '머신러닝', en: 'Machine Learning', color: 'var(--c-ml)', blurb: '데이터로부터 규칙을 찾는 방법. 선을 긋고, 오차를 줄이고, 평가합니다.' },
   { id: 'dl', title: '딥러닝', en: 'Deep Learning', color: 'var(--c-dl)', blurb: '뉴런을 쌓아 만든 신경망부터 CNN, 임베딩, 어텐션, 언어 모델까지.' },
 ];
 
-export const LESSONS: Lesson[] = [
+const lessons: Lesson[] = [
   {
     id: 'what-is-ai',
     part: 'intro',
@@ -212,9 +191,15 @@ export const LESSONS: Lesson[] = [
   },
 ];
 
-export const partOf = (id: PartId) => PARTS.find((p) => p.id === id)!;
-export const lessonIndex = (id: string) => LESSONS.findIndex((l) => l.id === id);
-/** Number of a lesson within its part, 1-based. */
-export const numberInPart = (l: Lesson) => LESSONS.filter((x) => x.part === l.part).indexOf(l) + 1;
-/** Global lesson label like "02" (intro is 00). */
-export const lessonNo = (l: Lesson) => String(lessonIndex(l.id)).padStart(2, '0');
+const course: Course = {
+  id: 'ai',
+  title: '벡터에서 트랜스포머까지',
+  mark: ['벡터에서', '트랜스포머까지'],
+  subject: '인공지능',
+  tagline: '손으로 만지며 배우는 인공지능',
+  parts,
+  lessons,
+  Cover: lazy(() => import('./Cover')),
+};
+
+export default course;

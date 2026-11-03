@@ -1,9 +1,9 @@
 import { useMemo, useRef, useState } from 'react';
-import { Callout, Check, Figure, M, MB, Quiz, Readout, Slider, T, Legend } from '../components/ui';
-import { useCanvas2D, useDrag } from '../lib/canvas';
-import { Plot, fmt } from '../lib/plot';
-import { usePalette, alpha } from '../lib/theme';
-import type { Vec2 } from '../lib/math';
+import { Callout, Check, Figure, M, MB, Quiz, Readout, Slider, T, Legend } from '../../../components/ui';
+import { useCanvas2D, useDrag } from '../../../lib/canvas';
+import { Plot, fmt } from '../../../lib/plot';
+import { usePalette, alpha } from '../../../lib/theme';
+import type { Vec2 } from '../../../lib/math';
 
 /* ─────────────── Figure 1: two draggable vectors ─────────────── */
 

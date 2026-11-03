@@ -1,8 +1,8 @@
 import { Fragment, useMemo, useState } from 'react';
-import { Callout, Figure, Legend, M, MB, Quiz, Readout, Seg, T } from '../components/ui';
-import { ThreeView, textSprite, color3, THREE } from '../lib/three';
-import { type Palette } from '../lib/theme';
-import { fmt } from '../lib/plot';
+import { Callout, Figure, Legend, M, MB, Quiz, Readout, Seg, T } from '../../../components/ui';
+import { ThreeView, textSprite, color3, THREE } from '../../../lib/three';
+import { type Palette } from '../../../lib/theme';
+import { fmt } from '../../../lib/plot';
 
 /* ─────────────── toy embedding space ─────────────── */
 
@@ -386,7 +386,7 @@ export default function Embeddings() {
         신경망은 숫자만 계산할 수 있으니 단어도 벡터로 바꿔야 합니다. 가장 쉬운 방법은 사전에 있는 단어마다 번호를 붙이고, 그 번호 자리만 1이고 나머지는 모두 0인 벡터를 만드는 것입니다. 이것을 <T en="one-hot encoding">원-핫 인코딩</T>이라고 합니다. 단어가 5만 개면 벡터도 5만 차원입니다.
       </p>
       <p>
-        원-핫 벡터에는 큰 약점이 있습니다. 서로 다른 두 단어의 벡터는 항상 직각이라서 <a href="#vectors">내적</a>이 0입니다. 모든 단어가 다른 모든 단어와 똑같이 남남인 셈이죠. 아래 그림에서 두 방식을 바꿔 가며 비교해 보세요.
+        원-핫 벡터에는 큰 약점이 있습니다. 서로 다른 두 단어의 벡터는 항상 직각이라서 <a href="#ai/vectors">내적</a>이 0입니다. 모든 단어가 다른 모든 단어와 똑같이 남남인 셈이죠. 아래 그림에서 두 방식을 바꿔 가며 비교해 보세요.
       </p>
       <OneHotFigure />
 
@@ -408,7 +408,7 @@ export default function Embeddings() {
       </p>
       <SpaceFigure />
       <p>
-        가까움을 잴 때는 보통 점 사이의 거리보다 <a href="#vectors">코사인 유사도</a>를 씁니다. 원점에서 바라본 방향이 얼마나 같은지를 보는 것이죠. 벡터의 길이는 단어가 얼마나 자주 나오는지 같은 다른 요인에 영향을 받기 때문에, 의미를 비교할 때는 방향만 보는 편이 안정적입니다.
+        가까움을 잴 때는 보통 점 사이의 거리보다 <a href="#ai/vectors">코사인 유사도</a>를 씁니다. 원점에서 바라본 방향이 얼마나 같은지를 보는 것이죠. 벡터의 길이는 단어가 얼마나 자주 나오는지 같은 다른 요인에 영향을 받기 때문에, 의미를 비교할 때는 방향만 보는 편이 안정적입니다.
       </p>
 
       <h2>의미에도 방향이 있다</h2>
@@ -426,7 +426,7 @@ export default function Embeddings() {
         임베딩 아이디어는 단어에서 끝나지 않습니다. 문장 전체, 이미지, 소리, 상품, 사용자도 벡터로 만들 수 있습니다. 사진과 그 설명 문장을 같은 공간의 가까운 점으로 보내도록 학습하면 "바닷가의 강아지"라는 글로 사진을 검색할 수 있게 됩니다. 챗봇이 회사 문서를 찾아 답하는 검색 증강 생성(RAG)도 질문과 문서를 임베딩한 뒤 코사인 유사도가 높은 문서를 고르는 방식입니다.
       </p>
       <p>
-        한 가지 남은 문제가 있습니다. "배가 고프다"의 배와 "배를 타다"의 배는 뜻이 다른데, 지금까지 본 임베딩 표에서는 같은 벡터를 받습니다. 주변 문맥을 보고 벡터를 그때그때 고쳐 쓰는 장치가 필요한데, 그것이 다음 장의 <a href="#attention">어텐션</a>입니다.
+        한 가지 남은 문제가 있습니다. "배가 고프다"의 배와 "배를 타다"의 배는 뜻이 다른데, 지금까지 본 임베딩 표에서는 같은 벡터를 받습니다. 주변 문맥을 보고 벡터를 그때그때 고쳐 쓰는 장치가 필요한데, 그것이 다음 장의 <a href="#ai/attention">어텐션</a>입니다.
       </p>
       <Callout kind="key">
         임베딩은 단어를 의미 공간의 한 점으로 옮깁니다. 비슷한 쓰임새의 단어는 비슷한 방향을 향하고, 공간 속의 방향 자체가 "성별"이나 "수도" 같은 관계를 담습니다.

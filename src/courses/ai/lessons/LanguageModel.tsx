@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
-import { Button, Callout, Figure, M, MB, Quiz, Readout, Slider, T } from '../components/ui';
-import { softmax } from '../lib/math';
-import { fmt } from '../lib/plot';
+import { Button, Callout, Figure, M, MB, Quiz, Readout, Slider, T } from '../../../components/ui';
+import { softmax } from '../../../lib/math';
+import { fmt } from '../../../lib/plot';
 
 /* ─────────────── Figure 1: toy tokenizer ─────────────── */
 
@@ -528,13 +528,13 @@ function GenerateFigure() {
 /* ─────────────── Lesson ─────────────── */
 
 const JOURNEY: { href: string; from: string; to: string }[] = [
-  { href: '#vectors', from: '벡터와 내적', to: '임베딩과 어텐션 점수' },
-  { href: '#matrices', from: '행렬 곱', to: 'q, k, v를 만드는 W 행렬과 모든 층' },
-  { href: '#probability', from: '확률분포와 소프트맥스', to: '다음 토큰의 확률' },
-  { href: '#entropy', from: '크로스엔트로피', to: '사전 학습의 손실 함수' },
-  { href: '#gradient-descent', from: '경사하강법', to: '수천억 개 가중치의 학습' },
-  { href: '#backprop', from: '역전파', to: '그 기울기를 계산하는 방법' },
-  { href: '#attention', from: '어텐션', to: '문맥을 읽는 트랜스포머' },
+  { href: '#ai/vectors', from: '벡터와 내적', to: '임베딩과 어텐션 점수' },
+  { href: '#ai/matrices', from: '행렬 곱', to: 'q, k, v를 만드는 W 행렬과 모든 층' },
+  { href: '#ai/probability', from: '확률분포와 소프트맥스', to: '다음 토큰의 확률' },
+  { href: '#ai/entropy', from: '크로스엔트로피', to: '사전 학습의 손실 함수' },
+  { href: '#ai/gradient-descent', from: '경사하강법', to: '수천억 개 가중치의 학습' },
+  { href: '#ai/backprop', from: '역전파', to: '그 기울기를 계산하는 방법' },
+  { href: '#ai/attention', from: '어텐션', to: '문맥을 읽는 트랜스포머' },
 ];
 
 export default function LanguageModel() {
@@ -548,7 +548,7 @@ export default function LanguageModel() {
 
       <h2>토큰: 모델이 읽는 단위</h2>
       <p>
-        모델은 글자를 한 자씩 읽지도, 단어를 통째로 읽지도 않습니다. 그 중간 크기의 조각인 <T en="token">토큰</T>으로 자릅니다. 자주 나오는 단어는 한 토큰이 되고, 드문 단어는 여러 조각으로 나뉩니다. 이렇게 하면 수만 개 정도의 어휘로 세상의 거의 모든 글을 표현할 수 있습니다. 각 토큰은 번호로 바뀐 뒤 <a href="#embeddings">임베딩</a> 표에서 벡터를 찾아 모델에 들어갑니다.
+        모델은 글자를 한 자씩 읽지도, 단어를 통째로 읽지도 않습니다. 그 중간 크기의 조각인 <T en="token">토큰</T>으로 자릅니다. 자주 나오는 단어는 한 토큰이 되고, 드문 단어는 여러 조각으로 나뉩니다. 이렇게 하면 수만 개 정도의 어휘로 세상의 거의 모든 글을 표현할 수 있습니다. 각 토큰은 번호로 바뀐 뒤 <a href="#ai/embeddings">임베딩</a> 표에서 벡터를 찾아 모델에 들어갑니다.
       </p>
       <TokenizerFigure />
       <Callout kind="note">
@@ -571,12 +571,12 @@ export default function LanguageModel() {
       </p>
       <GenerateFigure />
       <p>
-        이 장난감 모델은 바로 앞 토큰 하나만 봅니다. 그래서 "나는 커피를 마시고 산책을 했다"처럼 앞뒤만 맞고 전체 흐름은 엉성한 문장이 나오기도 합니다. 실제 LLM은 <a href="#attention">어텐션</a>으로 앞에 나온 수천에서 수십만 개의 토큰을 모두 참고해서 분포를 계산합니다. 원리는 같고, 보는 범위와 계산의 깊이가 다를 뿐입니다.
+        이 장난감 모델은 바로 앞 토큰 하나만 봅니다. 그래서 "나는 커피를 마시고 산책을 했다"처럼 앞뒤만 맞고 전체 흐름은 엉성한 문장이 나오기도 합니다. 실제 LLM은 <a href="#ai/attention">어텐션</a>으로 앞에 나온 수천에서 수십만 개의 토큰을 모두 참고해서 분포를 계산합니다. 원리는 같고, 보는 범위와 계산의 깊이가 다를 뿐입니다.
       </p>
 
       <h2>어떻게 학습할까</h2>
       <p>
-        <strong>사전 학습.</strong> 인터넷 문서, 책, 코드 등 수조 개의 토큰에서 문장의 일부를 보여 주고 바로 다음 토큰을 맞히게 합니다. 정답 토큰에 준 확률이 낮을수록 벌점이 큰 <a href="#entropy">크로스엔트로피</a>가 손실 함수이고, <a href="#gradient-descent">경사하강법</a>과 <a href="#backprop">역전파</a>로 가중치를 고칩니다. 정답 데이터를 따로 만들 필요가 없어서 엄청난 양의 글로 학습할 수 있습니다.
+        <strong>사전 학습.</strong> 인터넷 문서, 책, 코드 등 수조 개의 토큰에서 문장의 일부를 보여 주고 바로 다음 토큰을 맞히게 합니다. 정답 토큰에 준 확률이 낮을수록 벌점이 큰 <a href="#ai/entropy">크로스엔트로피</a>가 손실 함수이고, <a href="#ai/gradient-descent">경사하강법</a>과 <a href="#ai/backprop">역전파</a>로 가중치를 고칩니다. 정답 데이터를 따로 만들 필요가 없어서 엄청난 양의 글로 학습할 수 있습니다.
       </p>
       <MB note="정답 다음 토큰 w_t에 모델이 준 확률의 로그를 모든 위치에서 평균 낸 값입니다.">{'\\mathcal{L} = -\\frac{1}{n}\\sum_{t=1}^{n} \\log P_\\theta(w_t \\mid w_{<t})'}</MB>
       <p>

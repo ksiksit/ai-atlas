@@ -44,10 +44,30 @@ npm run build:single    # dist-single/index.html — 파일 하나로 된 버전
 
 ```
 src/
-  curriculum.ts      장 목록과 메타데이터 (새 장은 여기에 추가)
-  App.tsx            레이아웃, 목차, 해시 라우팅 (#vectors 같은 주소)
-  pages/Home.tsx     첫 화면 (3D 손실 지형)
-  components/ui.tsx  그림 틀, 슬라이더, 수식, 퀴즈 등 공용 부품
-  lib/               캔버스·플롯·3D·테마·수학 도우미
-  lessons/           각 장의 본문과 인터랙티브 그림
+  App.tsx                 레이아웃, 목차, 해시 라우팅 (#ai/vectors 같은 주소)
+  courses/
+    index.ts              분야 목록(COURSES)과 주소 도우미 (새 분야는 여기에 등록)
+    types.ts              분야(Course) · 파트(Part) · 장(Lesson) 타입
+    ai/
+      course.ts           인공지능 분야의 제목, 파트, 장 목록 (새 장은 여기에 추가)
+      Cover.tsx           분야 첫 화면 (3D 손실 지형)
+      lessons/            각 장의 본문과 인터랙티브 그림
+  components/
+    ui.tsx                그림 틀, 슬라이더, 수식, 퀴즈 등 공용 부품
+    CourseMap.tsx         분야 첫 화면의 "전체 지도" (모든 분야 공용)
+  lib/                    캔버스·플롯·3D·테마·수학 도우미
+  styles/                 전역 스타일과 첫 화면 스타일
 ```
+
+## 주소
+
+- `#ai`: 분야 첫 화면
+- `#ai/vectors`: 분야 안의 한 장
+- 예전 주소(`#vectors`)는 자동으로 `#ai/vectors`로 바뀝니다.
+
+## 새 분야 추가하기
+
+1. `src/courses/<분야>/course.ts`에 `Course`를 만듭니다. 제목, 파트, 장 목록, 첫 화면(`Cover`)을 넣습니다.
+2. 장 본문은 `src/courses/<분야>/lessons/`에 둡니다. 공용 부품은 `../../../components/ui`와 `../../../lib/`에서 가져옵니다.
+3. `src/courses/index.ts`의 `COURSES`에 등록합니다.
+4. 장 사이 링크는 `lessonHref('<분야>', '<장>')`나 `href="#<분야>/<장>"`으로 겁니다.

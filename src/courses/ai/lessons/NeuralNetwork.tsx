@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Button, Callout, Check, Figure, Legend, M, MB, Quiz, Readout, Seg, Slider, T } from '../components/ui';
-import { localPoint, prefersReducedMotion, prepCanvas, useAnimationFrame, useElementSize, useInView } from '../lib/canvas';
-import { Plot, fmt } from '../lib/plot';
-import { alpha, parseColor, usePalette } from '../lib/theme';
-import { clamp, gauss, makeDataset, rng, type DatasetName } from '../lib/math';
+import { Button, Callout, Check, Figure, Legend, M, MB, Quiz, Readout, Seg, Slider, T } from '../../../components/ui';
+import { localPoint, prefersReducedMotion, prepCanvas, useAnimationFrame, useElementSize, useInView } from '../../../lib/canvas';
+import { Plot, fmt } from '../../../lib/plot';
+import { alpha, parseColor, usePalette } from '../../../lib/theme';
+import { clamp, gauss, makeDataset, rng, type DatasetName } from '../../../lib/math';
 import { FEATS, MLP, featurize, isoSegments, type Act, type FeatId } from './nn';
 import './NeuralNetwork.css';
 

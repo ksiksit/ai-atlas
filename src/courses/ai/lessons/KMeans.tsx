@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useRef, useState, type RefObject } from 'react';
-import { Button, Callout, Figure, M, MB, Quiz, Readout, Slider, T } from '../components/ui';
-import { useCanvas2D, useDrag, useInView } from '../lib/canvas';
-import { Plot, fmt } from '../lib/plot';
-import { alpha, parseColor, usePalette, type Palette } from '../lib/theme';
-import { gauss, rng } from '../lib/math';
+import { Button, Callout, Figure, M, MB, Quiz, Readout, Slider, T } from '../../../components/ui';
+import { useCanvas2D, useDrag, useInView } from '../../../lib/canvas';
+import { Plot, fmt } from '../../../lib/plot';
+import { alpha, parseColor, usePalette, type Palette } from '../../../lib/theme';
+import { gauss, rng } from '../../../lib/math';
 
 interface P2 {
   x: number;

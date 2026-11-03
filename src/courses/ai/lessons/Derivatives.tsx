@@ -1,8 +1,8 @@
 import { useRef, useState } from 'react';
-import { Button, Callout, Figure, Legend, M, MB, Quiz, Readout, Seg, Slider, T } from '../components/ui';
-import { useAnimationFrame, useCanvas2D, useDrag, useInView, prefersReducedMotion } from '../lib/canvas';
-import { Plot, fmt } from '../lib/plot';
-import { usePalette, alpha } from '../lib/theme';
+import { Button, Callout, Figure, Legend, M, MB, Quiz, Readout, Seg, Slider, T } from '../../../components/ui';
+import { useAnimationFrame, useCanvas2D, useDrag, useInView, prefersReducedMotion } from '../../../lib/canvas';
+import { Plot, fmt } from '../../../lib/plot';
+import { usePalette, alpha } from '../../../lib/theme';
 
 interface Fn {
   id: string;
@@ -445,7 +445,7 @@ export default function Derivatives() {
       <ChainFigure />
       <MB note="y가 u를 통해 x에 의존할 때. 분수처럼 u가 '약분'되는 모양이라 외우기 쉽습니다.">{'\\frac{dy}{dx} = \\frac{dy}{du}\\cdot\\frac{du}{dx} \\qquad \\text{예: } \\frac{d}{dx}\\sin(x^2) = \\cos(x^2)\\cdot 2x'}</MB>
       <p>
-        층이 100개인 신경망이라도 원리는 같습니다. 손실에서 출발해 층을 하나씩 거꾸로 지나며 배율을 곱해 가면, 맨 앞쪽 가중치가 손실에 미치는 영향까지 구할 수 있습니다. 이것이 뒤에서 배울 <a href="#backprop">역전파</a>입니다.
+        층이 100개인 신경망이라도 원리는 같습니다. 손실에서 출발해 층을 하나씩 거꾸로 지나며 배율을 곱해 가면, 맨 앞쪽 가중치가 손실에 미치는 영향까지 구할 수 있습니다. 이것이 뒤에서 배울 <a href="#ai/backprop">역전파</a>입니다.
       </p>
 
       <h2>미분이 학습에 쓰이는 방법</h2>

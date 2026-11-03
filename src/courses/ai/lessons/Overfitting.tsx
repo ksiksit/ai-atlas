@@ -1,9 +1,9 @@
 import { useMemo, useState } from 'react';
-import { Button, Callout, Check, Figure, Legend, M, MB, Quiz, Readout, Slider, T } from '../components/ui';
-import { useCanvas2D } from '../lib/canvas';
-import { Plot, fmt } from '../lib/plot';
-import { alpha, usePalette } from '../lib/theme';
-import { gauss, polyEval, polyFit, rng } from '../lib/math';
+import { Button, Callout, Check, Figure, Legend, M, MB, Quiz, Readout, Slider, T } from '../../../components/ui';
+import { useCanvas2D } from '../../../lib/canvas';
+import { Plot, fmt } from '../../../lib/plot';
+import { alpha, usePalette } from '../../../lib/theme';
+import { gauss, polyEval, polyFit, rng } from '../../../lib/math';
 
 const truth = (x: number) => 0.9 * Math.sin(2.8 * x);
 const NOISE = 0.28;

@@ -1,9 +1,9 @@
 import { useMemo, useRef, useState } from 'react';
-import { Button, Callout, Figure, Legend, M, MB, Quiz, Readout, Seg, Slider, T } from '../components/ui';
-import { useCanvas2D, useDrag } from '../lib/canvas';
-import { Plot, fmt } from '../lib/plot';
-import { alpha, usePalette } from '../lib/theme';
-import { normalCdf, normalPdf, rng } from '../lib/math';
+import { Button, Callout, Figure, Legend, M, MB, Quiz, Readout, Seg, Slider, T } from '../../../components/ui';
+import { useCanvas2D, useDrag } from '../../../lib/canvas';
+import { Plot, fmt } from '../../../lib/plot';
+import { alpha, usePalette } from '../../../lib/theme';
+import { normalCdf, normalPdf, rng } from '../../../lib/math';
 
 /* ─────────────── Figure 1: law of large numbers with dice ─────────────── */
 
@@ -426,7 +426,7 @@ export default function Probability() {
       <p>식보다 사람 1000명을 직접 세어 보는 편이 훨씬 쉽습니다.</p>
       <BayesFigure />
       <p>
-        기본값(유병률 1%, 민감도 90%, 특이도 95%)에서 양성 판정을 받아도 실제로 병이 있을 확률은 15% 정도에 그칩니다. 대부분의 사람이 이 숫자를 90% 근처로 짐작합니다. 유병률을 20%로 올리면 같은 검사인데도 결과가 크게 달라지는 것을 확인해 보세요. 이 현상은 스팸 필터나 사기 거래 탐지처럼 찾으려는 대상이 드문 머신러닝 문제에서 그대로 나타납니다. 뒤의 <a href="#evaluation">모델 평가</a> 장에서 다시 만납니다.
+        기본값(유병률 1%, 민감도 90%, 특이도 95%)에서 양성 판정을 받아도 실제로 병이 있을 확률은 15% 정도에 그칩니다. 대부분의 사람이 이 숫자를 90% 근처로 짐작합니다. 유병률을 20%로 올리면 같은 검사인데도 결과가 크게 달라지는 것을 확인해 보세요. 이 현상은 스팸 필터나 사기 거래 탐지처럼 찾으려는 대상이 드문 머신러닝 문제에서 그대로 나타납니다. 뒤의 <a href="#ai/evaluation">모델 평가</a> 장에서 다시 만납니다.
       </p>
       <Callout kind="key">
         모델의 출력은 확률분포이고, 학습은 그 분포를 실제 데이터의 분포에 가깝게 만드는 일입니다. 확률을 해석할 때는 언제나 "무엇이 주어졌을 때의 확률인가"를 먼저 확인하세요.

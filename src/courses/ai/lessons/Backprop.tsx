@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Button, Callout, Figure, Legend, M, MB, Quiz, Readout, Seg, Slider, T } from '../components/ui';
-import { prefersReducedMotion, useCanvas2D } from '../lib/canvas';
-import { fmt } from '../lib/plot';
-import { alpha, usePalette } from '../lib/theme';
-import { rng, sigmoid } from '../lib/math';
+import { Button, Callout, Figure, Legend, M, MB, Quiz, Readout, Seg, Slider, T } from '../../../components/ui';
+import { prefersReducedMotion, useCanvas2D } from '../../../lib/canvas';
+import { fmt } from '../../../lib/plot';
+import { alpha, usePalette } from '../../../lib/theme';
+import { rng, sigmoid } from '../../../lib/math';
 
 /* ═══════════════════ Figure 1: computational graph ═══════════════════ */
 

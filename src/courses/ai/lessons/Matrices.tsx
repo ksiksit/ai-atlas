@@ -1,8 +1,8 @@
 import { useMemo, useRef, useState } from 'react';
-import { Button, Callout, Check, Figure, Legend, M, MB, Quiz, Readout, Seg, Slider, T } from '../components/ui';
-import { useAnimationFrame, useCanvas2D, useDrag, useInView, prefersReducedMotion } from '../lib/canvas';
-import { Plot, fmt } from '../lib/plot';
-import { usePalette, alpha, lerpColor, rgbStr } from '../lib/theme';
+import { Button, Callout, Check, Figure, Legend, M, MB, Quiz, Readout, Seg, Slider, T } from '../../../components/ui';
+import { useAnimationFrame, useCanvas2D, useDrag, useInView, prefersReducedMotion } from '../../../lib/canvas';
+import { Plot, fmt } from '../../../lib/plot';
+import { usePalette, alpha, lerpColor, rgbStr } from '../../../lib/theme';
 
 type Mat = [number, number, number, number]; // [a, b, c, d] = [[a, b], [c, d]]
 const I: Mat = [1, 0, 0, 1];

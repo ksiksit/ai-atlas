@@ -1,8 +1,8 @@
 import { useMemo, useRef, useState, type KeyboardEvent } from 'react';
-import { Button, Callout, Figure, Legend, M, MB, Quiz, Readout, Seg, T } from '../components/ui';
-import { useAnimationFrame, useCanvas2D, useDrag, useInView, prefersReducedMotion } from '../lib/canvas';
-import { fmt } from '../lib/plot';
-import { usePalette, lerpColor, rgbStr, alpha, type Palette } from '../lib/theme';
+import { Button, Callout, Figure, Legend, M, MB, Quiz, Readout, Seg, T } from '../../../components/ui';
+import { useAnimationFrame, useCanvas2D, useDrag, useInView, prefersReducedMotion } from '../../../lib/canvas';
+import { fmt } from '../../../lib/plot';
+import { usePalette, lerpColor, rgbStr, alpha, type Palette } from '../../../lib/theme';
 
 const N = 20; // input size
 const K = 3; // kernel size
@@ -667,7 +667,7 @@ export default function CNN() {
       <ConvLab input={input} setInput={setInput} kernelName={kernelName} setKernelName={setKernelName} custom={custom} setCustom={setCustom} kernel={kernel} feature={feature} />
       <MB note="I는 입력 이미지, K는 필터입니다. (i, j) 위치에서 겹친 칸끼리 곱해 모두 더합니다.">{'(I * K)(i, j) = \\sum_{m=0}^{2}\\sum_{n=0}^{2} I(i+m,\\, j+n)\\; K(m, n)'}</MB>
       <Callout kind="intuition">
-        곱해서 더하기는 <a href="#vectors">벡터와 내적</a> 장에서 본 내적과 똑같은 계산입니다. 3×3 영역을 9차원 벡터로, 필터도 9차원 벡터로 보면 출력값은 두 벡터가 얼마나 닮았는지를 잰 값입니다. 그래서 필터는 자기와 닮은 무늬를 찾는 탐지기가 됩니다. 세로 경계 필터는 세로 경계와 닮은 곳에서 크게 반응합니다.
+        곱해서 더하기는 <a href="#ai/vectors">벡터와 내적</a> 장에서 본 내적과 똑같은 계산입니다. 3×3 영역을 9차원 벡터로, 필터도 9차원 벡터로 보면 출력값은 두 벡터가 얼마나 닮았는지를 잰 값입니다. 그래서 필터는 자기와 닮은 무늬를 찾는 탐지기가 됩니다. 세로 경계 필터는 세로 경계와 닮은 곳에서 크게 반응합니다.
       </Callout>
       <p>
         중요한 점은 하나의 필터가 이미지 전체를 돌아다닌다는 것입니다. 왼쪽 위의 세로선을 찾는 데 쓴 9개의 숫자를 오른쪽 아래에서도 그대로 씁니다. 이것을 <T en="weight sharing">가중치 공유</T>라고 하며, 덕분에 필터 하나의 학습 가중치는 9개(편향을 더하면 10개)뿐입니다.
@@ -680,7 +680,7 @@ export default function CNN() {
 
       <h2>ReLU와 풀링</h2>
       <p>
-        합성곱 다음에는 보통 두 가지 처리를 합니다. 먼저 <a href="#neuron">인공 뉴런</a> 장에서 본 활성화 함수 ReLU로 음수를 0으로 바꿉니다. "이 무늬가 여기 있다"는 양의 신호만 남기는 셈입니다. 그다음 <T en="max pooling">최대 풀링</T>으로 2×2 묶음마다 가장 큰 값만 남겨 크기를 줄입니다.
+        합성곱 다음에는 보통 두 가지 처리를 합니다. 먼저 <a href="#ai/neuron">인공 뉴런</a> 장에서 본 활성화 함수 ReLU로 음수를 0으로 바꿉니다. "이 무늬가 여기 있다"는 양의 신호만 남기는 셈입니다. 그다음 <T en="max pooling">최대 풀링</T>으로 2×2 묶음마다 가장 큰 값만 남겨 크기를 줄입니다.
       </p>
       <PoolFigure feature={feature} />
       <p>
@@ -693,13 +693,13 @@ export default function CNN() {
       </p>
       <ArchFigure />
       <p>
-        여기서 필터의 숫자는 사람이 정하지 않습니다. 그림 1의 세로 경계 필터처럼 그럴듯한 값을 손으로 넣는 대신, 처음에는 무작위 값으로 시작해서 <a href="#gradient-descent">경사하강법</a>과 <a href="#backprop">역전파</a>로 정답을 잘 맞히는 방향으로 조금씩 고칩니다. 놀랍게도 학습이 끝난 첫 층의 필터들을 들여다보면 사람이 설계한 경계 검출 필터와 꽤 비슷한 모양이 나타납니다.
+        여기서 필터의 숫자는 사람이 정하지 않습니다. 그림 1의 세로 경계 필터처럼 그럴듯한 값을 손으로 넣는 대신, 처음에는 무작위 값으로 시작해서 <a href="#ai/gradient-descent">경사하강법</a>과 <a href="#ai/backprop">역전파</a>로 정답을 잘 맞히는 방향으로 조금씩 고칩니다. 놀랍게도 학습이 끝난 첫 층의 필터들을 들여다보면 사람이 설계한 경계 검출 필터와 꽤 비슷한 모양이 나타납니다.
       </p>
       <Callout kind="key">
         CNN은 작은 필터를 이미지 전체에 공유해서 가까운 픽셀끼리의 무늬를 찾습니다. 합성곱과 풀링을 쌓을수록 선분에서 모양으로, 모양에서 물체로 점점 추상적인 특징을 찾아냅니다.
       </Callout>
       <Callout kind="note">
-        최근에는 이미지를 작은 조각으로 나눠 <a href="#attention">어텐션</a>으로 처리하는 비전 트랜스포머(ViT)도 널리 쓰입니다. 하지만 가까운 것끼리 묶어 본다는 합성곱의 아이디어는 여전히 많은 모델 안에 살아 있습니다.
+        최근에는 이미지를 작은 조각으로 나눠 <a href="#ai/attention">어텐션</a>으로 처리하는 비전 트랜스포머(ViT)도 널리 쓰입니다. 하지만 가까운 것끼리 묶어 본다는 합성곱의 아이디어는 여전히 많은 모델 안에 살아 있습니다.
       </Callout>
       <Quiz
         q={
