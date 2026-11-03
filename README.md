@@ -1,6 +1,6 @@
 # 만지는 교과서
 
-여러 분야를 기초부터 직접 만지며 배우는 인터랙티브 교과서입니다. 첫 화면(서재)에서 분야를 골라 공부합니다.
+여러 분야의 과목을 직접 만지며 배우는 인터랙티브 교과서입니다. 첫 화면(서재)에서 분야와 난이도에 맞는 과목을 골라 공부합니다.
 모든 시각화와 학습(신경망 훈련 포함)은 브라우저 안에서 계산됩니다. 읽은 장 기록은 브라우저의 localStorage에만 저장됩니다.
 
 **사이트:** https://ksiksit.github.io/ai-atlas/
@@ -25,7 +25,14 @@ npm run build:single    # dist-single/index.html — 파일 하나로 된 버전
 
 ## 구성
 
-### 인공지능: 벡터에서 트랜스포머까지 (`#ai`)
+콘텐츠는 **분야 → 과목 → 파트 → 장**으로 나뉩니다.
+
+| 분야 | 과목 | 난이도 | 주소 |
+| --- | --- | --- | --- |
+| 인공지능 | 기초 인공지능 (벡터에서 트랜스포머까지) | 기초 | `#ai-basics` |
+| 통계학 | 기초 통계학 (평균에서 p값까지) | 기초 | `#stats-basics` |
+
+### 기초 인공지능
 
 | 파트 | 장 |
 | --- | --- |
@@ -34,7 +41,7 @@ npm run build:single    # dist-single/index.html — 파일 하나로 된 버전
 | 머신러닝 | 선형회귀 · 경사하강법 · 로지스틱 회귀와 분류 · 과적합과 일반화 · 모델 평가 · 비지도학습과 K-평균 |
 | 딥러닝 | 인공 뉴런 · 신경망 놀이터 · 역전파 · 합성곱 신경망 · 임베딩 · 어텐션과 트랜스포머 · 언어 모델의 다음 단어 |
 
-### 통계학: 평균에서 p값까지 (`#stats`)
+### 기초 통계학
 
 | 파트 | 장 |
 | --- | --- |
@@ -53,39 +60,46 @@ npm run build:single    # dist-single/index.html — 파일 하나로 된 버전
 
 ```
 src/
-  App.tsx                 레이아웃, 목차, 해시 라우팅 (#ai/vectors 같은 주소), 진도 기록
+  App.tsx                 레이아웃, 목차, 해시 라우팅, 진도 기록
   site.ts                 사이트 이름과 소개 문구
-  pages/Library.tsx       서재: 분야 고르기 첫 화면
+  pages/Library.tsx       서재: 분야별 과목 카드, 난이도 필터(난이도가 두 가지 이상일 때 표시)
   courses/
-    index.ts              분야 목록(COURSES)과 주소 도우미 (새 분야는 여기에 등록)
-    types.ts              분야(Course) · 파트(Part) · 장(Lesson) 타입
-    ai/
-      course.ts           인공지능 분야의 제목, 파트, 장 목록 (새 장은 여기에 추가)
-      Cover.tsx           분야 첫 화면 (3D 손실 지형)
-      lessons/            각 장의 본문과 인터랙티브 그림
-    stats/
-      course.ts           통계학 분야
-      Cover.tsx           분야 첫 화면 (갈톤 보드)
-      lessons/            각 장, shared.ts는 통계 그림 공용 도우미
+    index.ts              분야(SUBJECTS)·과목(COURSES) 등록, 난이도 이름, 주소 처리
+    types.ts              Subject · Course · Part · Lesson 타입
+    <분야>/
+      subject.ts          분야 이름, 영어 이름, 색, 한 줄 소개
+      shared.ts           (있으면) 그 분야 과목들이 함께 쓰는 그림 도우미
+      <과목>/
+        course.ts         과목 제목, 부제, 난이도, 파트, 장 목록
+        Cover.tsx         과목 표지
+        lessons/          각 장의 본문과 인터랙티브 그림
   components/
     ui.tsx                그림 틀, 슬라이더, 수식, 퀴즈 등 공용 부품
-    CourseMap.tsx         분야 첫 화면의 "전체 지도" (모든 분야 공용)
-    BrandMark.tsx         "A → B" 모양의 분야 제목
+    CourseMap.tsx         과목 표지의 "전체 지도" (모든 과목 공용)
   lib/                    캔버스·플롯·3D·테마·수학(통계 함수 포함) 도우미
     progress.ts           읽은 장 기록 (localStorage, 실패해도 사이트는 동작)
-  styles/                 전역 스타일과 첫 화면 스타일
+  styles/                 전역 스타일, 표지·서재 스타일
 ```
 
 ## 주소
 
-- `#`: 서재 (분야 고르기)
-- `#ai`: 분야 첫 화면
-- `#ai/vectors`: 분야 안의 한 장
-- 예전 주소(`#vectors`)는 자동으로 `#ai/vectors`로 바뀝니다.
+- `#`: 서재
+- `#<과목>`: 과목 표지 (예: `#stats-basics`)
+- `#<과목>/<장>`: 한 장 (예: `#stats-basics/clt`)
+- 예전 주소는 자동으로 새 주소로 바뀝니다: `#vectors`, `#ai/vectors` → `#ai-basics/vectors`, `#stats/clt` → `#stats-basics/clt`. 과목 주소를 바꿀 때는 이전 주소를 `aliases`에 남겨 두면 링크와 저장된 진도가 그대로 이어집니다.
 
-## 새 분야 추가하기
+## 이름 정하기
 
-1. `src/courses/<분야>/course.ts`에 `Course`를 만듭니다. 제목, 영어 이름, 소개, 강조색, 파트, 장 목록, 첫 화면(`Cover`)을 넣습니다. 파트 색이 새로 필요하면 `global.css`의 밝은 테마와 어두운 테마(두 곳)에 모두 토큰을 추가합니다.
-2. 장 본문은 `src/courses/<분야>/lessons/`에 둡니다. 공용 부품은 `../../../components/ui`와 `../../../lib/`에서 가져옵니다.
-3. `src/courses/index.ts`의 `COURSES`에 등록하면 서재에 카드가 생깁니다.
-4. 장 사이 링크는 `lessonHref('<분야>', '<장>')`나 `href="#<분야>/<장>"`으로 겁니다.
+- **분야**: 학문 이름 그대로 (인공지능, 통계학, 물리학 …)
+- **과목 제목**: 무엇을 배우는지 바로 알 수 있는 이름. 분야의 첫 과목은 "기초 ○○", 그다음 과목은 주제 이름(예: 회귀분석, 베이즈 통계, 딥러닝)
+- **부제**: 과목이 다루는 범위를 "A에서 B까지"처럼 짧게
+- **난이도**: `level` 필드(1 기초, 2 중급, 3 심화)로 표시하고, 먼저 들어야 할 과목은 `prerequisites`에 적습니다
+- **과목 주소(id)**: `<분야>-<주제>` 형식의 영문 소문자 (예: `stats-basics`, `stats-regression`, `ai-deep-learning`). 한 번 공개한 주소는 바꾸지 않는 것이 좋고, 바꿔야 하면 `aliases`를 씁니다
+
+## 과목 추가하기
+
+1. 분야가 새로 필요하면 `src/courses/<분야>/subject.ts`를 만들고 `src/courses/index.ts`의 `SUBJECTS`에 넣습니다.
+2. `src/courses/<분야>/<과목>/course.ts`에 `Course`를 만듭니다. 파트 색이 새로 필요하면 `global.css`의 밝은 테마와 어두운 테마(두 곳)에 모두 토큰을 추가합니다.
+3. 장 본문은 `src/courses/<분야>/<과목>/lessons/`에 둡니다. 공용 부품은 `../../../../components/ui`와 `../../../../lib/`에서 가져옵니다.
+4. `COURSES`에 등록하면 서재의 해당 분야 아래에 난이도 순으로 카드가 생깁니다.
+5. 장 사이 링크는 `lessonHref('<과목>', '<장>')`나 `href="#<과목>/<장>"`으로 겁니다. 다른 과목의 장으로도 링크할 수 있습니다.

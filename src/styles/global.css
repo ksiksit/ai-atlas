@@ -305,6 +305,42 @@ code {
   margin-left: 6px;
 }
 
+/* difficulty: ●○○ 기초 */
+.level-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.level-dots {
+  display: inline-flex;
+  gap: 3px;
+}
+.level-dots i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1px solid var(--ink-3);
+}
+.level-dots i[data-on] {
+  background: var(--ink-2);
+  border-color: var(--ink-2);
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .theme-toggle {
   display: inline-flex;
   border: 1px solid var(--line-strong);
@@ -1130,4 +1166,14 @@ table.tbl td.num {
   font-size: var(--fs-sm);
   padding: 20px;
   text-align: center;
+}
+
+/* level dots in the library rail sit in the number column, scaled down */
+.rail-link .num .level-dots {
+  gap: 2px;
+  vertical-align: 1px;
+}
+.rail-link .num .level-dots i {
+  width: 6px;
+  height: 6px;
 }

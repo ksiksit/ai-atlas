@@ -1,16 +1,30 @@
-import ai from './ai/course';
-import stats from './stats/course';
-import type { Course, Lesson, Part } from './types';
+import aiSubject from './ai/subject';
+import aiBasics from './ai/basics/course';
+import statsSubject from './stats/subject';
+import statsBasics from './stats/basics/course';
+import { renameCourseProgress } from '../lib/progress';
+import type { Course, Lesson, Level, Part, Subject } from './types';
 
-export type { Course, Lesson, Part } from './types';
+export type { Course, Lesson, Level, Part, Subject } from './types';
 
-/** Every course on the site, in library order. Add a new field of study by adding its folder and listing it here. */
-export const COURSES: Course[] = [ai, stats];
+/** Fields of study, in library order. */
+export const SUBJECTS: Subject[] = [aiSubject, statsSubject];
 
-/** Course that old, course-less links (#vectors) belong to. */
-export const LEGACY_COURSE = ai;
+/** Every course. Within a subject the library sorts them by level, then by this order. */
+export const COURSES: Course[] = [aiBasics, statsBasics];
+
+export const LEVELS: Record<Level, { name: string; en: string }> = {
+  1: { name: '기초', en: 'Basic' },
+  2: { name: '중급', en: 'Intermediate' },
+  3: { name: '심화', en: 'Advanced' },
+};
+
+/** Course that the oldest links (#vectors, from before courses existed) belong to. */
+const LEGACY_COURSE = aiBasics;
 
 export const findCourse = (id: string) => COURSES.find((c) => c.id === id);
+export const subjectOf = (c: Course): Subject => SUBJECTS.find((s) => s.id === c.subject)!;
+export const coursesOf = (s: Subject) => COURSES.filter((c) => c.subject === s.id).sort((a, b) => a.level - b.level);
 
 export const LIBRARY_HREF = '#';
 export const courseHref = (courseId: string) => '#' + courseId;
@@ -22,6 +36,11 @@ export const lessonIndex = (c: Course, id: string) => c.lessons.findIndex((l) =>
 export const lessonNumber = (c: Course, l: Lesson) => lessonIndex(c, l.id) + (c.firstNo ?? 1);
 /** Lesson number as a two-digit label, like "02". */
 export const lessonNo = (c: Course, l: Lesson) => String(lessonNumber(c, l)).padStart(2, '0');
+
+const byAlias = new Map<string, Course>(COURSES.flatMap((c) => (c.aliases ?? []).map((a) => [a, c] as [string, Course])));
+
+// Progress saved under a course's old slug moves to its current one.
+renameCourseProgress(Object.fromEntries([...byAlias].map(([alias, c]) => [alias, c.id])));
 
 export type Route =
   | { kind: 'library' }
@@ -42,7 +61,13 @@ export function parseRoute(hash: string): Route {
     const lesson = rest.length === 0 ? course.lessons.find((l) => l.id === second) : undefined;
     return lesson ? { kind: 'lesson', course, lesson } : { kind: 'missing', course };
   }
-  // Links from before courses existed (#vectors) point at the AI course.
+  // A course's earlier slug (#stats/clt → #stats-basics/clt).
+  const renamed = byAlias.get(first);
+  if (renamed) {
+    const tail = [second, ...rest].filter((x) => x !== undefined).join('/');
+    return { kind: 'redirect', to: courseHref(renamed.id) + (tail ? '/' + tail : '') };
+  }
+  // Links from before courses existed (#vectors) point at the first AI course.
   if (second === undefined && LEGACY_COURSE.lessons.some((l) => l.id === first)) {
     return { kind: 'redirect', to: lessonHref(LEGACY_COURSE.id, first) };
   }

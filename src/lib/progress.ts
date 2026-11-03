@@ -60,6 +60,24 @@ export function markDone(courseId: string, lessonId: string) {
   commit({ ...state, [courseId]: { ...cur, done: [...cur.done, lessonId] } });
 }
 
+/**
+ * Move progress saved under old course ids to their new ids, merging with anything
+ * already saved under the new id. Runs once at startup; a no-op when nothing matches.
+ */
+export function renameCourseProgress(renames: Record<string, string>) {
+  let changed = false;
+  const next: Progress = { ...state };
+  for (const [from, to] of Object.entries(renames)) {
+    const old = next[from];
+    if (!old || from === to) continue;
+    const cur = next[to] ?? { done: [] };
+    next[to] = { done: [...new Set([...cur.done, ...old.done])], last: cur.last ?? old.last };
+    delete next[from];
+    changed = true;
+  }
+  if (changed) commit(next);
+}
+
 /** React hook: current progress; re-renders whenever it changes. */
 export function useProgress(): Progress {
   const [p, setP] = useState(state);
