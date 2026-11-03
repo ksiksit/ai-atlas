@@ -1,0 +1,334 @@
+/* 안전한 통로: TLS, 방화벽, NAT, VPN */
+
+/* TLS handshake: the selected message */
+.tls-hash {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+}
+.tls-hash .mono {
+  color: var(--ink-2);
+}
+.tls-msg {
+  border: 1px solid var(--line);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.tls-msg-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 10px;
+}
+.tls-badge {
+  font-size: var(--fs-xs);
+  padding: 1px 6px;
+  border: 1px solid currentColor;
+}
+.tls-badge[data-p='plain'] {
+  color: var(--ink-2);
+  border-style: dashed;
+}
+.tls-badge[data-p='hs'] {
+  color: var(--neg);
+}
+.tls-badge[data-p='app'] {
+  color: var(--good);
+}
+.tls-dir {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  margin-left: auto;
+}
+.tls-fields {
+  margin: 0;
+  display: grid;
+  gap: 2px;
+  font-size: var(--fs-xs);
+}
+.tls-fields > div {
+  display: grid;
+  grid-template-columns: minmax(8em, 13em) minmax(0, 1fr);
+  gap: 10px;
+}
+.tls-fields dt {
+  color: var(--ink-3);
+  overflow-wrap: anywhere;
+}
+.tls-fields dd {
+  margin: 0;
+  color: var(--ink);
+}
+.tls-msg .step-note {
+  margin: 0;
+  min-height: 0;
+}
+.tls-seen {
+  display: grid;
+  grid-template-columns: minmax(8em, 13em) minmax(0, 1fr);
+  gap: 10px;
+  font-size: var(--fs-xs);
+  border-top: 1px dashed var(--line-strong);
+  padding-top: 6px;
+}
+.tls-seen > span:first-child {
+  color: var(--bad);
+  font-weight: 600;
+}
+.tls-seen > span:last-child {
+  color: var(--ink-2);
+  overflow-wrap: anywhere;
+}
+@media (max-width: 560px) {
+  .tls-fields > div,
+  .tls-seen {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+  .tls-fields > div + div {
+    margin-top: 4px;
+  }
+}
+
+/* man in the middle: the client's checks */
+.mitm-checks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.lesson .mitm-checks {
+  margin: 0;
+  padding: 0;
+}
+.mitm-checks li {
+  margin: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2px 12px;
+  align-items: baseline;
+  padding: 6px 8px;
+  border-left: 3px solid var(--line);
+  font-size: var(--fs-sm);
+}
+.mitm-checks li[data-s='pass'] {
+  border-left-color: var(--good);
+}
+.mitm-checks li[data-s='fail'] {
+  border-left-color: var(--bad);
+  background: color-mix(in srgb, var(--bad) 10%, transparent);
+}
+.mitm-checks li[data-s='off'] {
+  border-left-style: dashed;
+  border-left-color: var(--ink-3);
+}
+.mitm-checks li[data-s='na'] {
+  opacity: 0.55;
+}
+.mitm-state {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.mitm-checks li[data-s='pass'] .mitm-state {
+  color: var(--good);
+}
+.mitm-checks li[data-s='fail'] .mitm-state {
+  color: var(--bad);
+}
+.mitm-why {
+  grid-column: 1 / -1;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  padding-left: 1.7em;
+}
+@media (max-width: 560px) {
+  .mitm-checks li {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .mitm-state {
+    padding-left: 1.7em;
+  }
+}
+.mitm-outcome {
+  padding: 10px 12px;
+  border: 1px solid var(--line-strong);
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+}
+.mitm-outcome strong {
+  margin-right: 4px;
+}
+.mitm-outcome[data-o='blocked'] {
+  border-color: var(--good);
+}
+.mitm-outcome[data-o='blocked'] strong {
+  color: var(--good);
+}
+.mitm-outcome:not([data-o='blocked']) {
+  border-color: var(--bad);
+  background: color-mix(in srgb, var(--bad) 8%, transparent);
+}
+.mitm-outcome:not([data-o='blocked']) strong {
+  color: var(--bad);
+}
+
+/* firewall: rules and packets */
+.fw-rules {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: fw;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.lesson .fw-rules {
+  margin: 0;
+  padding: 0;
+}
+.fw-rules li {
+  margin: 0;
+  counter-increment: fw;
+  display: grid;
+  grid-template-columns: 1.6em minmax(0, 1fr) auto auto;
+  gap: 8px;
+  align-items: center;
+  padding: 4px 6px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--good);
+  font-size: var(--fs-sm);
+}
+.fw-rules li::before {
+  content: counter(fw);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  text-align: right;
+}
+.fw-rules li[data-act='deny'] {
+  border-left-color: var(--bad);
+}
+.fw-rules li[data-off] {
+  border-left-color: var(--line-strong);
+  border-left-style: dashed;
+}
+.fw-rules li[data-off] .fw-rule-text {
+  color: var(--ink-3);
+  text-decoration: line-through;
+}
+.fw-hits {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+.fw-move {
+  display: inline-flex;
+  gap: 4px;
+}
+@media (max-width: 560px) {
+  .fw-rules li {
+    grid-template-columns: 1.4em minmax(0, 1fr) auto;
+  }
+  .fw-hits {
+    display: none;
+  }
+}
+.fw-pkts td {
+  font-size: var(--fs-xs);
+}
+.fw-what {
+  display: block;
+  color: var(--ink);
+}
+.fw-hdr {
+  display: block;
+  color: var(--ink-3);
+  font-size: var(--fs-xs);
+  overflow-wrap: anywhere;
+}
+.fw-verdict {
+  font-weight: 600;
+  white-space: nowrap;
+}
+.fw-verdict[data-a='allow'] {
+  color: var(--good);
+}
+.fw-verdict[data-a='deny'] {
+  color: var(--bad);
+}
+.fw-wrong {
+  display: block;
+  font-weight: 600;
+  font-size: var(--fs-xs);
+  color: #1a1a1a;
+  background: var(--hl);
+  padding: 0 4px;
+  margin-top: 2px;
+}
+.fw-pkts tr[data-bad] td:first-child {
+  box-shadow: inset 3px 0 0 var(--hl);
+}
+.fw-by {
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.fw-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.fw-foot .readouts {
+  flex: 1 1 320px;
+}
+
+/* NAT */
+.nat-hdrs {
+  display: grid;
+  gap: 4px;
+  font-size: var(--fs-xs);
+}
+.nat-hdrs > div {
+  display: grid;
+  grid-template-columns: 9.5em minmax(0, 1fr);
+  gap: 8px;
+}
+.nat-hdrs > div > span:first-child {
+  color: var(--ink-3);
+}
+.nat-hdrs .mono {
+  overflow-wrap: anywhere;
+}
+.nat-hdrs > div[data-drop] .mono {
+  color: var(--bad);
+  font-weight: 600;
+}
+.nat-table td {
+  font-size: var(--fs-xs);
+}
+.nat-table tr[data-new] td,
+.nat-table tr[data-used] td {
+  background: color-mix(in srgb, var(--hl) 30%, transparent);
+}
+.nat-empty {
+  color: var(--ink-3);
+}
+
+/* VPN: what an observer sees */
+.vpn-seen td {
+  font-size: var(--fs-xs);
+  overflow-wrap: anywhere;
+}
+.vpn-seen tr[data-tun] td:last-child {
+  color: var(--good);
+}
