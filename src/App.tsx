@@ -81,16 +81,20 @@ function LessonPage({ lesson }: { lesson: Lesson }) {
     <article className="lesson" style={{ ['--part-color' as string]: part.color } as CSSProperties}>
       <header className="lesson-head">
         <div className="eyebrow">
-          <span className="bar" />
-          {part.title} · {lessonNo(lesson)}
+          {part.title} · {Number(lessonNo(lesson))}장
         </div>
         <h1 className="lesson-title">{lesson.title}</h1>
         <p className="lesson-lede">{lesson.lede}</p>
-        <ul className="learn-list" aria-label="이 장에서 배우는 것">
-          {lesson.learn.map((x) => (
-            <li key={x}>{x}</li>
-          ))}
-        </ul>
+        <section className="learn-box" aria-labelledby="learn-title">
+          <h2 id="learn-title" className="learn-box-title">
+            이 장에서 배우는 것
+          </h2>
+          <ol className="learn-list">
+            {lesson.learn.map((x) => (
+              <li key={x}>{x}</li>
+            ))}
+          </ol>
+        </section>
       </header>
       <Suspense fallback={<div className="loading">불러오는 중…</div>}>
         <C />
