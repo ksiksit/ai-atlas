@@ -1,0 +1,127 @@
+/* 기초 알고리즘: figure styles that are plain HTML rather than canvas */
+
+/* complexity: one row per growth rate, log-scale bars */
+.growth-rows {
+  --gn: 84px;
+  --gt: 112px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+.growth-row {
+  display: grid;
+  grid-template-columns: var(--gn) minmax(0, 1fr) var(--gt);
+  align-items: center;
+  gap: 10px;
+}
+.growth-name {
+  font-size: 0.875rem;
+}
+.growth-track {
+  height: 16px;
+  background: var(--surface-2);
+  position: relative;
+}
+.growth-bar {
+  display: block;
+  height: 100%;
+}
+.growth-bar[data-over] {
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%);
+}
+.growth-time {
+  text-align: right;
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+.growth-axis {
+  position: relative;
+  height: 18px;
+  margin-left: calc(var(--gn) + 10px);
+  margin-right: calc(var(--gt) + 10px);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-3);
+}
+.growth-axis span {
+  position: absolute;
+  transform: translateX(-50%);
+}
+@media (max-width: 560px) {
+  .growth-rows {
+    --gn: 70px;
+    --gt: 86px;
+  }
+  .growth-time {
+    font-size: 0.75rem;
+  }
+}
+
+/* sorting race: four small panels */
+.race-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.race-panel {
+  border: 1px solid var(--line);
+  padding: 8px 10px 6px;
+  min-width: 0;
+}
+.race-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: var(--fs-xs);
+  color: var(--ink-2);
+}
+.race-head strong {
+  color: var(--ink);
+}
+.race-head .mono {
+  white-space: nowrap;
+}
+.race-panel[data-done] .race-head strong::after {
+  content: ' ✓';
+  color: var(--good);
+}
+@media (max-width: 560px) {
+  .race-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* queue / stack contents in the graph lesson */
+.ds-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  min-height: 30px;
+  font-size: var(--fs-sm);
+}
+.ds-row .ds-label {
+  width: 100%;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.ds-cell {
+  min-width: 28px;
+  height: 28px;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  background: var(--surface);
+}
+.ds-cell[data-next] {
+  background: var(--part-color, var(--accent));
+  border-color: var(--part-color, var(--accent));
+  color: var(--surface);
+}
+.ds-empty {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}

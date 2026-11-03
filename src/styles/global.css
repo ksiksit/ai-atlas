@@ -26,6 +26,9 @@
   --c-dl: #9c3d22;
   --c-stats-1: #1c6a6a; /* statistics: describe */
   --c-stats-2: #6a3f8c; /* statistics: infer */
+  --c-cs-1: #8a5a0f; /* computer science */
+  --c-cs-2: #4b4fa6;
+  --c-cs-3: #8e3b6f;
 
   /* data encodings — shared by every figure (blue/orange differ in lightness too) */
   --pos: #d9661f;
@@ -78,6 +81,9 @@
     --c-dl: #e48d6e;
     --c-stats-1: #79c3c0;
     --c-stats-2: #c3a2e3;
+    --c-cs-1: #e3b866;
+    --c-cs-2: #aeb1f2;
+    --c-cs-3: #e8a2cf;
     --pos: #f08a4b;
     --neg: #6aa8ee;
     --pos-soft: rgba(240, 138, 75, 0.2);
@@ -110,6 +116,9 @@
   --c-dl: #e48d6e;
   --c-stats-1: #79c3c0;
   --c-stats-2: #c3a2e3;
+  --c-cs-1: #e3b866;
+  --c-cs-2: #aeb1f2;
+  --c-cs-3: #e8a2cf;
   --pos: #f08a4b;
   --neg: #6aa8ee;
   --pos-soft: rgba(240, 138, 75, 0.2);
@@ -1176,4 +1185,26 @@ table.tbl td.num {
 .rail-link .num .level-dots i {
   width: 6px;
   height: 6px;
+}
+
+/* code listings in lessons */
+.code {
+  margin: 0.4em 0 1.4em;
+  padding: 14px 16px;
+  background: var(--surface-2);
+  border-left: 2px solid var(--part-color, var(--accent));
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: var(--ink);
+  tab-size: 2;
+}
+.code code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+}
+.code .cm {
+  color: var(--ink-3);
 }
