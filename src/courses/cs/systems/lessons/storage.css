@@ -1,0 +1,144 @@
+/* 시스템 속 알고리즘 · 저장 구조: dynamic array and B-tree figures (HTML parts; plots are canvas) */
+
+.sto-note {
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  min-height: 3.2em;
+}
+
+/* dynamic array: the memory block, one square per slot */
+.mem-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  align-content: flex-start;
+  min-height: 43px;
+}
+.mem-cell {
+  width: 17px;
+  height: 17px;
+  border: 1px solid var(--ink);
+  background: var(--surface);
+}
+.mem-cell[data-s='empty'] {
+  border-color: var(--line-strong);
+  border-style: dashed;
+}
+.mem-cell[data-s='full'] {
+  background: var(--ink-3);
+  border-color: var(--ink-3);
+}
+.mem-cell[data-s='copied'] {
+  background: var(--pos);
+  border-color: var(--pos);
+}
+.mem-cell[data-s='new'] {
+  background: var(--hl);
+  border-color: var(--ink);
+}
+@media (max-width: 560px) {
+  .mem-row {
+    gap: 2px;
+  }
+  .mem-cell {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+/* growth policies table */
+.am-tbl {
+  margin: 0;
+}
+table.tbl.am-tbl td,
+table.tbl.am-tbl th {
+  white-space: nowrap;
+  padding: 7px 8px;
+}
+table.tbl.am-tbl th:not(:first-child) {
+  text-align: right;
+}
+.am-sw {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 6px;
+  vertical-align: baseline;
+}
+
+/* B-tree: typed key + insert / search */
+.bt-typed {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+}
+.bt-typed .text-input {
+  width: 56px;
+  padding: 5px 8px;
+  text-align: center;
+}
+.mono-sm {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  overflow-wrap: anywhere;
+}
+
+/* tree heights: one square per page read */
+.lv-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.lv-row {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr) 76px;
+  align-items: center;
+  gap: 10px;
+}
+.lv-name {
+  font-size: var(--fs-sm);
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+.lv-name small,
+.lv-num small {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.lv-boxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+.lv-boxes i {
+  width: 14px;
+  height: 14px;
+}
+.lv-boxes i[data-empty] {
+  background: transparent;
+  border: 1px dashed var(--line-strong);
+}
+.lv-num {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  font-size: 1rem;
+  line-height: 1.3;
+}
+@media (max-width: 560px) {
+  .lv-row {
+    grid-template-columns: 84px minmax(0, 1fr) 62px;
+    gap: 8px;
+  }
+  .lv-boxes {
+    gap: 2px;
+  }
+  .lv-boxes i {
+    width: 9px;
+    height: 12px;
+  }
+}
