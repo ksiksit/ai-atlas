@@ -1,5 +1,5 @@
 import { Suspense, useEffect, useRef, useState, type CSSProperties } from 'react';
-import { LEVELS, LIBRARY_HREF, SUBJECTS, courseHref, coursesOf, lessonHref, lessonIndex, lessonNo, lessonNumber, parseRoute, partOf, subjectOf, type Course, type Lesson, type Route } from './courses';
+import { COURSES, LEVELS, LIBRARY_HREF, SUBJECTS, courseHref, coursesOf, lessonHref, lessonIndex, lessonNo, lessonNumber, parseRoute, partOf, subjectOf, type Course, type Lesson, type Route } from './courses';
 import { markDone, markVisited, useProgress } from './lib/progress';
 import { loadThemeMode, setThemeMode, type ThemeMode } from './lib/theme';
 import Library from './pages/Library';
@@ -132,6 +132,8 @@ function LessonPage({ course, lesson }: { course: Course; lesson: Lesson }) {
   const i = lessonIndex(course, lesson.id);
   const prev = course.lessons[i - 1];
   const next = course.lessons[i + 1];
+  // after the last lesson, point to a course that lists this one as its prerequisite
+  const nextCourse = next ? undefined : COURSES.find((c) => c.prerequisites?.includes(course.id));
   const C = lesson.Component;
   const pagerRef = useRef<HTMLElement>(null);
 
@@ -192,6 +194,11 @@ function LessonPage({ course, lesson }: { course: Course; lesson: Lesson }) {
           <a className="next" href={lessonHref(course.id, next.id)}>
             <span className="dir">다음 →</span>
             <span className="ttl">{next.title}</span>
+          </a>
+        ) : nextCourse ? (
+          <a className="next" href={courseHref(nextCourse.id)}>
+            <span className="dir">다음 과목 · {LEVELS[nextCourse.level].name} →</span>
+            <span className="ttl">{nextCourse.title}</span>
           </a>
         ) : (
           <a className="next" href={LIBRARY_HREF}>

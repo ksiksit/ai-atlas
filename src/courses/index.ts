@@ -1,5 +1,6 @@
 import aiSubject from './ai/subject';
 import aiBasics from './ai/basics/course';
+import aiDeepLearning from './ai/deep/course';
 import statsSubject from './stats/subject';
 import statsBasics from './stats/basics/course';
 import csSubject from './cs/subject';
@@ -15,7 +16,7 @@ export type { Course, Lesson, Level, Part, Subject } from './types';
 export const SUBJECTS: Subject[] = [aiSubject, statsSubject, csSubject];
 
 /** Every course. Within a subject the library sorts them by level, then by this order. */
-export const COURSES: Course[] = [aiBasics, statsBasics, csAlgorithms, csAlgorithmDesign, csSystemAlgorithms];
+export const COURSES: Course[] = [aiBasics, aiDeepLearning, statsBasics, csAlgorithms, csAlgorithmDesign, csSystemAlgorithms];
 
 export const LEVELS: Record<Level, { name: string; en: string }> = {
   1: { name: '기초', en: 'Basic' },
