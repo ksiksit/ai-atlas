@@ -21,6 +21,9 @@ function label(ctx: CanvasRenderingContext2D, P: Palette, s: string, x: number, 
 /* ─────────────── Figure 1: one flow's congestion window ─────────────── */
 
 const ROUNDS = 80;
+const LOSS_TXT = '용량 + 버퍼: 넘으면 손실';
+const CAP_TXT = '회선 용량 (BDP)';
+const BUF_TXT = '버퍼에 쌓이는 구간';
 
 function CwndFigure() {
   const P = usePalette();
@@ -40,8 +43,47 @@ function CwndFigure() {
       const gap = 14;
       const top = (h - gap) * 0.64;
       const yMax = Math.max(cap + buf, ...tr.map((r) => r.cwnd)) * 1.08;
-      const pad = { l: 40, r: 12, t: 22, b: 6 };
-      const p1 = new Plot(ctx, w, top, P, { xMin: 0, xMax: ROUNDS - 1, yMin: 0, yMax, pad });
+      const mk = (t: number) => new Plot(ctx, w, top, P, { xMin: 0, xMax: ROUNDS - 1, yMin: 0, yMax, pad: { l: 40, r: 12, t, b: 6 } });
+
+      // A spot for a line label at the first of the given heights (beside its line), tried from the
+      // right edge leftwards, where it clears the cwnd curve and its loss marks.
+      const clearAt = (p: Plot, s: string, ys: number[], size: number): { x: number; y: number } | null => {
+        ctx.font = `${size}px ${P.fontBody}`;
+        const tw = ctx.measureText(s).width + 6;
+        const half = size / 2 + 6;
+        for (const y of ys) {
+          if (y - half < p.pad.t || y + half > top - p.pad.b) continue;
+          for (let xr = p.X(ROUNDS - 1) - 2; xr - tw >= p.X(0); xr -= 4) {
+            const i0 = Math.max(0, Math.floor(p.invX(xr - tw)) - 1);
+            const i1 = Math.min(tr.length - 1, Math.ceil(p.invX(xr)) + 1);
+            let ok = true;
+            for (let i = i0; i < i1 && ok; i++) {
+              const ya = p.Y(tr[i].cwnd);
+              const yb = p.Y(tr[i + 1].cwnd);
+              if (Math.max(ya, yb) > y - half && Math.min(ya, yb) < y + half) ok = false;
+            }
+            if (ok) return { x: xr, y };
+          }
+        }
+        return null;
+      };
+      const placeAll = (p: Plot) => {
+        const band = p.Y(cap) - p.Y(cap + buf);
+        return {
+          loss: clearAt(p, LOSS_TXT, [p.Y(cap + buf) - 9, ...(band > 40 ? [p.Y(cap + buf) + 9] : [])], 11),
+          cap: clearAt(p, CAP_TXT, [p.Y(cap) + 9, ...(band > 40 ? [p.Y(cap) - 9] : [])], 11),
+          // the band explains itself once its lines are labelled, so this one is dropped rather than moved
+          buf: buf > 0 && band > 18 ? clearAt(p, BUF_TXT, [(p.Y(cap) + p.Y(cap + buf)) / 2], 10) : null,
+        };
+      };
+      // labels with no clear spot (narrow screens) become a key in an extra header row
+      let p1 = mk(22);
+      let spots = placeAll(p1);
+      const keyRow = !spots.loss || !spots.cap;
+      if (keyRow) {
+        p1 = mk(40);
+        spots = placeAll(p1);
+      }
       p1.grid({ xStep: 10, yStep: yMax > 120 ? 40 : 20, labels: false, axes: false });
       ctx.font = `11px ${P.fontMono}`;
       ctx.fillStyle = P.ink3;
@@ -58,10 +100,6 @@ function CwndFigure() {
       ctx.fillRect(p1.X(0), p1.Y(cap + buf), p1.pw, p1.Y(cap) - p1.Y(cap + buf));
       p1.line(0, cap, ROUNDS - 1, cap, alpha(P.ink, 0.55), 1.2, [6, 4]);
       p1.line(0, cap + buf, ROUNDS - 1, cap + buf, P.bad, 1.2, [6, 4]);
-      label(ctx, P, '회선 용량 (BDP)', p1.X(ROUNDS - 1) - 2, p1.Y(cap) + (buf < 8 ? 9 : 9), P.ink2, 'right');
-      if (buf > 0) label(ctx, P, '버퍼에 쌓이는 구간', p1.X(ROUNDS - 1) - 2, (p1.Y(cap) + p1.Y(cap + buf)) / 2 + (buf < 12 ? -2 : 0), P.ink3, 'right', 10);
-      label(ctx, P, '용량 + 버퍼: 넘으면 손실', p1.X(ROUNDS - 1) - 2, p1.Y(cap + buf) - 9, P.bad, 'right');
-
       // cwnd, coloured by phase
       for (let i = 1; i < tr.length; i++) {
         const a = tr[i - 1];
@@ -81,6 +119,28 @@ function CwndFigure() {
         ctx.lineTo(x - 4, y + 4);
         ctx.stroke();
       });
+
+      // line labels on top of the curve, or as a key under the title
+      let keyX = p1.X(0);
+      const tag = (txt: string, spot: { x: number; y: number } | null, color: string, size = 11) => {
+        if (spot) return label(ctx, P, txt, spot.x, spot.y, color, 'right', size);
+        if (!keyRow) return;
+        const ky = 28;
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1.2;
+        ctx.setLineDash([6, 4]);
+        ctx.beginPath();
+        ctx.moveTo(keyX, ky);
+        ctx.lineTo(keyX + 16, ky);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.font = `${size}px ${P.fontBody}`;
+        label(ctx, P, txt, keyX + 21, ky, color, 'left', size);
+        keyX += 21 + ctx.measureText(txt).width + 12;
+      };
+      tag(LOSS_TXT, spots.loss, P.bad);
+      tag(CAP_TXT, spots.cap, P.ink2);
+      if (spots.buf) tag(BUF_TXT, spots.buf, P.ink3, 10);
 
       // bottom: round-trip time
       ctx.save();
