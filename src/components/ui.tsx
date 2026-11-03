@@ -20,6 +20,35 @@ export function MB({ children, note }: { children: string; note?: ReactNode }) {
   );
 }
 
+/* ───────── Code ───────── */
+
+/** A code listing. Line comments (// …) are dimmed; no other highlighting. */
+export function Code({ children, label }: { children: string; label?: string }) {
+  const lines = children.replace(/^\n+|\s+$/g, '').split('\n');
+  return (
+    <pre className="code" aria-label={label}>
+      <code>
+        {lines.map((line, i) => {
+          const c = line.indexOf('//');
+          return (
+            <span key={i}>
+              {c >= 0 ? (
+                <>
+                  {line.slice(0, c)}
+                  <span className="cm">{line.slice(c)}</span>
+                </>
+              ) : (
+                line
+              )}
+              {i < lines.length - 1 ? '\n' : ''}
+            </span>
+          );
+        })}
+      </code>
+    </pre>
+  );
+}
+
 /* ───────── Prose helpers ───────── */
 
 /** A key term, optionally with its English name. */
@@ -104,9 +133,10 @@ export function Seg<T extends string | number>({ value, options, onChange, label
   );
 }
 
-export function Button({ children, onClick, primary, small, disabled, title }: { children: ReactNode; onClick: () => void; primary?: boolean; small?: boolean; disabled?: boolean; title?: string }) {
+/** `label` names a button whose visible text is only a symbol (▶, ⏭) for screen readers. */
+export function Button({ children, onClick, primary, small, disabled, title, label }: { children: ReactNode; onClick: () => void; primary?: boolean; small?: boolean; disabled?: boolean; title?: string; label?: string }) {
   return (
-    <button type="button" className={'btn' + (primary ? ' primary' : '') + (small ? ' small' : '')} onClick={onClick} disabled={disabled} title={title}>
+    <button type="button" className={'btn' + (primary ? ' primary' : '') + (small ? ' small' : '')} onClick={onClick} disabled={disabled} title={title} aria-label={label}>
       {children}
     </button>
   );
