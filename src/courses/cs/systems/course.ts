@@ -59,7 +59,7 @@ const lessons: Lesson[] = [
     title: 'diff: 바뀐 줄 찾기',
     en: 'Diff',
     lede: 'git diff는 두 파일에서 바뀐 줄을 어떻게 찾을까요? 가장 긴 공통 부분 수열과 편집 그래프의 최단 경로로 diff를 계산하고, 마이어스 알고리즘이 빠른 이유를 봅니다.',
-    learn: ['diff와 가장 긴 공통 부분 수열', '편집 그래프와 최단 경로', '마이어스 알고리즘'],
+    learn: ['diff와 가장 긴 공통 부분 수열', 'unified 형식 읽기', '편집 그래프와 마이어스 알고리즘'],
     Component: lazy(() => import('./lessons/Diff')),
   },
 ];

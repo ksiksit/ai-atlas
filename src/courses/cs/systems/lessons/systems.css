@@ -1,0 +1,219 @@
+/* 일관된 해싱 · diff: figure styles that are plain HTML rather than canvas */
+
+/* ── consistent hashing: two panels side by side ── */
+.ch-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+.ch-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.ch-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+  font-size: var(--fs-xs);
+  color: var(--ink-2);
+}
+.ch-head strong {
+  color: var(--ink);
+  font-size: var(--fs-sm);
+}
+.ch-count {
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+}
+.ch-count strong {
+  font-family: var(--font-mono);
+  font-size: 1.0625rem;
+}
+@media (max-width: 640px) {
+  .ch-pair {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.ch-click canvas {
+  cursor: pointer;
+}
+
+/* server on/off toggles, each with its server colour */
+.ch-servers {
+  gap: 6px;
+}
+.ch-srv {
+  min-width: 36px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  border-color: var(--srv, var(--ink));
+  border-width: 2px;
+}
+.ch-srv[aria-pressed='true'] {
+  border-style: dashed;
+  border-color: var(--bad);
+  color: var(--ink-3);
+  text-decoration: line-through;
+  background: var(--surface-2);
+}
+
+/* ── diff: two editable files ── */
+.df-inputs {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+}
+@media (max-width: 560px) {
+  .df-inputs {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+textarea.text-input {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  min-height: calc(10 * 1.5em + 16px);
+  resize: vertical;
+  white-space: pre;
+  overflow-x: auto;
+  tab-size: 2;
+}
+
+/* unified diff output */
+.df-out {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  overflow-x: auto;
+  min-width: 0;
+}
+.df-line {
+  display: grid;
+  grid-template-columns: 2.6em 2.6em 1.4em max-content;
+  min-width: 100%;
+  width: max-content;
+}
+.df-line > span {
+  white-space: pre;
+}
+.df-no {
+  color: var(--ink-3);
+  text-align: right;
+  padding-right: 6px;
+  user-select: none;
+}
+.df-sign {
+  text-align: center;
+  user-select: none;
+}
+.df-text {
+  padding-right: 12px;
+}
+.df-line[data-t='del'] {
+  background: color-mix(in srgb, var(--bad) 14%, transparent);
+}
+.df-line[data-t='del'] .df-sign {
+  color: var(--bad);
+  font-weight: 700;
+}
+.df-line[data-t='ins'] {
+  background: color-mix(in srgb, var(--good) 16%, transparent);
+}
+.df-line[data-t='ins'] .df-sign {
+  color: var(--good);
+  font-weight: 700;
+}
+.df-hunk {
+  padding: 2px 8px;
+  color: var(--accent);
+  background: var(--surface-2);
+  white-space: pre;
+}
+.df-empty {
+  padding: 10px 12px;
+  color: var(--ink-3);
+  font-family: var(--font-body);
+}
+.df-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 14px;
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+}
+.df-summary .add {
+  color: var(--good);
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+.df-summary .del {
+  color: var(--bad);
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+.df-note {
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  min-height: 3.4em;
+  overflow-wrap: anywhere;
+}
+.df-pair-inputs {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 10px;
+}
+
+/* work comparison rows reuse the growth bars with a wider name column */
+.df-rows {
+  --gn: 112px;
+  --gt: 112px;
+  margin-block: 4px 8px;
+}
+@media (max-width: 560px) {
+  .df-rows {
+    --gn: 100px;
+    --gt: 84px;
+  }
+}
+
+/* the edit script under the edit graph */
+.df-script {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  align-items: center;
+  font-size: var(--fs-xs);
+  min-height: 28px;
+}
+.df-script .lbl {
+  width: 100%;
+  color: var(--ink-3);
+}
+.df-tok {
+  display: inline-grid;
+  place-items: center;
+  min-width: 30px;
+  height: 26px;
+  padding: 0 4px;
+  border: 1px solid var(--line-strong);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  white-space: pre;
+  background: var(--surface);
+}
+.df-tok[data-t='del'] {
+  border-color: var(--bad);
+  background: color-mix(in srgb, var(--bad) 14%, transparent);
+}
+.df-tok[data-t='ins'] {
+  border-color: var(--good);
+  background: color-mix(in srgb, var(--good) 16%, transparent);
+}
