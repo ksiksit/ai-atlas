@@ -49,7 +49,7 @@ export function useStepper(total: number, initialSpeed = 6, resetKey: unknown = 
     if (!n) return;
     acc.current -= n;
     setI((x) => {
-      const next = Math.min(last, x + n);
+      const next = Math.max(0, Math.min(last, x + n));
       if (next >= last) setPlaying(false);
       return next;
     });
