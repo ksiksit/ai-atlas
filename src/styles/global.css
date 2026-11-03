@@ -29,6 +29,7 @@
   --c-cs-1: #8a5a0f; /* computer science */
   --c-cs-2: #4b4fa6;
   --c-cs-3: #8e3b6f;
+  --c-cs-4: #2f6b2a;
 
   /* data encodings — shared by every figure (blue/orange differ in lightness too) */
   --pos: #d9661f;
@@ -84,6 +85,7 @@
     --c-cs-1: #e3b866;
     --c-cs-2: #aeb1f2;
     --c-cs-3: #e8a2cf;
+    --c-cs-4: #9fd39a;
     --pos: #f08a4b;
     --neg: #6aa8ee;
     --pos-soft: rgba(240, 138, 75, 0.2);
@@ -119,6 +121,7 @@
   --c-cs-1: #e3b866;
   --c-cs-2: #aeb1f2;
   --c-cs-3: #e8a2cf;
+  --c-cs-4: #9fd39a;
   --pos: #f08a4b;
   --neg: #6aa8ee;
   --pos-soft: rgba(240, 138, 75, 0.2);

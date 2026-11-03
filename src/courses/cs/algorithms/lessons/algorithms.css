@@ -125,3 +125,165 @@
   font-size: var(--fs-xs);
   color: var(--ink-3);
 }
+
+/* stack and queue side by side */
+.sq-panels {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  align-items: start;
+  gap: 12px;
+}
+.sq-panel {
+  border: 1px solid var(--line);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.sq-head {
+  font-size: var(--fs-xs);
+  color: var(--ink-2);
+}
+.sq-head strong {
+  color: var(--ink);
+  font-size: var(--fs-sm);
+  margin-right: 4px;
+}
+.sq-stack {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 3px;
+  min-height: calc(6 * 31px);
+}
+.sq-stack .ds-cell {
+  width: 64px;
+}
+.sq-queue-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.sq-queue {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  min-width: 0;
+}
+.sq-end {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  white-space: nowrap;
+  text-align: center;
+}
+.sq-out {
+  margin-top: auto;
+  font-size: var(--fs-xs);
+  color: var(--ink-2);
+  border-top: 1px solid var(--line);
+  padding-top: 6px;
+}
+.sq-out .mono {
+  color: var(--ink);
+  margin-left: 6px;
+}
+@media (max-width: 560px) {
+  .sq-panels {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .sq-stack {
+    min-height: 0;
+  }
+}
+
+/* bracket matching: the text as character cells */
+.br-chars {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  font-family: var(--font-mono);
+  font-size: 0.9375rem;
+}
+.br-char {
+  min-width: 18px;
+  height: 28px;
+  display: inline-grid;
+  place-items: center;
+  color: var(--ink-3);
+  border-bottom: 2px solid transparent;
+}
+.br-char[data-space] {
+  min-width: 8px;
+}
+.br-char[data-read] {
+  color: var(--ink);
+}
+.br-char[data-cur] {
+  color: var(--ink);
+  font-weight: 700;
+  background: color-mix(in srgb, var(--hl) 35%, transparent);
+  border-bottom-color: var(--hl);
+}
+.br-char[data-fail] {
+  background: color-mix(in srgb, var(--bad) 22%, transparent);
+  border-bottom-color: var(--bad);
+}
+.text-input {
+  width: 100%;
+  font-size: 0.9375rem;
+  padding: 7px 10px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink);
+  border-radius: 0;
+}
+.text-input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* heap: the array under the tree */
+.heap-arr {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  min-height: 46px;
+}
+.heap-slot {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.heap-idx {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-3);
+}
+.heap-slot[data-role='cmp'] .ds-cell {
+  background: var(--hl);
+  border-color: var(--hl);
+  color: #1a1a1a;
+}
+.heap-slot[data-role='swap'] .ds-cell {
+  background: var(--pos);
+  border-color: var(--pos);
+  color: var(--surface);
+}
+.heap-slot[data-role='out'] .ds-cell {
+  background: var(--bad);
+  border-color: var(--bad);
+  color: var(--surface);
+}
+.heap-slot[data-role='mark'] .ds-cell {
+  background: color-mix(in srgb, var(--neg) 30%, transparent);
+}
+
+/* priority queue comparison reuses the growth rows with a wider name column */
+.pq-rows {
+  --gn: 110px;
+  margin-block: 6px 12px;
+}
