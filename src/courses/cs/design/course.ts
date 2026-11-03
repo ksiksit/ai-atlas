@@ -50,7 +50,7 @@ const lessons: Lesson[] = [
     title: '유니온 파인드와 최소 신장 트리',
     en: 'Union-Find & Minimum Spanning Trees',
     lede: '"이 둘이 같은 그룹인가?"를 거의 상수 시간에 답하는 자료구조와, 그것으로 모든 점을 가장 싸게 잇는 크루스칼 알고리즘을 봅니다.',
-    learn: ['유니온 파인드와 경로 압축', '최소 신장 트리', '크루스칼과 프림'],
+    learn: ['유니온 파인드와 경로 압축', '크루스칼과 프림', '최소 신장 트리로 군집 나누기'],
     Component: lazy(() => import('./lessons/UnionFindMST')),
   },
   {
@@ -58,7 +58,7 @@ const lessons: Lesson[] = [
     part: 'graph',
     title: '위상 정렬',
     en: 'Topological Sort',
-    lede: '패키지 설치, 빌드 순서, 선수 과목처럼 "A를 하려면 B가 먼저"인 일들을 어떤 순서로 해야 할까요. 의존 관계 그래프에서 순서를 뽑고, 순환을 찾고, 전체 일정의 최소 기간을 계산합니다.',
+    lede: '패키지 설치, 빌드 파이프라인, 선수 과목처럼 "A를 하려면 B가 먼저"인 일들을 어떤 순서로 해야 할까요. 의존 관계 그래프에서 순서를 뽑고, 순환을 찾고, 전체 일정의 최소 기간을 계산합니다.',
     learn: ['방향 비순환 그래프(DAG)', '칸 알고리즘과 진입 차수', '순환 찾기와 임계 경로'],
     Component: lazy(() => import('./lessons/TopologicalSort')),
   },
