@@ -1,0 +1,131 @@
+/* 아끼는 기술: LRU 캐시, 블룸 필터, HyperLogLog */
+
+/* LRU: the request sequence as chips */
+.op-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-height: 28px;
+}
+.op-list .ds-label {
+  width: 100%;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.op-chip {
+  font: inherit;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  padding: 2px 6px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink-2);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.op-chip[data-s='future'] {
+  opacity: 0.45;
+}
+.op-chip[data-s='hit'] {
+  border-color: var(--good);
+  color: var(--ink);
+}
+.op-chip[data-s='miss'] {
+  border-color: var(--bad);
+  border-style: dashed;
+  color: var(--bad);
+}
+.op-chip[data-cur] {
+  background: var(--hl);
+  border-color: var(--hl);
+  border-style: solid;
+  color: #1a1a1a;
+}
+
+/* small inline form: key input + buttons */
+.key-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 6px;
+  align-items: center;
+}
+.key-form .text-input {
+  min-width: 0;
+}
+
+/* policy comparison bars */
+.policy-rows {
+  --gn: 104px;
+  --gt: 58px;
+  margin-block: 2px 4px;
+}
+.policy-rows .growth-track {
+  height: 18px;
+}
+.policy-rows .growth-row[data-opt] .growth-name {
+  color: var(--ink-2);
+}
+.stream-note {
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  min-height: 3.2em;
+}
+
+/* Bloom filter: added words */
+.word-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-height: 28px;
+}
+.word-list .ds-label {
+  width: 100%;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.word-chip {
+  font: inherit;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  padding: 2px 6px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+}
+.word-chip[data-cur] {
+  border-color: var(--ink);
+  font-weight: 700;
+}
+.bloom-verdict {
+  font-size: var(--fs-sm);
+  padding: 8px 10px;
+  border-left: 3px solid var(--line-strong);
+  background: var(--surface-2);
+  min-height: 3.2em;
+}
+.bloom-verdict[data-v='no'] {
+  border-left-color: var(--good);
+}
+.bloom-verdict[data-v='yes'] {
+  border-left-color: var(--neg);
+}
+.bloom-verdict[data-v='fp'] {
+  border-left-color: var(--bad);
+}
+
+@media (max-width: 560px) {
+  .policy-rows {
+    --gn: 92px;
+    --gt: 52px;
+  }
+}
+
+/* step notes under a figure */
+.step-note {
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  min-height: 3.2em;
+}

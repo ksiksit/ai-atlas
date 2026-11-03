@@ -32,7 +32,7 @@ const lessons: Lesson[] = [
     title: 'LRU 캐시',
     en: 'LRU Cache',
     lede: '자주 쓰는 데이터를 가까이 두면 빨라지지만 캐시는 늘 작습니다. 무엇을 버릴지 정하는 규칙들을 비교하고, 해시 맵과 이중 연결 리스트로 모든 연산이 O(1)인 LRU 캐시를 만듭니다.',
-    learn: ['적중률과 지역성', '해시 맵 + 이중 연결 리스트', 'LRU, FIFO, LFU 비교'],
+    learn: ['적중률과 지역성', '해시 맵 + 이중 연결 리스트', '교체 정책의 강점과 약점'],
     Component: lazy(() => import('./lessons/LruCache')),
   },
   {
