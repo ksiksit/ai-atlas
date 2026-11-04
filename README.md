@@ -140,7 +140,11 @@ npm run build:single    # dist-single/index.html — 파일 하나로 된 버전
 src/
   App.tsx                 레이아웃, 목차, 해시 라우팅, 진도 기록
   site.ts                 사이트 이름과 소개 문구
-  pages/Library.tsx       서재: 분야별 과목 카드, 난이도 필터(난이도가 두 가지 이상일 때 표시)
+  pages/Library.tsx       서재: 목록/지도 보기 전환(마지막 선택을 기억), 검색, 목록의 난이도 필터
+  pages/library/
+    LibraryMap.tsx        지도 보기: 확대·이동, 과목을 고르면 가는 길과 다음 과목 표시, 옆 패널(휴대폰은 아래 시트)
+    mapLayout.ts          지도 배치 계산 (분야 = 세로 칸, 난이도 = 가로 띠, 선 = prerequisites)
+    LibrarySearch.tsx     분야·과목·장 검색 (한글·영어 이름, / 키로 바로 이동)
   courses/
     index.ts              분야(SUBJECTS)·과목(COURSES) 등록, 난이도 이름, 주소 처리
     types.ts              Subject · Course · Part · Lesson 타입
@@ -179,5 +183,5 @@ src/
 1. 분야가 새로 필요하면 `src/courses/<분야>/subject.ts`를 만들고 `src/courses/index.ts`의 `SUBJECTS`에 넣습니다.
 2. `src/courses/<분야>/<과목>/course.ts`에 `Course`를 만듭니다. 파트 색이 새로 필요하면 `global.css`의 밝은 테마와 어두운 테마(두 곳)에 모두 토큰을 추가합니다.
 3. 장 본문은 `src/courses/<분야>/<과목>/lessons/`에 둡니다. 공용 부품은 `../../../../components/ui`와 `../../../../lib/`에서 가져옵니다.
-4. `COURSES`에 등록하면 서재의 해당 분야 아래에 난이도 순으로 카드가 생깁니다.
+4. `COURSES`에 등록하면 서재의 해당 분야 아래에 난이도 순으로 카드가 생깁니다. 지도 보기에도 자동으로 들어갑니다: 분야 칸의 난이도 띠에 놓이고, `prerequisites`에 적은 과목에서 화살표가 이어집니다. 같은 분야·난이도에 과목이 여럿이면 옆으로 나란히 놓입니다.
 5. 장 사이 링크는 `lessonHref('<과목>', '<장>')`나 `href="#<과목>/<장>"`으로 겁니다. 다른 과목의 장으로도 링크할 수 있습니다.
