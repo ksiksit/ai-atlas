@@ -1,0 +1,591 @@
+/* 컴퓨터 구조 · C와 메모리: memory strips, byte grids, stack frames, the heap bar */
+
+/* variable colours shared by SVG and HTML */
+.cm-v-x {
+  --vc: var(--c-cs-3);
+}
+.cm-v-y {
+  --vc: var(--c-cs-4);
+}
+.cm-v-c {
+  --vc: var(--c-cs-1);
+}
+.cm-v-p {
+  --vc: var(--pos);
+}
+
+/* ── SVG figures ── */
+.cm-svg {
+  min-width: 0;
+}
+.cm-svg svg {
+  display: block;
+  width: 100%;
+  max-width: 460px;
+  height: auto;
+  margin-inline: auto;
+  overflow: visible;
+}
+.cm-svg text {
+  font-family: var(--font-mono);
+  fill: var(--ink);
+}
+.cm-svg .t-dim {
+  fill: var(--ink-3);
+}
+.cm-svg .t-body {
+  font-family: var(--font-body);
+}
+.cm-cell {
+  fill: var(--surface);
+  stroke: var(--line-strong);
+  stroke-width: 1;
+}
+.cm-cell[data-pad] {
+  fill: var(--surface-2);
+}
+.cm-cell[data-own] {
+  fill: color-mix(in srgb, var(--vc) 12%, var(--surface));
+}
+.cm-cell[data-w] {
+  fill: color-mix(in srgb, var(--hl) 48%, var(--surface));
+}
+.cm-cell[data-r] {
+  stroke: var(--neg);
+  stroke-width: 2.4;
+}
+.cm-box {
+  fill: none;
+  stroke: var(--vc);
+  stroke-width: 2;
+}
+.cm-vlabel {
+  fill: var(--vc) !important;
+  font-weight: 700;
+}
+.cm-arrow {
+  fill: none;
+  stroke: var(--pos);
+  stroke-width: 2.2;
+}
+.cm-arrow-head {
+  fill: var(--pos);
+}
+.cm-arrow[data-bad] {
+  stroke: var(--bad);
+  stroke-dasharray: 5 3;
+}
+.cm-arrow-head[data-bad] {
+  fill: var(--bad);
+}
+
+/* ── code next to a figure (uses .loop-code/.loop-line from arch.css) ── */
+.cm-code {
+  margin: 0;
+}
+.cm-code .loop-line {
+  min-height: 1.6em;
+}
+.cm-code .ln {
+  display: inline-block;
+  width: 1.7em;
+  color: var(--ink-3);
+  font-weight: 400;
+  user-select: none;
+}
+.cm-side {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+/* ── byte grid: 8 bytes per row with an address column ── */
+.cm-grid {
+  display: grid;
+  grid-template-columns: 52px repeat(8, minmax(0, 1fr));
+  gap: 3px;
+  min-width: 0;
+}
+.cm-grid-h {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--ink-3);
+  text-align: center;
+}
+.cm-addr {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ink-3);
+  align-self: center;
+  text-align: right;
+  padding-right: 4px;
+}
+.cm-b {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 0;
+  height: 44px;
+  padding-bottom: 4px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--ink-3);
+}
+.cm-b .lbl {
+  position: absolute;
+  top: 2px;
+  left: 3px;
+  font-size: 9.5px;
+  line-height: 1;
+  color: var(--ink-2);
+  white-space: nowrap;
+  font-weight: 600;
+}
+.cm-b .ch {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.1;
+}
+.cm-b .hx {
+  font-size: 0.6875rem;
+  line-height: 1.1;
+}
+.cm-b[data-o='e0'] {
+  background: color-mix(in srgb, var(--neg) 13%, var(--surface));
+  color: var(--ink);
+}
+.cm-b[data-o='e1'] {
+  background: color-mix(in srgb, var(--neg) 26%, var(--surface));
+  color: var(--ink);
+}
+.cm-b[data-o='bal'] {
+  background: color-mix(in srgb, var(--c-cs-4) 18%, var(--surface));
+  color: var(--ink);
+}
+.cm-b[data-sel] {
+  outline: 2.5px solid var(--pos);
+  outline-offset: -2.5px;
+  color: var(--ink);
+}
+.cm-b[data-sel-first]::before {
+  content: '';
+  position: absolute;
+  left: -2px;
+  top: -9px;
+  border: 5px solid transparent;
+  border-top-color: var(--pos);
+}
+.cm-b[data-now] {
+  outline: 2.5px solid var(--hl);
+  outline-offset: -2.5px;
+}
+.cm-b[data-nul] .ch {
+  color: var(--good);
+}
+@media (max-width: 420px) {
+  .cm-grid {
+    grid-template-columns: 44px repeat(8, minmax(0, 1fr));
+    gap: 2px;
+  }
+  .cm-addr {
+    font-size: 0.6875rem;
+    padding-right: 2px;
+  }
+  .cm-b {
+    height: 40px;
+    font-size: 0.75rem;
+  }
+  .cm-b .lbl {
+    font-size: 8.5px;
+    left: 2px;
+  }
+  .cm-b .hx {
+    font-size: 0.625rem;
+  }
+}
+
+.cm-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.cm-chip {
+  font: inherit;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  min-height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cm-chip:hover {
+  background: var(--surface-2);
+}
+.cm-chip[aria-pressed='true'] {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--bg);
+}
+.cm-chip:focus-visible,
+.cm-blk:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.cm-input-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: flex-end;
+}
+.cm-input-row .ctl {
+  flex: 1 1 220px;
+}
+.cm-warn {
+  color: var(--bad);
+  font-weight: 600;
+}
+.cm-ok {
+  color: var(--good);
+  font-weight: 600;
+}
+
+/* ── memory map ── */
+.cm-region {
+  stroke: var(--line-strong);
+  stroke-width: 1;
+  fill: var(--surface);
+}
+.cm-region[data-k='stack'] {
+  fill: color-mix(in srgb, var(--pos) 16%, var(--surface));
+}
+.cm-region[data-k='heap'] {
+  fill: color-mix(in srgb, var(--neg) 16%, var(--surface));
+}
+.cm-region[data-k='data'] {
+  fill: color-mix(in srgb, var(--c-cs-4) 16%, var(--surface));
+}
+.cm-region[data-k='rodata'] {
+  fill: color-mix(in srgb, var(--c-cs-4) 8%, var(--surface));
+}
+.cm-region[data-k='code'] {
+  fill: color-mix(in srgb, var(--c-cs-2) 16%, var(--surface));
+}
+.cm-region[data-k='gap'] {
+  fill: var(--surface-2);
+  stroke-dasharray: 4 3;
+}
+.cm-region[data-k='null'] {
+  fill: var(--surface-3);
+}
+.cm-region[data-on] {
+  stroke: var(--ink);
+  stroke-width: 2.4;
+}
+.cm-mark {
+  fill: var(--hl);
+  stroke: var(--ink);
+  stroke-width: 1.2;
+}
+.cm-mapline {
+  stroke: var(--ink-3);
+  stroke-width: 1;
+}
+
+/* ── stack frames ── */
+.cm-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  font-size: 0.8125rem;
+}
+.cm-stack-top {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  display: flex;
+  justify-content: space-between;
+}
+.cm-frame {
+  border: 1.5px solid var(--ink-2);
+  background: var(--surface);
+  min-width: 0;
+}
+.cm-frame[data-top] {
+  border-color: var(--pos);
+  box-shadow: inset 0 0 0 1px var(--pos);
+}
+.cm-frame[data-ghost] {
+  border: 1.5px dashed var(--line-strong);
+  background: transparent;
+  opacity: 0.6;
+}
+.cm-frame[data-over] {
+  border: 1.5px dashed var(--bad);
+  background: color-mix(in srgb, var(--bad) 12%, transparent);
+}
+.cm-frame-h {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 3px 8px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.8125rem;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--line);
+}
+.cm-frame-h .sz {
+  font-weight: 400;
+  color: var(--ink-3);
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+.cm-frame[data-ghost] .cm-frame-h {
+  background: transparent;
+}
+.cm-slot {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: baseline;
+  padding: 2px 8px;
+  border-bottom: 1px solid var(--line);
+}
+.cm-slot:last-child {
+  border-bottom: 0;
+}
+.cm-slot .a {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ink-3);
+}
+.cm-slot .n {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cm-slot .v {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  text-align: right;
+  white-space: nowrap;
+}
+.cm-slot .v.dim {
+  color: var(--ink-3);
+  font-weight: 400;
+}
+.cm-slot[data-ret] .n,
+.cm-slot[data-ret] .v {
+  color: var(--ink-2);
+  font-weight: 400;
+}
+.cm-slot[data-changed] {
+  background: color-mix(in srgb, var(--hl) 34%, transparent);
+}
+.cm-sp {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--pos);
+  font-weight: 700;
+  border-top: 2px solid var(--pos);
+  padding-top: 1px;
+}
+.cm-limit {
+  font-size: var(--fs-xs);
+  color: var(--bad);
+  border-top: 2px dashed var(--bad);
+  padding-top: 2px;
+}
+.cm-free-space {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  text-align: center;
+  padding: 2px 0;
+}
+.cm-out {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  background: var(--surface-2);
+  padding: 4px 8px;
+  min-height: 1.8em;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.cm-out-h {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+
+/* ── heap bar ── */
+.cm-heap {
+  display: flex;
+  height: 64px;
+  border: 1px solid var(--ink-2);
+  min-width: 0;
+  background: var(--surface);
+}
+.cm-blk {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  border-right: 1px solid var(--ink-2);
+  background: transparent;
+  font: inherit;
+  color: var(--ink);
+  text-align: left;
+  overflow: hidden;
+}
+.cm-blk:last-child {
+  border-right: 0;
+}
+button.cm-blk {
+  cursor: pointer;
+}
+.cm-blk .hdr {
+  flex: 0 0 auto;
+  background: color-mix(in srgb, var(--ink) 55%, var(--surface));
+}
+.cm-blk .body {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1px;
+  padding: 0 3px;
+  background: color-mix(in srgb, var(--neg) 20%, var(--surface));
+}
+.cm-blk:hover .body {
+  background: color-mix(in srgb, var(--neg) 32%, var(--surface));
+}
+.cm-blk[data-new] .body {
+  background: color-mix(in srgb, var(--hl) 44%, var(--surface));
+}
+.cm-blk .nm {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.cm-blk .sz {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--ink-2);
+  white-space: nowrap;
+  overflow: hidden;
+}
+.cm-blk[data-free] .hdr {
+  background: color-mix(in srgb, var(--ink-3) 30%, var(--surface));
+}
+.cm-blk[data-free] .body {
+  background: repeating-linear-gradient(135deg, transparent 0 5px, color-mix(in srgb, var(--ink-3) 14%, transparent) 5px 7px);
+}
+.cm-blk[data-free] .sz {
+  color: var(--ink-3);
+}
+.cm-ticks {
+  position: relative;
+  height: 16px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--ink-3);
+  margin-top: 2px;
+}
+.cm-ticks span {
+  position: absolute;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+.cm-ticks span:first-child {
+  transform: none;
+}
+.cm-ticks span:last-child {
+  transform: translateX(-100%);
+}
+.cm-log {
+  margin: 0;
+  padding: 6px 10px;
+  list-style: none;
+  background: var(--surface-2);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  min-height: 7.4em;
+  overflow-x: auto;
+}
+.cm-log li {
+  white-space: pre;
+}
+.cm-log .cm {
+  color: var(--ink-3);
+}
+.cm-log .bad {
+  color: var(--bad);
+}
+.cm-freelist {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  overflow-wrap: anywhere;
+}
+
+/* ── bug diagrams ── */
+.cm-frame-box {
+  fill: var(--surface);
+  stroke: var(--ink-2);
+  stroke-width: 1.4;
+}
+.cm-frame-box[data-ghost] {
+  fill: none;
+  stroke: var(--line-strong);
+  stroke-dasharray: 5 3;
+}
+.cm-frame-head {
+  fill: var(--surface-2);
+}
+.cm-blkbox {
+  fill: color-mix(in srgb, var(--neg) 18%, var(--surface));
+  stroke: var(--neg);
+  stroke-width: 1.6;
+}
+.cm-blkbox[data-st='freed'] {
+  fill: none;
+  stroke: var(--ink-3);
+  stroke-dasharray: 5 3;
+}
+.cm-blkbox[data-st='orphan'] {
+  fill: color-mix(in srgb, var(--bad) 16%, var(--surface));
+  stroke: var(--bad);
+}
+.cm-ghost-text {
+  opacity: 0.55;
+}
+.cm-chart-line {
+  fill: none;
+  stroke-width: 2.4;
+}
+.cm-axis {
+  stroke: var(--ink-3);
+  stroke-width: 1;
+}
+.cm-note-bad {
+  color: var(--bad);
+}
+.cm-note-good {
+  color: var(--good);
+}

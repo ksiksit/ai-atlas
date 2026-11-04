@@ -4,6 +4,7 @@ import type { Course, Lesson, Part } from '../../types';
 const parts: Part[] = [
   { id: 'bits', title: '비트와 회로', en: 'Bits & Circuits', color: 'var(--c-cs-1)', blurb: '모든 데이터는 0과 1입니다. 수를 비트로 나타내고, 게이트로 계산하고, 회로로 기억하는 법.' },
   { id: 'machine', title: '기계의 동작', en: 'How the Machine Runs', color: 'var(--c-cs-2)', blurb: '명령어를 읽고 실행하는 CPU, 그리고 CPU를 기다리게 하지 않으려는 메모리 계층.' },
+  { id: 'c-memory', title: 'C와 메모리', en: 'C & Memory', color: 'var(--c-cs-3)', blurb: '주소로 메모리를 직접 다루는 C의 눈으로, 프로그램의 변수와 배열과 함수 호출이 메모리 어디에 어떻게 놓이는지.' },
 ];
 
 const lessons: Lesson[] = [
@@ -52,6 +53,24 @@ const lessons: Lesson[] = [
     learn: ['지연 시간의 계층', '캐시 라인과 지역성', '캐시 적중과 실패 흉내 내기'],
     Component: lazy(() => import('./lessons/MemoryHierarchy')),
   },
+  {
+    id: 'pointers',
+    part: 'c-memory',
+    title: '포인터와 배열',
+    en: 'Pointers & Arrays',
+    lede: '메모리는 번호가 붙은 바이트의 긴 줄이고, 포인터는 그 번호를 담은 변수입니다. 변수와 포인터를 바이트 단위로 따라가 보고, 배열이 주소 계산이라는 것과 배열 밖을 읽으면 옆 변수가 튀어나오는 이유, 문자열이 0으로 끝나는 이유를 봅니다.',
+    learn: ['주소와 포인터', '배열과 포인터 산술', '범위 검사가 없는 배열과 C 문자열'],
+    Component: lazy(() => import('./lessons/Pointers')),
+  },
+  {
+    id: 'stack-heap',
+    part: 'c-memory',
+    title: '스택과 힙',
+    en: 'The Stack & the Heap',
+    lede: '함수를 부르면 스택에 칸이 쌓이고, 끝나면 사라집니다. 오래 남겨야 하는 데이터는 힙에 malloc으로 빌리고 free로 돌려줍니다. 메모리 지도를 따라가며 댕글링 포인터와 메모리 누수가 생기는 순간을 봅니다.',
+    learn: ['프로세스의 메모리 지도', '스택 프레임과 함수 호출', 'malloc과 free, 흔한 메모리 버그'],
+    Component: lazy(() => import('./lessons/StackHeap')),
+  },
 ];
 
 const course: Course = {
@@ -61,7 +80,7 @@ const course: Course = {
   subtitle: '비트에서 CPU까지',
   level: 1,
   prerequisites: ['cs-programming'],
-  blurb: '프로그램이 실제로 돌아가는 기계를 아래에서부터 쌓아 올립니다. 0과 1로 수를 나타내는 법, 논리 게이트로 덧셈기와 메모리를 만드는 법, 명령어를 한 줄씩 실행하는 CPU, 그리고 속도를 좌우하는 메모리 계층과 캐시까지 다룹니다.',
+  blurb: '프로그램이 실제로 돌아가는 기계를 아래에서부터 쌓아 올립니다. 0과 1로 수를 나타내는 법, 논리 게이트로 덧셈기와 메모리를 만드는 법, 명령어를 한 줄씩 실행하는 CPU, 속도를 좌우하는 메모리 계층과 캐시, 그리고 C의 포인터와 스택·힙으로 메모리를 직접 다루는 법까지 다룹니다.',
   parts,
   lessons,
   Cover: lazy(() => import('./Cover')),
