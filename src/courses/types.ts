@@ -87,7 +87,11 @@ export interface Major {
   en: string;
   /** Subject that runs the major; courses from other subjects are marked as such. */
   subject: string;
-  /** One or two sentences for the major's card and page. */
+  /** One or two sentences at the top of the major's chart. */
   blurb: string;
+  /** One short line under the major's name on the home page. */
+  tagline: string;
+  /** Field (계열) for the home page's filter, e.g. "공학". The filter appears once there are 7 or more majors. */
+  field?: string;
   courses: { course: string; role: CourseRole }[];
 }
