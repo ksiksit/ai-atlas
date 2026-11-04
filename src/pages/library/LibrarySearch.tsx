@@ -92,7 +92,7 @@ export default function LibrarySearch({ onPick }: { onPick: (hit: SearchHit) => 
         aria-autocomplete="list"
         aria-activedescendant={shown && hits.length ? `${id}-${active}` : undefined}
         autoComplete="off"
-        placeholder="과목이나 장 찾기 (예: 어텐션, TLS, p값)"
+        placeholder="과목이나 장 찾기"
         value={q}
         onChange={(e) => {
           setQ(e.target.value);

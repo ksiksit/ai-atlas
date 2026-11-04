@@ -140,9 +140,9 @@ npm run build:single    # dist-single/index.html — 파일 하나로 된 버전
 src/
   App.tsx                 레이아웃, 목차, 해시 라우팅, 진도 기록
   site.ts                 사이트 이름과 소개 문구
-  pages/Library.tsx       서재: 목록/지도 보기 전환(마지막 선택을 기억), 검색, 목록의 난이도 필터
+  pages/Library.tsx       서재: 지도 보기(화면 전체)와 목록 보기 전환(마지막 선택을 기억), 목록의 검색과 난이도 필터
   pages/library/
-    LibraryMap.tsx        지도 보기: 확대·이동, 위에 이어서 보기 한 줄, 과목을 고르면 순서(먼저 볼 과목 → 다음 과목)와 옆 패널(휴대폰은 아래 시트)
+    LibraryMap.tsx        지도 보기: 화면 전체를 쓰는 지도, 위에 검색·목록·테마와 이어서 보기 한 줄, 과목을 고르면 순서와 옆 패널(휴대폰은 아래 시트). 떠 있는 조작 요소는 모두 .lm-ctl 한 가지 모양
     mapLayout.ts          지도 배치 계산 (분야 = 세로 칸, 난이도 = 가로 띠, 선 = prerequisites)
     LibrarySearch.tsx     분야·과목·장 검색 (한글·영어 이름, / 키로 바로 이동)
   courses/
@@ -156,6 +156,7 @@ src/
         Cover.tsx         과목 표지
         lessons/          각 장의 본문과 인터랙티브 그림
   components/
+    ThemeToggle.tsx       화면 테마(자동·밝게·어둡게): 목차의 세 칸 버튼, 지도의 아이콘 버튼. 둘이 같은 설정을 씀
     ui.tsx                그림 틀, 슬라이더, 수식, 퀴즈 등 공용 부품
     CourseMap.tsx         과목 표지의 "전체 지도" (모든 과목 공용)
   lib/                    캔버스·플롯·3D·테마·수학(통계 함수 포함) 도우미

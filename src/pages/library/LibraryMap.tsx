@@ -2,6 +2,8 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, typ
 import { LevelBadge } from '../../components/LevelBadge';
 import { COURSES, LEVELS, SUBJECTS, courseHref, lessonHref, lessonNo, type Course, type Subject } from '../../courses';
 import { useProgress, type Progress } from '../../lib/progress';
+import { ThemeCycleButton } from '../../components/ThemeToggle';
+import LibrarySearch, { type SearchHit } from './LibrarySearch';
 import {
   BOX_W,
   HEAD,
@@ -19,14 +21,6 @@ import {
   type ZoomMode,
 } from './mapLayout';
 import '../../styles/library-map.css';
-
-/** Something the map should show, sent from outside (the search box). `n` makes repeats count. */
-export interface MapRequest {
-  n: number;
-  subject?: string;
-  course?: string;
-  lesson?: string;
-}
 
 const NARROW = '(max-width: 760px)';
 const FLY_MS = 520;
@@ -139,27 +133,21 @@ function CourseBox({ course, progress, x, y, h, classes, focusLesson, onKey }: {
 
 /* ───────────── side panel ───────────── */
 
-/** One line above the map: the courses in progress and the lesson to continue with. */
-function ResumeBar({ progress }: { progress: Progress }) {
+/** The course read most recently, as one link: "이어서 · 편미분과 그래디언트". */
+function ResumeLink({ progress }: { progress: Progress }) {
   const reading = COURSES.filter((c) => {
     const n = doneCount(progress, c);
     return (n > 0 || progress[c.id]?.last) && n < c.lessons.length;
-  });
-  if (!reading.length) return null;
+  }).sort((a, b) => (progress[b.id]?.at ?? 0) - (progress[a.id]?.at ?? 0));
+  const c = reading[0];
+  if (!c) return null;
+  const last = c.lessons.find((l) => l.id === progress[c.id]?.last) ?? c.lessons[0];
   return (
-    <nav className="lm-resume" aria-label="이어서 보기">
-      <span className="lm-resume-label">이어서 보기</span>
-      {reading.map((c) => {
-        const last = c.lessons.find((l) => l.id === progress[c.id]?.last) ?? c.lessons[0];
-        return (
-          <a key={c.id} href={lessonHref(c.id, last.id)} style={vars({ '--c': SUBJECTS.find((s) => s.id === c.subject)!.color })}>
-            <i aria-hidden="true" />
-            <span className="c">{c.title}</span>
-            <span className="l">{last.title}</span>
-          </a>
-        );
-      })}
-    </nav>
+    <a className="lm-ctl lm-resume" href={lessonHref(c.id, last.id)} style={vars({ '--c': SUBJECTS.find((s) => s.id === c.subject)!.color })}>
+      <span className="k">이어서</span>
+      <span className="l">{last.title}</span>
+      <span className="c">{c.title}</span>
+    </a>
   );
 }
 
@@ -256,7 +244,7 @@ function PanelCourse({ course, progress, focusLesson, onSelect }: { course: Cour
 
 /* ───────────── the map ───────────── */
 
-export default function LibraryMap({ request }: { request: MapRequest | null }) {
+export default function LibraryMap({ onList }: { onList: () => void }) {
   const progress = useProgress();
   const L = useMemo(() => layoutMap(SUBJECTS, COURSES), []);
   const [sel, setSel] = useState<string | null>(null);
@@ -264,6 +252,7 @@ export default function LibraryMap({ request }: { request: MapRequest | null }) 
   const [mode, setMode] = useState<ZoomMode>('mid');
 
   const frameRef = useRef<HTMLDivElement>(null);
+  const headRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const worldRef = useRef<SVGGElement>(null);
   const panelRef = useRef<HTMLElement>(null);
@@ -290,15 +279,17 @@ export default function LibraryMap({ request }: { request: MapRequest | null }) 
     }
   }, []);
 
-  /** The part of the frame the panel does not cover. */
+  /** The part of the screen that the top bar and the panel leave free for the map. */
   const freeRect = useCallback(() => {
     const fr = frameRef.current!.getBoundingClientRect();
+    const hr = headRef.current?.getBoundingClientRect();
     const pr = panelRef.current?.getBoundingClientRect();
+    const top = hr ? hr.bottom - fr.top + 4 : 0;
     let w = fr.width,
-      h = fr.height;
-    if (pr && isNarrow()) h = Math.max(160, pr.top - fr.top - 8);
+      bottom = fr.height;
+    if (pr && isNarrow()) bottom = pr.top - fr.top - 8;
     else if (pr) w = Math.max(240, pr.left - fr.left - 8);
-    return { w, h };
+    return { top, w, h: Math.max(160, bottom - top) };
   }, []);
 
   const flyTo = useCallback(
@@ -324,7 +315,7 @@ export default function LibraryMap({ request }: { request: MapRequest | null }) 
       const fr = freeRect();
       const k = clampK(Math.min((fr.w - pad * 2) / b.w, (fr.h - pad * 2) / b.h, kmax));
       const x = (fr.w - b.w * k) / 2 - b.x * k;
-      const y = (fr.h - b.h * k) / 2 - b.y * k;
+      const y = fr.top + (fr.h - b.h * k) / 2 - b.y * k;
       if (animate) flyTo(x, y, k);
       else setView(x, y, k);
     },
@@ -334,7 +325,7 @@ export default function LibraryMap({ request }: { request: MapRequest | null }) 
   const centerOn = useCallback(
     (wx: number, wy: number, k: number) => {
       const fr = freeRect();
-      flyTo(fr.w / 2 - wx * k, fr.h / 2 - wy * k, k);
+      flyTo(fr.w / 2 - wx * k, fr.top + fr.h / 2 - wy * k, k);
     },
     [flyTo, freeRect],
   );
@@ -352,7 +343,7 @@ export default function LibraryMap({ request }: { request: MapRequest | null }) 
   const zoomBy = (f: number) => {
     const fr = freeRect();
     touched.current = true;
-    zoomAt(fr.w / 2, fr.h / 2, view.current.k * f);
+    zoomAt(fr.w / 2, fr.top + fr.h / 2, view.current.k * f);
   };
 
   const select = useCallback(
@@ -403,13 +394,12 @@ export default function LibraryMap({ request }: { request: MapRequest | null }) 
     return () => ro.disconnect();
   }, [fitAll]);
 
-  // Requests from the search box.
-  useEffect(() => {
-    if (!request) return;
+  // A search result: fly to the subject, course or lesson.
+  const pick = (hit: SearchHit) => {
     touched.current = true;
-    if (request.subject) showSubject(request.subject);
-    else if (request.course) select(request.course, { lesson: request.lesson });
-  }, [request, select, showSubject]);
+    if (hit.kind === 'subject') showSubject(hit.subject.id);
+    else select(hit.course.id, { lesson: hit.kind === 'lesson' ? hit.lesson.id : undefined });
+  };
 
   // Pointer, wheel and pinch handling. Taps are told apart from drags by distance moved.
   useEffect(() => {
@@ -532,7 +522,7 @@ export default function LibraryMap({ request }: { request: MapRequest | null }) 
     const fr = freeRect();
     const sx = p.x * v.k + v.x,
       sy = p.y * v.k + v.y;
-    if (sx < 0 || sy < 0 || sx + BOX_W * v.k > fr.w || sy + 60 * v.k > fr.h) centerOn(p.x + BOX_W / 2, p.y + Math.min(p.h, 300) / 2, Math.max(v.k, 0.5));
+    if (sx < 0 || sy < fr.top || sx + BOX_W * v.k > fr.w || sy + 60 * v.k > fr.top + fr.h) centerOn(p.x + BOX_W / 2, p.y + Math.min(p.h, 300) / 2, Math.max(v.k, 0.5));
   };
 
   /* highlight: the chosen course, the courses before it, and the ones that follow */
@@ -547,10 +537,7 @@ export default function LibraryMap({ request }: { request: MapRequest | null }) 
   const levelOf = Object.fromEntries(COURSES.map((c) => [c.id, c.level]));
 
   return (
-    <div className="lmap">
-      <ResumeBar progress={progress} />
-
-      <div className="lm-frame" ref={frameRef}>
+    <div className="lmap" ref={frameRef}>
         <svg
           ref={svgRef}
           className={'lm-svg' + (sel ? ' has-sel' : '')}
@@ -574,7 +561,7 @@ export default function LibraryMap({ request }: { request: MapRequest | null }) 
               const c = L.cols[s.id];
               return (
                 <g key={s.id}>
-                  <rect className="lm-region" x={c.x} y={24} width={c.w} height={L.height - 36} rx={14} style={{ fill: `color-mix(in srgb, ${s.color} 6%, transparent)` }} />
+                  <rect className="lm-region" x={c.x} y={24} width={c.w} height={L.height - 36} rx={14} style={{ fill: `color-mix(in srgb, ${s.color} 5%, transparent)` }} />
                   <text className="lm-region-name" x={c.x + L.colPad} y={100} fill={s.color}>
                     {s.name}
                   </text>
@@ -603,7 +590,21 @@ export default function LibraryMap({ request }: { request: MapRequest | null }) 
           </g>
         </svg>
 
-        <div className="lm-zoom">
+        <div className="lm-head" ref={headRef}>
+          <div className="lm-top">
+            <a className="lm-brand" href="#">
+              아틀라스
+            </a>
+            <LibrarySearch onPick={pick} />
+            <button type="button" className="lm-ctl lm-btn" onClick={onList}>
+              목록
+            </button>
+            <ThemeCycleButton className="lm-ctl lm-iconbtn" />
+          </div>
+          <ResumeLink progress={progress} />
+        </div>
+
+        <div className="lm-ctl lm-zoom">
           <button type="button" aria-label="확대" onClick={() => zoomBy(1.4)}>
             +
           </button>
@@ -618,7 +619,7 @@ export default function LibraryMap({ request }: { request: MapRequest | null }) 
         </div>
 
         {selected && (
-          <aside className="lm-panel" ref={panelRef} aria-label={`${selected.title} 자세히`}>
+          <aside className="lm-ctl lm-panel" ref={panelRef} aria-label={`${selected.title} 자세히`}>
             <div className="lm-panel-head">
               <span className="eyebrow">
                 {subjectOfSel!.name} · {LEVELS[selected.level].name}
@@ -634,7 +635,6 @@ export default function LibraryMap({ request }: { request: MapRequest | null }) 
             </div>
           </aside>
         )}
-      </div>
     </div>
   );
 }

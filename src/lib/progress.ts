@@ -2,13 +2,15 @@ import { useEffect, useState } from 'react';
 
 /**
  * Reading progress, kept in this browser only (localStorage).
- * `last` is the lesson opened most recently; `done` holds lessons read to the end.
+ * `last` is the lesson opened most recently and `at` when (ms since epoch);
+ * `done` holds lessons read to the end.
  * Every storage access is guarded: in private windows or with storage blocked the
  * site still works, it just forgets progress on reload.
  */
 export interface CourseProgress {
   done: string[];
   last?: string;
+  at?: number;
 }
 export type Progress = Record<string, CourseProgress>;
 
@@ -28,6 +30,7 @@ function load(): Progress {
       out[k] = {
         done: Array.isArray(cp.done) ? cp.done.filter((x): x is string => typeof x === 'string') : [],
         last: typeof cp.last === 'string' ? cp.last : undefined,
+        at: typeof cp.at === 'number' ? cp.at : undefined,
       };
     }
     return out;
@@ -50,8 +53,7 @@ const entry = (courseId: string): CourseProgress => state[courseId] ?? { done: [
 
 export function markVisited(courseId: string, lessonId: string) {
   const cur = entry(courseId);
-  if (cur.last === lessonId) return;
-  commit({ ...state, [courseId]: { ...cur, last: lessonId } });
+  commit({ ...state, [courseId]: { ...cur, last: lessonId, at: Date.now() } });
 }
 
 export function markDone(courseId: string, lessonId: string) {
@@ -71,7 +73,7 @@ export function renameCourseProgress(renames: Record<string, string>) {
     const old = next[from];
     if (!old || from === to) continue;
     const cur = next[to] ?? { done: [] };
-    next[to] = { done: [...new Set([...cur.done, ...old.done])], last: cur.last ?? old.last };
+    next[to] = { done: [...new Set([...cur.done, ...old.done])], last: cur.last ?? old.last, at: cur.at ?? old.at };
     delete next[from];
     changed = true;
   }

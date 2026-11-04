@@ -1,68 +1,140 @@
-/* Library map: subjects as columns, levels as bands from 기초 (top) to 심화 (bottom).
-   Course boxes show more as you zoom in — subject names, then courses, then lesson titles.
-   Choosing a course opens a panel on the right (a bottom sheet on phones); otherwise the map
-   has the whole frame. */
-.lmap {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+/* Library map, the whole page: subjects as columns, levels as bands from 기초 (top) to 심화
+   (bottom). Course boxes show more as you zoom in — subject names, courses, lesson titles.
+   Every control on top of it (top bar, zoom, panel) is one style: .lm-ctl. */
+
+/* the library page drops the rail and the top bar while the map is shown */
+.shell:has(.library[data-view='map']) {
+  grid-template-columns: minmax(0, 1fr);
+}
+.shell:has(.library[data-view='map']) :is(.rail, .topbar, .scrim) {
+  display: none;
+}
+.shell:has(.library[data-view='map']) .main {
+  padding: 0;
 }
 
-/* "이어서 보기": one line of links above the map */
-.lm-resume {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px 16px;
-  font-size: var(--fs-sm);
-  line-height: 1.5;
+.lmap {
+  --ctl-h: 40px;
+  --ctl-r: 8px;
+  --gap: 12px;
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--bg);
 }
-.lm-resume-label {
-  font-size: var(--fs-xs);
-  font-weight: 600;
-  color: var(--ink-3);
+@supports (height: 100dvh) {
+  .lmap {
+    height: 100dvh;
+  }
 }
-.lm-resume a {
+
+/* one look for everything that floats over the map */
+.lm-ctl {
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--ctl-r);
+}
+.lm-btn,
+.lm-iconbtn {
+  height: var(--ctl-h);
   display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  color: var(--ink);
+  font: inherit;
+  font-size: var(--fs-sm);
+  cursor: pointer;
+}
+.lm-btn {
+  padding: 0 16px;
+}
+.lm-iconbtn {
+  width: var(--ctl-h);
+}
+.lm-btn:hover,
+.lm-iconbtn:hover {
+  background: var(--surface-2);
+}
+.lm-iconbtn svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+}
+
+/* top bar: name, search, 목록, theme — then the "이어서" link under it */
+.lm-head {
+  position: absolute;
+  z-index: 4;
+  top: calc(var(--gap) + env(safe-area-inset-top, 0px));
+  left: max(var(--gap), env(safe-area-inset-left, 0px));
+  right: max(var(--gap), env(safe-area-inset-right, 0px));
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  pointer-events: none;
+}
+.lm-head > * {
+  pointer-events: auto;
+}
+.lm-top {
+  align-self: stretch;
+  display: flex;
   align-items: center;
   gap: 8px;
   min-width: 0;
+}
+.lm-brand {
+  flex: none;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.25rem;
   color: var(--ink);
   text-decoration: none;
+  padding: 0 10px 0 6px;
 }
-.lm-resume a i {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--c);
-  flex: none;
+.lm-top .lib-search {
+  flex: 0 1 420px;
+  max-width: none;
 }
-.lm-resume a .c {
+.lm-top .lib-search input {
+  min-height: var(--ctl-h);
+  border-radius: var(--ctl-r);
+}
+.lm-top .lm-btn {
+  margin-left: auto;
+}
+.lm-resume {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  max-width: 100%;
+  padding: 6px 12px;
+  font-size: var(--fs-xs);
+  line-height: 1.5;
+  color: var(--ink);
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lm-resume:hover {
+  border-color: var(--ink-3);
+}
+.lm-resume .k {
+  color: var(--accent);
+  font-weight: 600;
+}
+.lm-resume .l {
+  font-weight: 600;
+}
+.lm-resume .c {
   color: var(--ink-3);
 }
-.lm-resume a .l {
-  background: var(--marker);
-  padding: 0 4px;
-}
-.lm-resume a:hover .l {
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
 
-.lm-frame {
-  position: relative;
-  /* sized so the title, the tools and the whole frame fit on one screen */
-  height: clamp(480px, calc(100vh - 280px), 920px);
-  border: 1px solid var(--line-strong);
-  border-radius: 6px;
-  background: var(--bg);
-  overflow: hidden;
-}
-@supports (height: 100dvh) {
-  .lm-frame {
-    height: clamp(480px, calc(100dvh - 280px), 920px);
-  }
-}
 .lm-svg {
   position: absolute;
   inset: 0;
@@ -238,22 +310,19 @@
   opacity: 0.2;
 }
 
-/* zoom buttons, stacked in the corner */
+/* zoom: +, −, fit, stacked in the corner */
 .lm-zoom {
   position: absolute;
   z-index: 2;
-  left: 12px;
-  bottom: 12px;
+  left: max(var(--gap), env(safe-area-inset-left, 0px));
+  bottom: calc(var(--gap) + env(safe-area-inset-bottom, 0px));
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius);
-  background: var(--surface);
   overflow: hidden;
 }
 .lm-zoom button {
-  width: 36px;
-  height: 36px;
+  width: var(--ctl-h);
+  height: var(--ctl-h);
   display: grid;
   place-items: center;
   border: 0;
@@ -275,23 +344,20 @@
   height: 16px;
   fill: none;
   stroke: currentColor;
-  stroke-width: 2;
+  stroke-width: 1.8;
 }
 
 /* panel for the chosen course */
 .lm-panel {
   position: absolute;
   z-index: 3;
-  top: 12px;
-  right: 12px;
-  bottom: 12px;
+  top: calc(var(--gap) + var(--ctl-h) + 8px + env(safe-area-inset-top, 0px));
+  right: max(var(--gap), env(safe-area-inset-right, 0px));
+  bottom: calc(var(--gap) + env(safe-area-inset-bottom, 0px));
   width: 340px;
   display: flex;
   flex-direction: column;
   min-height: 0;
-  background: var(--surface);
-  border: 1px solid var(--line-strong);
-  border-radius: 6px;
   font-size: var(--fs-sm);
   line-height: 1.6;
 }
@@ -312,6 +378,7 @@
 .lm-icon {
   width: 32px;
   height: 32px;
+  flex: none;
   display: grid;
   place-items: center;
   border: 0;
@@ -328,7 +395,7 @@
   height: 16px;
   fill: none;
   stroke: currentColor;
-  stroke-width: 2;
+  stroke-width: 1.8;
 }
 .lm-panel-body {
   overflow-y: auto;
@@ -367,7 +434,11 @@
 .lm-meta-row .mono {
   color: var(--ink);
 }
+/* buttons and chips in the panel follow the same control style */
 .lm-panel .btn {
+  min-height: 34px;
+  border-color: var(--line-strong);
+  border-radius: 6px;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -385,9 +456,9 @@
   font-size: var(--fs-xs);
   color: var(--ink);
   border: 1px solid var(--line-strong);
-  border-radius: 999px;
+  border-radius: 6px;
   background: var(--surface);
-  padding: 3px 11px;
+  padding: 3px 10px;
   cursor: pointer;
 }
 .lm-chips button:hover {
@@ -457,15 +528,21 @@
   color: var(--ink-3);
 }
 
-/* phones: the panel becomes a bottom sheet */
+/* phones: no name in the top bar; the panel becomes a bottom sheet */
 @media (max-width: 760px) {
-  .lm-frame {
-    height: clamp(400px, calc(100vh - 360px), 760px);
+  .lmap {
+    --gap: 10px;
   }
-  @supports (height: 100dvh) {
-    .lm-frame {
-      height: clamp(400px, calc(100dvh - 360px), 760px);
-    }
+  .lm-brand {
+    display: none;
+  }
+  .lm-top .lib-search {
+    flex: 1 1 auto;
+    order: 0;
+  }
+  .lm-top .lm-btn {
+    margin-left: 0;
+    padding: 0 12px;
   }
   .lm-panel {
     top: auto;
@@ -474,13 +551,9 @@
     bottom: 0;
     width: auto;
     max-height: 60%;
-    border-radius: 10px 10px 0 0;
+    border-radius: 12px 12px 0 0;
     border-width: 1px 0 0;
-  }
-  .lm-zoom {
-    top: 10px;
-    bottom: auto;
-    left: 10px;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 }
 

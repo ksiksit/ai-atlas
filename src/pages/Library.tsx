@@ -4,7 +4,7 @@ import { Seg } from '../components/ui';
 import { COURSES, LEVELS, SUBJECTS, courseHref, coursesOf, findCourse, lessonHref, lessonNo, type Course, type Level } from '../courses';
 import { useProgress, type CourseProgress } from '../lib/progress';
 import { SITE } from '../site';
-import LibraryMap, { type MapRequest } from './library/LibraryMap';
+import LibraryMap from './library/LibraryMap';
 import LibrarySearch, { type SearchHit } from './library/LibrarySearch';
 import '../styles/cover.css';
 import '../styles/library.css';
@@ -108,7 +108,6 @@ export default function Library() {
   const progress = useProgress();
   const [view, setView] = useState<View>(loadView);
   const [filter, setFilter] = useState<LevelFilter>('all');
-  const [request, setRequest] = useState<MapRequest | null>(null);
   const levels = [...new Set(COURSES.map((c) => c.level))].sort() as Level[];
   const totalLessons = COURSES.reduce((s, c) => s + c.lessons.length, 0);
   const shown = (c: Course) => filter === 'all' || c.level === filter;
@@ -118,14 +117,8 @@ export default function Library() {
     saveView(v);
   };
 
-  // On the map a search result is shown in place; in the list it opens the page.
+  // In the list a search result opens its page (the map shows results in place).
   const pick = (hit: SearchHit) => {
-    if (view === 'map') {
-      const n = (request?.n ?? 0) + 1;
-      if (hit.kind === 'subject') setRequest({ n, subject: hit.subject.id });
-      else setRequest({ n, course: hit.course.id, lesson: hit.kind === 'lesson' ? hit.lesson.id : undefined });
-      return;
-    }
     if (hit.kind === 'lesson') window.location.hash = lessonHref(hit.course.id, hit.lesson.id);
     else if (hit.kind === 'course') window.location.hash = courseHref(hit.course.id);
     else {
@@ -134,8 +127,18 @@ export default function Library() {
     }
   };
 
+  // The map is the whole page: no rail, no header, only its own controls.
+  if (view === 'map') {
+    return (
+      <div className="library" data-view="map">
+        <h1 className="visually-hidden">{SITE.name}</h1>
+        <LibraryMap onList={() => changeView('list')} />
+      </div>
+    );
+  }
+
   return (
-    <div className="library" data-view={view}>
+    <div className="library" data-view="list">
       <section className="lib-hero">
         <h1 className="lib-title">{SITE.name}</h1>
         <p className="hero-lede">분야와 난이도에 맞는 과목을 골라 시작하세요. 모든 장의 그림은 직접 움직여 보며 배울 수 있습니다.</p>
@@ -154,7 +157,7 @@ export default function Library() {
           ]}
         />
         <LibrarySearch onPick={pick} />
-        {view === 'list' && levels.length > 1 && (
+        {levels.length > 1 && (
           <Seg<LevelFilter>
             value={filter}
             onChange={setFilter}
@@ -163,28 +166,24 @@ export default function Library() {
         )}
       </div>
 
-      {view === 'map' ? (
-        <LibraryMap request={request} />
-      ) : (
-        SUBJECTS.map((s) => {
-          const list = coursesOf(s).filter(shown);
-          if (!list.length) return null;
-          return (
-            <section key={s.id} className="subject" aria-labelledby={`subject-${s.id}`} style={{ ['--subject-color' as string]: s.color } as CSSProperties}>
-              <header className="subject-head">
-                <span className="subject-en">{s.en}</span>
-                <h2 id={`subject-${s.id}`}>{s.name}</h2>
-                <p>{s.blurb}</p>
-              </header>
-              <div className="shelf-grid">
-                {list.map((c) => (
-                  <CourseCard key={c.id} course={c} progress={progress[c.id]} />
-                ))}
-              </div>
-            </section>
-          );
-        })
-      )}
+      {SUBJECTS.map((s) => {
+        const list = coursesOf(s).filter(shown);
+        if (!list.length) return null;
+        return (
+          <section key={s.id} className="subject" aria-labelledby={`subject-${s.id}`} style={{ ['--subject-color' as string]: s.color } as CSSProperties}>
+            <header className="subject-head">
+              <span className="subject-en">{s.en}</span>
+              <h2 id={`subject-${s.id}`}>{s.name}</h2>
+              <p>{s.blurb}</p>
+            </header>
+            <div className="shelf-grid">
+              {list.map((c) => (
+                <CourseCard key={c.id} course={c} progress={progress[c.id]} />
+              ))}
+            </div>
+          </section>
+        );
+      })}
 
       <footer className="home-foot">
         모든 그림은 브라우저 안에서 직접 계산됩니다. 읽은 장 기록은 이 브라우저에만 저장되고 서버로 전송되지 않습니다.

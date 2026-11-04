@@ -1,7 +1,7 @@
 import { Suspense, useEffect, useRef, useState, type CSSProperties } from 'react';
 import { COURSES, LEVELS, LIBRARY_HREF, SUBJECTS, courseHref, coursesOf, lessonHref, lessonIndex, lessonNo, lessonNumber, parseRoute, partOf, subjectOf, type Course, type Lesson, type Route } from './courses';
 import { markDone, markVisited, useProgress } from './lib/progress';
-import { loadThemeMode, setThemeMode, type ThemeMode } from './lib/theme';
+import { ThemeToggle } from './components/ThemeToggle';
 import Library from './pages/Library';
 import { SITE } from './site';
 
@@ -27,25 +27,6 @@ function useRoute(): Route {
     return () => window.removeEventListener('hashchange', on);
   }, []);
   return r;
-}
-
-function ThemeToggle() {
-  const [mode, setMode] = useState<ThemeMode>(loadThemeMode);
-  useEffect(() => setThemeMode(mode), [mode]);
-  const opts: [ThemeMode, string][] = [
-    ['system', '자동'],
-    ['light', '밝게'],
-    ['dark', '어둡게'],
-  ];
-  return (
-    <div className="theme-toggle" role="group" aria-label="화면 테마">
-      {opts.map(([m, l]) => (
-        <button key={m} type="button" aria-pressed={mode === m} onClick={() => setMode(m)}>
-          {l}
-        </button>
-      ))}
-    </div>
-  );
 }
 
 /** Table of contents for one course. */

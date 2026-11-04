@@ -31,19 +31,11 @@
 .lib-count .mono {
   color: var(--ink);
 }
-/* the map uses the full width beside the rail */
+/* the map view is the whole page (see library-map.css) */
 .library[data-view='map'] {
-  max-width: 1480px;
-  padding-block: 40px 56px;
-  gap: 32px;
-}
-
-/* on the map the hero is just the name and the counts, so the map fits on screen */
-.library[data-view='map'] .lib-hero {
-  gap: 6px;
-}
-.library[data-view='map'] .hero-lede {
-  display: none;
+  max-width: none;
+  padding: 0;
+  gap: 0;
 }
 
 /* view switch (목록 / 지도), search, level filter */
@@ -53,9 +45,6 @@
   align-items: center;
   gap: 10px 12px;
   margin-bottom: -24px;
-}
-.library[data-view='map'] .lib-tools {
-  margin-bottom: -16px;
 }
 .lib-search {
   position: relative;
