@@ -15,7 +15,9 @@ export const MAJORS: Major[] = [
     tagline: '컴퓨터가 스스로 배우는 원리에서 대형 언어 모델까지',
     field: '공학',
     courses: [
+      { course: 'math-linear-algebra', role: 'base' },
       { course: 'stats-basics', role: 'base' },
+      { course: 'math-probability', role: 'base' },
       { course: 'cs-algorithms', role: 'base' },
       { course: 'ai-basics', role: 'core' },
       { course: 'ai-deep-learning', role: 'core' },
@@ -31,8 +33,9 @@ export const MAJORS: Major[] = [
     tagline: '프로그래밍과 증명에서 CPU, 운영체제, 계산의 한계까지',
     field: '공학',
     courses: [
-      { course: 'stats-basics', role: 'base' },
       { course: 'math-discrete', role: 'base' },
+      { course: 'math-linear-algebra', role: 'base' },
+      { course: 'math-probability', role: 'base' },
       { course: 'cs-programming', role: 'core' },
       { course: 'cs-algorithms', role: 'core' },
       { course: 'cs-architecture', role: 'core' },

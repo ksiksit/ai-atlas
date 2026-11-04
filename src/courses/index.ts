@@ -18,6 +18,8 @@ import netBasics from './net/basics/course';
 import netSecurity from './net/security/course';
 import mathSubject from './math/subject';
 import mathDiscrete from './math/discrete/course';
+import mathLinearAlgebra from './math/linear/course';
+import mathProbability from './math/probability/course';
 import { MAJORS } from './majors';
 import type { Course, CourseRole, Lesson, Level, Major, Part, Subject } from './types';
 
@@ -28,7 +30,7 @@ export { MAJORS } from './majors';
 export const SUBJECTS: Subject[] = [aiSubject, statsSubject, mathSubject, csSubject, netSubject];
 
 /** Every course. Within a subject the library sorts them by level, then by this order. */
-export const COURSES: Course[] = [aiBasics, aiDeepLearning, aiLlm, statsBasics, mathDiscrete, csProgramming, csAlgorithms, csAlgorithmDesign, csSystemAlgorithms, csArchitecture, csOperatingSystems, csDatabases, csComputation, netBasics, netSecurity];
+export const COURSES: Course[] = [aiBasics, aiDeepLearning, aiLlm, statsBasics, mathDiscrete, mathLinearAlgebra, mathProbability, csProgramming, csAlgorithms, csAlgorithmDesign, csSystemAlgorithms, csArchitecture, csOperatingSystems, csDatabases, csComputation, netBasics, netSecurity];
 
 export const LEVELS: Record<Level, { name: string; en: string }> = {
   1: { name: '기초', en: 'Basic' },
