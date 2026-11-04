@@ -1,5 +1,5 @@
 /* Home (전공 안내) and major pages (이수체계도).
-   Home: a short header with search, the majors as bulletin entries, then every course by subject.
+   Home: a short header with search, then the majors as tiles with their names set large.
    Major: roles (전공기초·필수·선택) are rows, levels are columns; each course card lists its
    units and lessons in full, and prerequisite arrows join the cards. */
 
@@ -24,7 +24,6 @@
   gap: 12px;
   max-width: 46rem;
 }
-.home-eyebrow,
 .major-en {
   font-family: var(--font-mono);
   font-size: var(--fs-xs);
@@ -50,16 +49,6 @@
 }
 .home-count .mono {
   color: var(--ink);
-}
-.home-h2 {
-  font-size: var(--fs-xl);
-  font-weight: 700;
-  margin-bottom: 16px;
-}
-.home-note {
-  margin: 10px 0 0;
-  font-size: var(--fs-xs);
-  color: var(--ink-3);
 }
 
 /* search: one underlined field */
@@ -165,124 +154,117 @@
   cursor: default;
 }
 
-/* majors */
-.majors {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
-  gap: 16px;
-}
-.major-card {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 20px 22px 18px;
-  background: var(--surface);
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius);
-  color: var(--ink);
-  text-decoration: none;
-  min-width: 0;
-}
-.major-card:hover {
-  border-color: var(--ink-3);
-}
-.major-card h3 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  line-height: 1.3;
-}
-.major-card p {
-  margin: 0;
-  font-size: var(--fs-sm);
-  color: var(--ink-2);
-  line-height: 1.7;
-}
-.major-path {
-  margin: 4px 0 0;
-  padding-top: 10px;
-  border-top: 1px solid var(--line);
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  font-size: var(--fs-xs);
-}
-.major-path div {
-  display: grid;
-  grid-template-columns: 4.5em minmax(0, 1fr);
-  gap: 8px;
-}
-.major-path dt {
-  color: var(--ink-3);
-}
-.major-path dd {
-  margin: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2px 10px;
-}
-.course-code {
-  font-family: var(--font-mono);
-  font-size: 0.8125rem;
-  color: var(--sc, var(--ink-3));
-  white-space: nowrap;
-}
-.major-foot {
-  margin-top: auto;
-  padding-top: 6px;
+/* majors: the name is the thing you pick, so it is the largest text in the list */
+.majors-head {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--rule);
   font-size: var(--fs-xs);
   color: var(--ink-3);
 }
-.major-foot .go {
-  font-size: var(--fs-sm);
-  font-weight: 600;
-  color: var(--accent);
-}
-
-/* every course, by subject */
-.catalog {
-  border-top: 1px solid var(--rule);
-}
-.catalog-row {
-  display: grid;
-  grid-template-columns: 150px minmax(0, 1fr);
-  gap: 16px;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--line);
-  align-items: baseline;
-}
-.catalog-row > b {
+.majors-head b {
   font-family: var(--font-display);
-  font-size: var(--fs-base);
-  color: var(--sc);
+  font-size: 1.125rem;
+  color: var(--ink);
 }
-.catalog-row ul {
+.majors-head .mono {
+  color: var(--ink);
+}
+.major-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-top: 14px;
+}
+.major-filters button {
+  font: inherit;
+  font-size: var(--fs-xs);
+  color: var(--ink-2);
+  background: none;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  padding: 3px 12px;
+  cursor: pointer;
+}
+.major-filters button[aria-pressed='true'] {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--bg);
+}
+.major-tiles {
   list-style: none;
   margin: 0;
   padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  column-gap: 32px;
+}
+.major-tile {
   display: flex;
-  flex-wrap: wrap;
-  gap: 6px 24px;
-  font-size: var(--fs-sm);
-}
-.catalog-row .course-code {
-  color: var(--ink-3);
-  margin-right: 6px;
-}
-.catalog-row a {
+  flex-direction: column;
+  gap: 4px;
+  height: 100%;
+  padding: 18px 2px 20px;
+  border-bottom: 1px solid var(--line);
   color: var(--ink);
   text-decoration: none;
 }
-.catalog-row a:hover {
-  text-decoration: underline;
+.major-tile-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 0.6875rem;
 }
-.catalog-row .in {
-  font-size: var(--fs-xs);
+.major-tile-top .en {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--sc);
+}
+.major-tile-top .n {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   color: var(--ink-3);
-  margin-left: 6px;
+  white-space: nowrap;
+}
+.major-tile h2 {
+  font-size: 1.625rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+.major-tile .ar {
+  display: inline-block;
+  margin-left: 8px;
+  font-family: var(--font-mono);
+  font-size: 1.125rem;
+  font-weight: 400;
+  color: var(--ink-3);
+  transition: transform 0.15s, color 0.15s;
+}
+.major-tile p {
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  line-height: 1.6;
+}
+.major-tile:hover h2 {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 6px;
+}
+.major-tile:hover .ar {
+  color: var(--accent);
+  transform: translateX(4px);
 }
 
 /* ───────────── major page ───────────── */
@@ -530,9 +512,8 @@
 
 /* narrow screens: one column; each role lists its courses in order, prerequisites in words */
 @media (max-width: 860px) {
-  .catalog-row {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 4px;
+  .major-tile h2 {
+    font-size: 1.375rem;
   }
   .mj-grid {
     grid-template-columns: minmax(0, 1fr);
@@ -556,6 +537,7 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
+  .major-tile .ar,
   .mj-cell {
     transition: none;
   }
