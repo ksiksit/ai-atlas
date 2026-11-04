@@ -70,7 +70,7 @@ const course: Course = {
   title: '알고리즘 설계',
   subtitle: '재귀에서 동적 계획법까지',
   level: 2,
-  prerequisites: ['cs-algorithms'],
+  prerequisites: ['cs-algorithms', 'math-discrete'],
   blurb: '알고리즘을 읽는 데서 한 걸음 나아가 직접 설계하는 법을 배웁니다. 재귀와 분할 정복, 동적 계획법과 탐욕 알고리즘, 유니온 파인드와 위상 정렬까지 코딩 테스트와 실무에서 자주 만나는 풀이 전략을 다룹니다.',
   parts,
   lessons,

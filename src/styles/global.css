@@ -34,6 +34,9 @@
   --c-net-2: #5b4ca8;
   --c-net-3: #a2492a;
   --c-net-4: #3d6b1f;
+  --c-math-1: #a3325a; /* mathematics */
+  --c-math-2: #3f5f7a;
+  --c-math-3: #7a5c12;
 
   /* data encodings — shared by every figure (blue/orange differ in lightness too) */
   --pos: #d9661f;
@@ -94,6 +97,9 @@
     --c-net-2: #b3a8ef;
     --c-net-3: #ec9b7c;
     --c-net-4: #a6d389;
+    --c-math-1: #f08cab;
+    --c-math-2: #9fbfdc;
+    --c-math-3: #e0c070;
     --pos: #f08a4b;
     --neg: #6aa8ee;
     --pos-soft: rgba(240, 138, 75, 0.2);
@@ -134,6 +140,9 @@
   --c-net-2: #b3a8ef;
   --c-net-3: #ec9b7c;
   --c-net-4: #a6d389;
+  --c-math-1: #f08cab;
+  --c-math-2: #9fbfdc;
+  --c-math-3: #e0c070;
   --pos: #f08a4b;
   --neg: #6aa8ee;
   --pos-soft: rgba(240, 138, 75, 0.2);
