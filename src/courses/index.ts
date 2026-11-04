@@ -11,10 +11,11 @@ import csSystemAlgorithms from './cs/systems/course';
 import netSubject from './net/subject';
 import netBasics from './net/basics/course';
 import netSecurity from './net/security/course';
-import { renameCourseProgress } from '../lib/progress';
-import type { Course, Lesson, Level, Part, Subject } from './types';
+import { MAJORS } from './majors';
+import type { Course, CourseRole, Lesson, Level, Major, Part, Subject } from './types';
 
-export type { Course, Lesson, Level, Part, Subject } from './types';
+export type { Course, CourseRole, Lesson, Level, Major, Part, Subject } from './types';
+export { MAJORS } from './majors';
 
 /** Fields of study, in library order. */
 export const SUBJECTS: Subject[] = [aiSubject, statsSubject, csSubject, netSubject];
@@ -48,11 +49,29 @@ export const lessonNo = (c: Course, l: Lesson) => String(lessonNumber(c, l)).pad
 
 const byAlias = new Map<string, Course>(COURSES.flatMap((c) => (c.aliases ?? []).map((a) => [a, c] as [string, Course])));
 
-// Progress saved under a course's old slug moves to its current one.
-renameCourseProgress(Object.fromEntries([...byAlias].map(([alias, c]) => [alias, c.id])));
+/** Course code: subject prefix, level as the hundreds digit, order within that level (AI 101, CS 201). */
+const CODES = new Map<string, string>();
+for (const s of SUBJECTS) {
+  for (const level of [1, 2, 3] as Level[]) {
+    COURSES.filter((c) => c.subject === s.id && c.level === level).forEach((c, i) => CODES.set(c.id, `${s.code} ${level}${String(i + 1).padStart(2, '0')}`));
+  }
+}
+export const courseCode = (c: Course) => CODES.get(c.id)!;
+
+export const ROLES: Record<CourseRole, { name: string; blurb: string }> = {
+  base: { name: '전공기초', blurb: '다른 분야의 과목. 전공을 시작하기 전에 들으면 좋습니다.' },
+  core: { name: '전공필수', blurb: '이 전공의 뼈대가 되는 과목입니다.' },
+  elect: { name: '전공선택', blurb: '관심에 따라 골라 듣는 과목입니다.' },
+};
+
+export const majorHref = (majorId: string) => `#majors/${majorId}`;
+export const findMajor = (id: string) => MAJORS.find((m) => m.id === id);
+/** Majors that include a course, in home-page order. */
+export const majorsOf = (courseId: string): Major[] => MAJORS.filter((m) => m.courses.some((x) => x.course === courseId));
 
 export type Route =
   | { kind: 'library' }
+  | { kind: 'major'; major: Major }
   | { kind: 'course'; course: Course }
   | { kind: 'lesson'; course: Course; lesson: Lesson }
   | { kind: 'redirect'; to: string }
@@ -64,6 +83,12 @@ export function parseRoute(hash: string): Route {
   const path = hash.replace(/^\/+|\/+$/g, '');
   if (!path) return { kind: 'library' };
   const [first, second, ...rest] = path.split('/');
+  // #majors/<id> is one major's curriculum chart; #majors alone is the home page.
+  if (first === 'majors') {
+    if (second === undefined) return { kind: 'redirect', to: LIBRARY_HREF };
+    const major = rest.length === 0 ? findMajor(second) : undefined;
+    return major ? { kind: 'major', major } : { kind: 'missing' };
+  }
   const course = findCourse(first);
   if (course) {
     if (second === undefined) return { kind: 'course', course };

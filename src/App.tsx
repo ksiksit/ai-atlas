@@ -1,9 +1,17 @@
-import { Suspense, useEffect, useRef, useState, type CSSProperties } from 'react';
-import { COURSES, LEVELS, LIBRARY_HREF, SUBJECTS, courseHref, coursesOf, lessonHref, lessonIndex, lessonNo, lessonNumber, parseRoute, partOf, subjectOf, type Course, type Lesson, type Route } from './courses';
-import { markDone, markVisited, useProgress } from './lib/progress';
-import { loadThemeMode, setThemeMode, type ThemeMode } from './lib/theme';
-import Library from './pages/Library';
+import { Suspense, useEffect, useState, type CSSProperties } from 'react';
+import { COURSES, LEVELS, LIBRARY_HREF, MAJORS, SUBJECTS, courseCode, courseHref, coursesOf, lessonHref, lessonIndex, lessonNo, lessonNumber, majorHref, majorsOf, parseRoute, partOf, type Course, type Lesson, type Major, type Route } from './courses';
+import { ThemeToggle } from './components/ThemeToggle';
+import Home from './pages/Home';
+import MajorPage from './pages/MajorPage';
 import { SITE } from './site';
+
+// Earlier versions kept reading progress and a view choice in this browser; nothing reads them now.
+try {
+  localStorage.removeItem('atlas-progress');
+  localStorage.removeItem('atlas-library-view');
+} catch {
+  /* storage unavailable */
+}
 
 function readRoute(): Route {
   let hash = window.location.hash.replace(/^#/, '');
@@ -29,40 +37,32 @@ function useRoute(): Route {
   return r;
 }
 
-function ThemeToggle() {
-  const [mode, setMode] = useState<ThemeMode>(loadThemeMode);
-  useEffect(() => setThemeMode(mode), [mode]);
-  const opts: [ThemeMode, string][] = [
-    ['system', '자동'],
-    ['light', '밝게'],
-    ['dark', '어둡게'],
-  ];
-  return (
-    <div className="theme-toggle" role="group" aria-label="화면 테마">
-      {opts.map(([m, l]) => (
-        <button key={m} type="button" aria-pressed={mode === m} onClick={() => setMode(m)}>
-          {l}
-        </button>
-      ))}
-    </div>
-  );
-}
-
 /** Table of contents for one course. */
 function CourseRail({ course, current, onNavigate }: { course: Course; current?: string; onNavigate: () => void }) {
-  const progress = useProgress();
-  const done = new Set(progress[course.id]?.done ?? []);
+  const majors = majorsOf(course.id);
   return (
     <>
       <a className="rail-back" href={LIBRARY_HREF} onClick={onNavigate}>
-        ← 모든 과목
+        ← 전공 안내
       </a>
       <a className="brand" href={courseHref(course.id)} onClick={onNavigate}>
         <span className="brand-mark">{course.title}</span>
         <span className="brand-sub">
-          {subjectOf(course).name} · {LEVELS[course.level].name} · {course.subtitle}
+          {courseCode(course)} · {LEVELS[course.level].name} · {course.subtitle}
         </span>
       </a>
+      {majors.length > 0 && (
+        <p className="rail-majors">
+          {majors.map((m, i) => (
+            <span key={m.id}>
+              {i > 0 && ' · '}
+              <a href={majorHref(m.id)} onClick={onNavigate}>
+                {m.name}
+              </a>
+            </span>
+          ))}
+        </p>
+      )}
       {course.parts.map((p) => (
         <div className="rail-part" key={p.id} style={{ ['--part-color' as string]: p.color } as CSSProperties}>
           <div className="rail-part-title">
@@ -74,14 +74,7 @@ function CourseRail({ course, current, onNavigate }: { course: Course; current?:
             .map((l) => (
               <a key={l.id} className="rail-link" href={lessonHref(course.id, l.id)} aria-current={current === l.id ? 'page' : undefined} onClick={onNavigate}>
                 <span className="num">{lessonNo(course, l)}</span>
-                <span>
-                  {l.title}
-                  {done.has(l.id) && (
-                    <span className="done-mark" role="img" aria-label="완료">
-                      ✓
-                    </span>
-                  )}
-                </span>
+                <span>{l.title}</span>
               </a>
             ))}
         </div>
@@ -90,37 +83,31 @@ function CourseRail({ course, current, onNavigate }: { course: Course; current?:
   );
 }
 
-/** Rail on the library page: the site name and every course, grouped by subject. */
-function LibraryRail({ onNavigate }: { onNavigate: () => void }) {
-  const progress = useProgress();
+/** Rail on the home and major pages: the majors, then every course by subject. */
+function LibraryRail({ major, onNavigate }: { major?: Major; onNavigate: () => void }) {
   return (
     <>
       <a className="brand" href={LIBRARY_HREF} onClick={onNavigate}>
         <span className="brand-mark">{SITE.name}</span>
         <span className="brand-sub">{SITE.tagline}</span>
       </a>
+      <div className="rail-part">
+        <div className="rail-part-title">전공</div>
+        {MAJORS.map((m) => (
+          <a key={m.id} className="rail-link rail-major" href={majorHref(m.id)} aria-current={major?.id === m.id ? 'page' : undefined} onClick={onNavigate}>
+            {m.name}
+          </a>
+        ))}
+      </div>
       {SUBJECTS.map((s) => (
         <div className="rail-part" key={s.id} style={{ ['--part-color' as string]: s.color } as CSSProperties}>
           <div className="rail-part-title">{s.name}</div>
-          {coursesOf(s).map((c) => {
-            const n = c.lessons.filter((l) => progress[c.id]?.done.includes(l.id)).length;
-            return (
-              <a key={c.id} className="rail-link" href={courseHref(c.id)} onClick={onNavigate}>
-                <span className="num" title={`난이도: ${LEVELS[c.level].name}`}>
-                  <span className="level-dots" aria-hidden="true">
-                    {[1, 2, 3].map((i) => (
-                      <i key={i} data-on={i <= c.level || undefined} />
-                    ))}
-                  </span>
-                </span>
-                <span>
-                  {c.title}
-                  <span className="visually-hidden"> (난이도 {LEVELS[c.level].name})</span>
-                  <span className="en"> · {n ? `${n}/${c.lessons.length}장` : `${c.lessons.length}장`}</span>
-                </span>
-              </a>
-            );
-          })}
+          {coursesOf(s).map((c) => (
+            <a key={c.id} className="rail-link" href={courseHref(c.id)} onClick={onNavigate}>
+              <span className="num">{courseCode(c).split(' ')[1]}</span>
+              <span>{c.title}</span>
+            </a>
+          ))}
         </div>
       ))}
     </>
@@ -135,26 +122,6 @@ function LessonPage({ course, lesson }: { course: Course; lesson: Lesson }) {
   // after the last lesson, point to a course that lists this one as its prerequisite
   const nextCourse = next ? undefined : COURSES.find((c) => c.prerequisites?.includes(course.id));
   const C = lesson.Component;
-  const pagerRef = useRef<HTMLElement>(null);
-
-  // Remember the lesson as "last opened", and as read once the reader reaches the pager.
-  useEffect(() => {
-    markVisited(course.id, lesson.id);
-    const el = pagerRef.current;
-    if (!el || typeof IntersectionObserver === 'undefined') return;
-    const io = new IntersectionObserver((entries) => {
-      if (entries.some((e) => e.isIntersecting)) {
-        markDone(course.id, lesson.id);
-        io.disconnect();
-      }
-    });
-    // Wait for the lazy lesson body to render so the pager starts below the fold.
-    const t = window.setTimeout(() => io.observe(el), 800);
-    return () => {
-      window.clearTimeout(t);
-      io.disconnect();
-    };
-  }, [course.id, lesson.id]);
 
   return (
     <article className="lesson" style={{ ['--part-color' as string]: part.color } as CSSProperties}>
@@ -178,7 +145,7 @@ function LessonPage({ course, lesson }: { course: Course; lesson: Lesson }) {
       <Suspense fallback={<div className="loading">불러오는 중…</div>}>
         <C />
       </Suspense>
-      <nav className="pager" aria-label="이전·다음 장" ref={pagerRef}>
+      <nav className="pager" aria-label="이전·다음 장">
         {prev ? (
           <a href={lessonHref(course.id, prev.id)}>
             <span className="dir">← 이전</span>
@@ -203,7 +170,7 @@ function LessonPage({ course, lesson }: { course: Course; lesson: Lesson }) {
         ) : (
           <a className="next" href={LIBRARY_HREF}>
             <span className="dir">끝까지 왔습니다 →</span>
-            <span className="ttl">다른 과목 둘러보기</span>
+            <span className="ttl">다른 전공 둘러보기</span>
           </a>
         )}
       </nav>
@@ -233,13 +200,14 @@ export default function App() {
   const [open, setOpen] = useState(false);
   const course = route.kind === 'course' || route.kind === 'lesson' || route.kind === 'missing' ? route.course : undefined;
   const lesson = route.kind === 'lesson' ? route.lesson : undefined;
+  const major = route.kind === 'major' ? route.major : undefined;
   const close = () => setOpen(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'auto' });
     setOpen(false);
-    document.title = lesson ? `${lesson.title} · ${course!.title}` : course ? `${course.title} · ${SITE.name}` : SITE.name;
-  }, [route, course, lesson]);
+    document.title = lesson ? `${lesson.title} · ${course!.title}` : course ? `${course.title} · ${SITE.name}` : major ? `${major.name} · ${SITE.name}` : SITE.name;
+  }, [route, course, lesson, major]);
 
   let page;
   if (route.kind === 'lesson') page = <LessonPage key={route.course.id + '/' + route.lesson.id} course={route.course} lesson={route.lesson} />;
@@ -250,13 +218,14 @@ export default function App() {
         <Cover key={route.course.id} />
       </Suspense>
     );
-  } else if (route.kind === 'library') page = <Library />;
+  } else if (route.kind === 'major') page = <MajorPage key={route.major.id} major={route.major} />;
+  else if (route.kind === 'library') page = <Home />;
   else page = <NotFound course={course} />;
 
   return (
     <div className="shell">
-      <nav className="rail" data-open={open} aria-label={course ? '목차' : '과목'}>
-        {course ? <CourseRail course={course} current={lesson?.id} onNavigate={close} /> : <LibraryRail onNavigate={close} />}
+      <nav className="rail" data-open={open} aria-label={course ? '목차' : '전공과 과목'}>
+        {course ? <CourseRail course={course} current={lesson?.id} onNavigate={close} /> : <LibraryRail major={major} onNavigate={close} />}
         <div className="rail-foot">
           <ThemeToggle />
         </div>
@@ -264,13 +233,13 @@ export default function App() {
       {open && <div className="scrim" onClick={close} />}
       <div style={{ minWidth: 0 }}>
         <header className="topbar">
-          <button className="menu-btn" type="button" aria-label={course ? '목차 열기' : '과목 목록 열기'} onClick={() => setOpen(true)}>
+          <button className="menu-btn" type="button" aria-label={course ? '목차 열기' : '전공과 과목 목록 열기'} onClick={() => setOpen(true)}>
             <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
               <path d="M2 4h14M2 9h14M2 14h14" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" fill="none" />
             </svg>
           </button>
-          <a className="brand" href={course ? courseHref(course.id) : LIBRARY_HREF} style={{ flexDirection: 'row' }}>
-            <span className="brand-mark">{course ? course.title : SITE.name}</span>
+          <a className="brand" href={course ? courseHref(course.id) : major ? majorHref(major.id) : LIBRARY_HREF} style={{ flexDirection: 'row' }}>
+            <span className="brand-mark">{course ? course.title : major ? major.name : SITE.name}</span>
           </a>
         </header>
         <main className="main">{page}</main>

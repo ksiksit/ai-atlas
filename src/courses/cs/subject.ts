@@ -2,6 +2,7 @@ import type { Subject } from '../types';
 
 const subject: Subject = {
   id: 'cs',
+  code: 'CS',
   name: '컴퓨터과학',
   en: 'Computer Science',
   color: 'var(--c-cs-1)',
