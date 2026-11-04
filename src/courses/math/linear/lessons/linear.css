@@ -1,0 +1,398 @@
+/* 선형대수: figure styles that are plain HTML rather than canvas */
+
+.la-note {
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  line-height: 1.65;
+  min-height: 1.7em;
+}
+.la-note strong {
+  color: var(--ink);
+}
+.la-tex {
+  text-align: center;
+  font-size: 1.02rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+  padding-block: 2px;
+}
+.la-tex.left {
+  text-align: left;
+}
+.la-scroll {
+  overflow-x: auto;
+  max-width: 100%;
+}
+.la-two {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+@media (max-width: 640px) {
+  .la-two {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.la-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.la-panel-title {
+  font-size: var(--fs-xs);
+  color: var(--ink-2);
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.la-status {
+  font-size: var(--fs-sm);
+  padding: 8px 10px;
+  border-left: 3px solid var(--line-strong);
+  background: var(--surface-2);
+  color: var(--ink-2);
+  line-height: 1.6;
+}
+.la-status[data-tone='good'] {
+  border-left-color: var(--good);
+}
+.la-status[data-tone='bad'] {
+  border-left-color: var(--bad);
+}
+.la-status[data-tone='hl'] {
+  border-left-color: var(--hl);
+}
+.la-status strong {
+  color: var(--ink);
+}
+.la-codeline {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--ink-2);
+  background: var(--surface-2);
+  padding: 8px 10px;
+  border-left: 2px solid var(--part-color, var(--accent));
+  overflow-wrap: anywhere;
+  line-height: 1.6;
+}
+
+/* number inputs laid out as a matrix */
+.la-matin {
+  display: inline-grid;
+  gap: 4px;
+  padding: 4px 8px;
+  border-left: 2px solid var(--ink-2);
+  border-right: 2px solid var(--ink-2);
+}
+.la-matin input {
+  width: 4.2em;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  padding: 4px 6px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink);
+  text-align: right;
+  border-radius: 0;
+}
+.la-matin input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* augmented matrix for Gaussian elimination */
+.la-aug {
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.95rem;
+  margin-inline: auto;
+}
+.la-aug td,
+.la-aug th {
+  padding: 6px 10px;
+  text-align: right;
+  min-width: 3.6em;
+  border: 0;
+  transition: background-color 0.25s;
+}
+.la-aug th {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  text-align: left;
+  min-width: 2.4em;
+  padding-right: 6px;
+}
+.la-aug td.bar {
+  border-left: 1.5px dashed var(--ink-3);
+}
+.la-aug tr[data-role='pivot'] td {
+  background: color-mix(in srgb, var(--part-color, var(--accent)) 12%, transparent);
+}
+.la-aug tr[data-role='target'] td {
+  background: color-mix(in srgb, var(--hl) 22%, transparent);
+}
+.la-aug tr[data-role='swap'] td {
+  background: color-mix(in srgb, var(--neg) 16%, transparent);
+}
+.la-aug tr[data-role='bad'] td {
+  background: color-mix(in srgb, var(--bad) 16%, transparent);
+}
+.la-aug td[data-pivot] {
+  outline: 2px solid var(--part-color, var(--accent));
+  outline-offset: -3px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.la-aug td[data-zero] {
+  color: var(--ink-3);
+}
+.la-aug td[data-changed] {
+  color: var(--part-color, var(--accent));
+  font-weight: 700;
+}
+.la-aug-wrap {
+  overflow-x: auto;
+  padding: 10px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  position: relative;
+}
+.la-aug-wrap::before,
+.la-aug-wrap::after {
+  content: none;
+}
+.la-op {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  text-align: center;
+  color: var(--ink);
+  min-height: 1.6em;
+}
+.la-steps,
+.lesson .la-steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+}
+.la-steps li,
+.lesson .la-steps li {
+  margin: 0;
+  font-size: var(--fs-xs);
+  padding: 2px 8px;
+  border: 1px solid var(--line);
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+}
+.la-steps li[data-now] {
+  border-color: var(--part-color, var(--accent));
+  color: var(--ink);
+}
+.la-steps li[data-past] {
+  color: var(--ink-2);
+}
+
+/* ratings table */
+.la-rate td.num {
+  white-space: nowrap;
+}
+.la-rate td.miss {
+  color: var(--hl);
+  font-weight: 700;
+  text-align: right;
+  font-family: var(--font-mono);
+}
+.la-rate tr[data-sel] td {
+  background: color-mix(in srgb, var(--part-color, var(--accent)) 8%, transparent);
+}
+.la-rate td.proto {
+  color: var(--ink-2);
+}
+.la-bars {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 4px 10px;
+  align-items: center;
+  font-size: var(--fs-xs);
+  color: var(--ink-2);
+}
+.la-bars .track {
+  position: relative;
+  height: 16px;
+  background: var(--surface-2);
+}
+.la-bars .fill {
+  position: absolute;
+  left: 0;
+  top: 3px;
+  bottom: 3px;
+  background: var(--part-color, var(--accent));
+  opacity: 0.85;
+  transition: width 0.15s;
+}
+.la-bars .mark {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--ink);
+}
+.la-bars .v {
+  font-family: var(--font-mono);
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* small grayscale images */
+.la-imgs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.la-img {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.la-img canvas {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  image-rendering: pixelated;
+  border: 1px solid var(--line);
+  display: block;
+  background: var(--surface-2);
+}
+.la-img span {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+
+/* PageRank graph */
+.la-graph {
+  width: 100%;
+  height: auto;
+  display: block;
+  max-height: 340px;
+}
+.la-graph .edge {
+  stroke: var(--ink-3);
+  stroke-width: 1.4;
+  fill: none;
+}
+.la-graph .ah {
+  fill: var(--ink-3);
+}
+.la-graph .node circle {
+  stroke: var(--ink);
+  stroke-width: 1.4;
+}
+.la-graph .node text {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  text-anchor: middle;
+  fill: var(--ink);
+  font-size: 13px;
+}
+.la-graph .node .rk {
+  font-weight: 500;
+  font-size: 10px;
+  fill: var(--ink-2);
+}
+.la-linkgrid {
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+.la-linkgrid th {
+  font-weight: 500;
+  color: var(--ink-3);
+  padding: 2px 4px;
+}
+.la-linkgrid td {
+  padding: 1px;
+}
+.la-linkgrid button {
+  width: 30px;
+  height: 26px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  cursor: pointer;
+  border-radius: 0;
+  padding: 0;
+}
+.la-linkgrid button[aria-pressed='true'] {
+  background: color-mix(in srgb, var(--part-color, var(--accent)) 22%, var(--surface));
+  border-color: var(--part-color, var(--accent));
+}
+.la-linkgrid button:disabled {
+  background: var(--surface-2);
+  cursor: default;
+}
+.la-linkgrid button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* cover hero */
+.la-hero {
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+.la-hero canvas {
+  display: block;
+  width: 100%;
+}
+
+/* readouts that hold Korean words read better in the body font */
+.la-readtext .readout-value {
+  font-family: var(--font-body);
+  font-size: 1rem;
+}
+
+/* equations typed as rows of number inputs */
+.la-eqs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.la-eqrow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-left: 8px;
+  border-left: 3px solid var(--line-strong);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.la-eqrow input {
+  width: 3.6em;
+  min-width: 0;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  padding: 4px 4px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink);
+  text-align: right;
+  border-radius: 0;
+}
+.la-eqrow input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
