@@ -1,0 +1,547 @@
+/* 계산 이론: SVG diagrams, tapes, tables and chips */
+
+/* ── state diagrams and trees (SVG) ── */
+.sd-wrap {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  overflow-x: auto;
+  min-width: 0;
+}
+.sd-wrap svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.sd-node circle {
+  fill: var(--surface);
+  stroke: var(--ink);
+  stroke-width: 1.6;
+  transition: fill 0.15s;
+}
+.sd-node text {
+  fill: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+.sd-node text.sd-sub {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 400;
+  fill: var(--ink-3);
+}
+.sd-node[data-s='on'] circle {
+  fill: var(--hl);
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+.sd-node[data-s='on'] circle.inner {
+  fill: none;
+  stroke: #1a1a1a;
+}
+.sd-node[data-s='on'] text:not(.sd-sub) {
+  fill: #1a1a1a;
+}
+.sd-node[data-s='new'] circle {
+  stroke: var(--pos);
+  stroke-width: 2.6;
+}
+.sd-node[data-s='bad'] circle {
+  fill: color-mix(in srgb, var(--bad) 22%, var(--surface));
+  stroke: var(--bad);
+}
+.sd-node[data-s='dim'] {
+  opacity: 0.28;
+}
+.sd-edge path {
+  fill: none;
+  stroke: var(--ink-3);
+  stroke-width: 1.5;
+}
+.sd-edge polygon {
+  fill: var(--ink-3);
+}
+.sd-edge.eps path {
+  stroke-dasharray: 4 3;
+}
+.sd-elabel {
+  fill: var(--ink-2);
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  text-anchor: middle;
+  dominant-baseline: central;
+  paint-order: stroke;
+  stroke: var(--surface);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+.sd-edge[data-s='hot'] path,
+.sd-edge[data-s='new'] path {
+  stroke: var(--pos);
+  stroke-width: 2.6;
+}
+.sd-edge[data-s='hot'] polygon,
+.sd-edge[data-s='new'] polygon {
+  fill: var(--pos);
+}
+.sd-edge[data-s='hot'] .sd-elabel,
+.sd-edge[data-s='new'] .sd-elabel {
+  fill: var(--pos);
+  font-weight: 700;
+}
+.sd-edge[data-s='dim'] {
+  opacity: 0.22;
+}
+.sd-start path {
+  stroke: var(--ink);
+}
+.sd-start polygon {
+  fill: var(--ink);
+}
+
+.tr-link {
+  stroke: var(--line-strong);
+  stroke-width: 1.5;
+}
+.tr-link[data-s='on'] {
+  stroke: var(--ink-2);
+}
+.tr-link[data-s='dim'] {
+  opacity: 0.25;
+}
+.tr-node rect {
+  fill: var(--surface);
+  stroke: var(--ink-3);
+  stroke-width: 1.3;
+}
+.tr-node text {
+  fill: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+.tr-node[data-kind='nt'] text {
+  font-family: var(--font-body);
+  font-size: 12px;
+  fill: var(--ink-2);
+}
+.tr-node[data-kind='t'] rect,
+.tr-node[data-kind='num'] rect {
+  fill: var(--surface-2);
+  stroke: var(--ink);
+}
+.tr-node[data-kind='op'] rect {
+  fill: var(--neg-soft);
+  stroke: var(--neg);
+}
+.tr-node[data-kind='op'] text {
+  font-weight: 700;
+}
+.tr-node[data-s='on'] rect {
+  fill: var(--hl);
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+.tr-node[data-s='on'] text {
+  fill: #1a1a1a;
+}
+.tr-node[data-s='new'] rect {
+  stroke: var(--pos);
+  stroke-width: 2.4;
+}
+.tr-node[data-s='dim'] {
+  opacity: 0.3;
+}
+.tr-val {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  fill: var(--pos);
+  text-anchor: start;
+  dominant-baseline: central;
+  paint-order: stroke;
+  stroke: var(--surface);
+  stroke-width: 3px;
+}
+
+/* ── an input string, one box per character ── */
+.cmp-input {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  align-items: center;
+  min-height: 34px;
+}
+.cmp-input .lbl {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  margin-right: 6px;
+}
+.cmp-ch {
+  min-width: 26px;
+  height: 30px;
+  display: inline-grid;
+  place-items: center;
+  padding: 0 3px;
+  border: 1px solid var(--line-strong);
+  font-family: var(--font-mono);
+  font-size: 0.9375rem;
+  color: var(--ink-3);
+  background: var(--surface);
+}
+.cmp-ch[data-st='done'] {
+  color: var(--ink);
+  background: var(--surface-2);
+}
+.cmp-ch[data-st='cur'] {
+  color: #1a1a1a;
+  font-weight: 700;
+  background: var(--hl);
+  border-color: var(--hl);
+}
+.cmp-ch[data-st='bad'] {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--bad) 22%, transparent);
+  border-color: var(--bad);
+}
+.cmp-ch[data-st='mark'] {
+  color: var(--ink);
+  border-color: var(--pos);
+  background: var(--pos-soft);
+}
+.cmp-empty {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+
+/* verdict line under a figure */
+.cmp-verdict {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  min-height: 1.6em;
+}
+.cmp-verdict strong[data-ok='yes'] {
+  color: var(--good);
+}
+.cmp-verdict strong[data-ok='no'] {
+  color: var(--bad);
+}
+.cmp-note {
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  min-height: 3.2em;
+  overflow-wrap: anywhere;
+}
+
+/* small chips: states in a set, tokens, test strings */
+.cmp-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  min-height: 28px;
+}
+.cmp-chips .lbl {
+  width: 100%;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.cmp-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 26px;
+  padding: 0 7px;
+  border: 1px solid var(--line-strong);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  background: var(--surface);
+  color: var(--ink);
+  white-space: nowrap;
+}
+.cmp-chip small {
+  font-family: var(--font-body);
+  font-size: 10.5px;
+  color: var(--ink-3);
+}
+.cmp-chip[data-s='on'] {
+  background: var(--hl);
+  border-color: var(--hl);
+  color: #1a1a1a;
+}
+.cmp-chip[data-s='on'] small {
+  color: #1a1a1a;
+}
+.cmp-chip[data-s='done'] {
+  color: var(--ink-3);
+}
+.cmp-chip[data-s='good'] {
+  border-color: var(--good);
+  background: color-mix(in srgb, var(--good) 14%, transparent);
+}
+.cmp-chip[data-s='bad'] {
+  border-color: var(--bad);
+  background: color-mix(in srgb, var(--bad) 16%, transparent);
+}
+.cmp-chip[data-s='pos'] {
+  border-color: var(--pos);
+  background: var(--pos-soft);
+}
+
+/* text inputs */
+.cmp-text {
+  width: 100%;
+  font-family: var(--font-mono);
+  font-size: 0.9375rem;
+  padding: 7px 10px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink);
+  border-radius: 0;
+}
+.cmp-text:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+.cmp-text[aria-invalid='true'] {
+  border-color: var(--bad);
+}
+.cmp-err {
+  font-size: var(--fs-xs);
+  color: var(--bad);
+  min-height: 1.3em;
+}
+
+/* compact tables: transition tables, rule tables, the diagonal */
+.cmp-tbl-wrap {
+  overflow-x: auto;
+  min-width: 0;
+}
+table.cmp-tbl {
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+  font-family: var(--font-mono);
+  margin: 0 auto;
+}
+table.cmp-tbl th,
+table.cmp-tbl td {
+  border: 1px solid var(--line);
+  padding: 4px 9px;
+  text-align: center;
+  white-space: nowrap;
+}
+table.cmp-tbl th {
+  font-weight: 600;
+  color: var(--ink-2);
+  background: var(--surface-2);
+}
+table.cmp-tbl th.row {
+  text-align: left;
+}
+table.cmp-tbl.tight th,
+table.cmp-tbl.tight td {
+  padding: 3px 5px;
+  font-size: 0.75rem;
+}
+table.cmp-tbl td[data-s='on'],
+table.cmp-tbl th[data-s='on'] {
+  background: var(--hl);
+  color: #1a1a1a;
+  font-weight: 700;
+}
+table.cmp-tbl td[data-s='diag'] {
+  box-shadow: inset 0 0 0 2px var(--pos);
+}
+table.cmp-tbl td[data-s='flip'] {
+  background: var(--pos-soft);
+  color: var(--ink);
+  font-weight: 700;
+  box-shadow: inset 0 0 0 2px var(--pos);
+}
+table.cmp-tbl td[data-s='bad'] {
+  background: color-mix(in srgb, var(--bad) 18%, transparent);
+  box-shadow: inset 0 0 0 2px var(--bad);
+  font-weight: 700;
+}
+table.cmp-tbl td[data-s='dim'] {
+  color: var(--ink-3);
+}
+table.cmp-tbl td.halt {
+  color: var(--good);
+}
+table.cmp-tbl td.loop {
+  color: var(--bad);
+}
+table.cmp-tbl button.cell-btn {
+  font: inherit;
+  min-width: 34px;
+  min-height: 30px;
+  border: 1px dashed var(--line-strong);
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+}
+table.cmp-tbl button.cell-btn:hover {
+  border-color: var(--ink);
+}
+
+/* ── Turing machine tape ── */
+.tm-tape-wrap {
+  overflow-x: auto;
+  padding: 20px 2px 4px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+.tm-tape {
+  display: flex;
+  width: max-content;
+  margin: 0 auto;
+}
+.tm-cell {
+  position: relative;
+  width: 30px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line-strong);
+  margin-left: -1px;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  color: var(--ink);
+  background: var(--surface);
+}
+.tm-cell[data-blank] {
+  color: var(--ink-3);
+}
+.tm-cell[data-head] {
+  background: color-mix(in srgb, var(--hl) 40%, var(--surface));
+  border-color: var(--ink);
+  z-index: 1;
+  font-weight: 700;
+}
+.tm-cell[data-head]::before {
+  content: '';
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top: 9px solid var(--part-color, var(--accent));
+}
+.tm-cell[data-written] {
+  box-shadow: inset 0 -3px 0 var(--pos);
+}
+.tm-status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  align-items: baseline;
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+}
+.tm-status .state {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--ink);
+  padding: 1px 8px;
+  border: 1px solid var(--ink);
+}
+.tm-status .state[data-halt='acc'] {
+  border-color: var(--good);
+  color: var(--good);
+}
+.tm-status .state[data-halt='rej'] {
+  border-color: var(--bad);
+  color: var(--bad);
+}
+
+/* number chips you can click (subset sum) */
+.ss-nums {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.ss-num {
+  font: inherit;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  min-width: 44px;
+  min-height: 34px;
+  padding: 0 6px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+}
+.ss-num[aria-pressed='true'] {
+  background: var(--neg);
+  border-color: var(--neg);
+  color: var(--surface);
+  font-weight: 700;
+}
+.ss-num[data-sol] {
+  box-shadow: inset 0 -3px 0 var(--pos);
+}
+
+/* the editable DFA puzzle: one test string per row */
+.fa-tests {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+  gap: 4px;
+}
+.fa-test {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 7px;
+  border: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
+.fa-test[data-ok='yes'] {
+  border-color: color-mix(in srgb, var(--good) 60%, var(--line));
+}
+.fa-test[data-ok='no'] {
+  border-color: var(--bad);
+  background: color-mix(in srgb, var(--bad) 12%, transparent);
+}
+.fa-test .mk {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--ink-3);
+}
+.fa-test[data-ok='no'] .mk {
+  color: var(--bad);
+  font-weight: 700;
+}
+
+.cmp-stack {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 2px;
+  align-items: stretch;
+  width: 54px;
+  min-height: 30px;
+}
+.cmp-stack span {
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  background: var(--surface);
+}
+.cmp-stack span:last-child {
+  background: var(--hl);
+  border-color: var(--hl);
+  color: #1a1a1a;
+}
