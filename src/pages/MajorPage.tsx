@@ -80,19 +80,38 @@ export default function MajorPage({ major }: { major: Major }) {
     const wrap = wrapRef.current;
     if (!wrap) return;
     const box = wrap.getBoundingClientRect();
+    const rects = new Map(ids.map((id) => [id, cards.current[id]?.getBoundingClientRect()] as const));
+    const pairs = ids.flatMap((id) => (findCourse(id)?.prerequisites ?? []).filter((p) => rects.get(p) && rects.get(id)).map((p) => ({ from: p, to: id, a: rects.get(p)!, b: rects.get(id)! })));
+    // Several courses in one column can send arrows across the same gap. Each source gets its own
+    // vertical lane in that gap, so two arrows never merge into one line.
+    const lanes = new Map<number, string[]>();
+    for (const { from, a, b } of pairs) {
+      if (b.left <= a.right - 1) continue;
+      const key = Math.round(a.right);
+      const list = lanes.get(key) ?? [];
+      if (!list.includes(from)) list.push(from);
+      lanes.set(key, list);
+    }
+    for (const list of lanes.values()) list.sort((p, q) => rects.get(p)!.top - rects.get(q)!.top);
     const out: Edge[] = [];
-    for (const id of ids) {
-      for (const p of findCourse(id)?.prerequisites ?? []) {
-        const a = cards.current[p]?.getBoundingClientRect();
-        const b = cards.current[id]?.getBoundingClientRect();
-        if (!a || !b) continue;
-        if (b.left > a.right - 1) {
-          const x1 = a.right - box.left, y1 = a.top + 40 - box.top, x2 = b.left - box.left - 8, y2 = b.top + 40 - box.top;
-          const mx = (x1 + x2) / 2;
-          out.push({ from: p, to: id, d: Math.abs(y1 - y2) < 2 ? `M${x1} ${y1} H${x2}` : `M${x1} ${y1} H${mx} V${y2} H${x2}`, head: `${x2},${y2 - 4.5} ${x2 + 8},${y2} ${x2},${y2 + 4.5}` });
-        } else if (b.top > a.bottom - 1) {
-          const x = a.left + 28 - box.left, y1 = a.bottom - box.top, y2 = b.top - box.top - 8;
-          out.push({ from: p, to: id, d: `M${x} ${y1} V${y2}`, head: `${x - 4.5},${y2} ${x + 4.5},${y2} ${x},${y2 + 8}` });
+    for (const { from, to, a, b } of pairs) {
+      const y1 = a.top + 40 - box.top, y2 = b.top + 40 - box.top;
+      if (b.left > a.right - 1) {
+        const x1 = a.right - box.left, x2 = b.left - box.left - 8;
+        const lane = lanes.get(Math.round(a.right))!;
+        // upper sources take the lanes nearer the target, so their long drops do not cut across the others' starts
+        const k = lane.length - lane.indexOf(from);
+        const mx = x1 + ((x2 - x1) * k) / (lane.length + 1);
+        out.push({ from, to, d: Math.abs(y1 - y2) < 2 ? `M${x1} ${y1} H${x2}` : `M${x1} ${y1} H${mx} V${y2} H${x2}`, head: `${x2},${y2 - 4.5} ${x2 + 8},${y2} ${x2},${y2 + 4.5}` });
+      } else if (b.top > a.bottom - 1) {
+        const between = [...rects.entries()].some(([id, r]) => id !== from && id !== to && r && r.left < a.right && r.right > a.left && r.top > a.bottom - 1 && r.bottom < b.top + 1);
+        if (!between) {
+          const x = a.left + 28 - box.left, ys = a.bottom - box.top, ye = b.top - box.top - 8;
+          out.push({ from, to, d: `M${x} ${ys} V${ye}`, head: `${x - 4.5},${ye} ${x + 4.5},${ye} ${x},${ye + 8}` });
+        } else {
+          // another card sits in between: go around it through the gap on the left
+          const x1 = a.left - box.left, x = x1 - 22, x2 = b.left - box.left - 8;
+          out.push({ from, to, d: `M${x1} ${y1} H${x} V${y2} H${x2}`, head: `${x2},${y2 - 4.5} ${x2 + 8},${y2} ${x2},${y2 + 4.5}` });
         }
       }
     }
