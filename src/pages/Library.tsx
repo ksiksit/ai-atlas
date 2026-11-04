@@ -1,25 +1,13 @@
 import { useState, type CSSProperties } from 'react';
+import { LevelBadge } from '../components/LevelBadge';
 import { Seg } from '../components/ui';
 import { COURSES, LEVELS, SUBJECTS, courseHref, coursesOf, findCourse, lessonHref, lessonNo, type Course, type Level } from '../courses';
 import { useProgress, type CourseProgress } from '../lib/progress';
 import { SITE } from '../site';
+import LibraryMap, { type MapRequest } from './library/LibraryMap';
+import LibrarySearch, { type SearchHit } from './library/LibrarySearch';
 import '../styles/cover.css';
 import '../styles/library.css';
-
-/** "●○○ 기초": difficulty as filled dots plus its name. */
-export function LevelBadge({ level }: { level: Level }) {
-  return (
-    <span className="level-badge" title={`난이도: ${LEVELS[level].name}`}>
-      <span className="level-dots" aria-hidden="true">
-        {[1, 2, 3].map((i) => (
-          <i key={i} data-on={i <= level || undefined} />
-        ))}
-      </span>
-      <span className="visually-hidden">난이도 </span>
-      {LEVELS[level].name}
-    </span>
-  );
-}
 
 function CourseCard({ course, progress }: { course: Course; progress?: CourseProgress }) {
   const total = course.lessons.length;
@@ -95,16 +83,59 @@ function CourseCard({ course, progress }: { course: Course; progress?: CoursePro
 }
 
 type LevelFilter = 'all' | Level;
+type View = 'list' | 'map';
+
+/** The reader's last choice of view; the map on wide screens, the list on phones until they choose. */
+const VIEW_KEY = 'atlas-library-view';
+function loadView(): View {
+  try {
+    const v = localStorage.getItem(VIEW_KEY);
+    if (v === 'list' || v === 'map') return v;
+  } catch {
+    /* storage unavailable */
+  }
+  return typeof window !== 'undefined' && window.matchMedia('(min-width: 761px)').matches ? 'map' : 'list';
+}
+function saveView(v: View) {
+  try {
+    localStorage.setItem(VIEW_KEY, v);
+  } catch {
+    /* storage unavailable: remember for this visit only */
+  }
+}
 
 export default function Library() {
   const progress = useProgress();
+  const [view, setView] = useState<View>(loadView);
   const [filter, setFilter] = useState<LevelFilter>('all');
+  const [request, setRequest] = useState<MapRequest | null>(null);
   const levels = [...new Set(COURSES.map((c) => c.level))].sort() as Level[];
   const totalLessons = COURSES.reduce((s, c) => s + c.lessons.length, 0);
   const shown = (c: Course) => filter === 'all' || c.level === filter;
 
+  const changeView = (v: View) => {
+    setView(v);
+    saveView(v);
+  };
+
+  // On the map a search result is shown in place; in the list it opens the page.
+  const pick = (hit: SearchHit) => {
+    if (view === 'map') {
+      const n = (request?.n ?? 0) + 1;
+      if (hit.kind === 'subject') setRequest({ n, subject: hit.subject.id });
+      else setRequest({ n, course: hit.course.id, lesson: hit.kind === 'lesson' ? hit.lesson.id : undefined });
+      return;
+    }
+    if (hit.kind === 'lesson') window.location.hash = lessonHref(hit.course.id, hit.lesson.id);
+    else if (hit.kind === 'course') window.location.hash = courseHref(hit.course.id);
+    else {
+      setFilter('all');
+      requestAnimationFrame(() => document.getElementById(`subject-${hit.subject.id}`)?.scrollIntoView({ block: 'start' }));
+    }
+  };
+
   return (
-    <div className="library">
+    <div className="library" data-view={view}>
       <section className="lib-hero">
         <h1 className="lib-title">{SITE.name}</h1>
         <p className="hero-lede">분야와 난이도에 맞는 과목을 골라 시작하세요. 모든 장의 그림은 직접 움직여 보며 배울 수 있습니다.</p>
@@ -113,35 +144,47 @@ export default function Library() {
         </p>
       </section>
 
-      {levels.length > 1 && (
-        <div className="lib-filter">
+      <div className="lib-tools">
+        <Seg<View>
+          value={view}
+          onChange={changeView}
+          options={[
+            { value: 'list', label: '목록' },
+            { value: 'map', label: '지도' },
+          ]}
+        />
+        <LibrarySearch onPick={pick} />
+        {view === 'list' && levels.length > 1 && (
           <Seg<LevelFilter>
-            label="난이도"
             value={filter}
             onChange={setFilter}
-            options={[{ value: 'all', label: '전체' }, ...levels.map((l) => ({ value: l, label: LEVELS[l].name }))]}
+            options={[{ value: 'all', label: '난이도 전체' }, ...levels.map((l) => ({ value: l, label: LEVELS[l].name }))]}
           />
-        </div>
-      )}
+        )}
+      </div>
 
-      {SUBJECTS.map((s) => {
-        const list = coursesOf(s).filter(shown);
-        if (!list.length) return null;
-        return (
-          <section key={s.id} className="subject" aria-labelledby={`subject-${s.id}`} style={{ ['--subject-color' as string]: s.color } as CSSProperties}>
-            <header className="subject-head">
-              <span className="subject-en">{s.en}</span>
-              <h2 id={`subject-${s.id}`}>{s.name}</h2>
-              <p>{s.blurb}</p>
-            </header>
-            <div className="shelf-grid">
-              {list.map((c) => (
-                <CourseCard key={c.id} course={c} progress={progress[c.id]} />
-              ))}
-            </div>
-          </section>
-        );
-      })}
+      {view === 'map' ? (
+        <LibraryMap request={request} />
+      ) : (
+        SUBJECTS.map((s) => {
+          const list = coursesOf(s).filter(shown);
+          if (!list.length) return null;
+          return (
+            <section key={s.id} className="subject" aria-labelledby={`subject-${s.id}`} style={{ ['--subject-color' as string]: s.color } as CSSProperties}>
+              <header className="subject-head">
+                <span className="subject-en">{s.en}</span>
+                <h2 id={`subject-${s.id}`}>{s.name}</h2>
+                <p>{s.blurb}</p>
+              </header>
+              <div className="shelf-grid">
+                {list.map((c) => (
+                  <CourseCard key={c.id} course={c} progress={progress[c.id]} />
+                ))}
+              </div>
+            </section>
+          );
+        })
+      )}
 
       <footer className="home-foot">
         모든 그림은 브라우저 안에서 직접 계산됩니다. 읽은 장 기록은 이 브라우저에만 저장되고 서버로 전송되지 않습니다.
