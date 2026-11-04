@@ -62,6 +62,7 @@ const course: Course = {
   title: '기초 알고리즘',
   subtitle: 'Big-O에서 길 찾기까지',
   level: 1,
+  prerequisites: ['cs-programming'],
   blurb: '입문 개발자를 위한 알고리즘 첫걸음. 복잡도를 읽는 법에서 시작해 정렬, 이진 탐색과 해시 테이블, 스택·큐·힙, 그래프 탐색까지 코드와 그림으로 따라갑니다.',
   parts,
   lessons,

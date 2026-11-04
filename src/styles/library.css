@@ -382,6 +382,30 @@
 .mj-unit {
   break-inside: avoid-column;
 }
+.mj-brief {
+  list-style: none;
+  margin-bottom: 0;
+  padding-left: 0;
+}
+.mj-brief a {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 2px 0;
+  color: var(--ink-2);
+  text-decoration: none;
+}
+.mj-brief a:hover .t {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.mj-brief .no {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
 .mj-unit + .mj-unit {
   margin-top: 10px;
 }

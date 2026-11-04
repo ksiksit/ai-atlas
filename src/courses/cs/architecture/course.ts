@@ -60,6 +60,7 @@ const course: Course = {
   title: '컴퓨터 구조',
   subtitle: '비트에서 CPU까지',
   level: 1,
+  prerequisites: ['cs-programming'],
   blurb: '프로그램이 실제로 돌아가는 기계를 아래에서부터 쌓아 올립니다. 0과 1로 수를 나타내는 법, 논리 게이트로 덧셈기와 메모리를 만드는 법, 명령어를 한 줄씩 실행하는 CPU, 그리고 속도를 좌우하는 메모리 계층과 캐시까지 다룹니다.',
   parts,
   lessons,

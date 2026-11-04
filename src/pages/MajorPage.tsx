@@ -30,8 +30,10 @@ function chainWithin(ids: string[], id: string, acc: string[] = []): string[] {
 function CourseCard({ course, major, refFor }: { course: Course; major: Major; refFor: (el: HTMLElement | null) => void }) {
   const subject = subjectOf(course.subject);
   const prereqs = (course.prerequisites ?? []).map((p) => findCourse(p)).filter((c): c is Course => !!c);
+  // A course borrowed from another field shows only its units; the major's own courses list every lesson.
+  const borrowed = course.subject !== major.subject;
   return (
-    <article ref={refFor} className={'mj-card' + (course.lessons.length > LONG ? ' long' : '')} data-id={course.id} style={vars({ '--sc': subject.color })}>
+    <article ref={refFor} className={'mj-card' + (!borrowed && course.lessons.length > LONG ? ' long' : '')} data-id={course.id} style={vars({ '--sc': subject.color })}>
       <span className="mj-code">{courseCode(course)}</span>
       <a className="mj-title" href={courseHref(course.id)}>
         {course.title}
@@ -39,26 +41,43 @@ function CourseCard({ course, major, refFor }: { course: Course; major: Major; r
       <span className="mj-meta">
         {course.parts.length}개 단원 · {course.lessons.length}장 · {prereqs.length ? `선수 ${prereqs.map(courseCode).join(', ')}` : '선수 없음'}
       </span>
-      {course.subject !== major.subject && <span className="mj-from">{subject.name} 분야 과목</span>}
-      <div className="mj-units">
-        {course.parts.map((p) => (
-          <section key={p.id} className="mj-unit">
-            <h4>{p.title}</h4>
-            <ol>
-              {course.lessons
-                .filter((l) => l.part === p.id)
-                .map((l) => (
-                  <li key={l.id}>
-                    <a href={lessonHref(course.id, l.id)}>
-                      <span className="no">{lessonNo(course, l)}</span>
-                      <span className="t">{l.title}</span>
-                    </a>
-                  </li>
-                ))}
-            </ol>
-          </section>
-        ))}
-      </div>
+      {borrowed && <span className="mj-from">{subject.name} 분야 과목</span>}
+      {borrowed ? (
+        <ul className="mj-units mj-brief">
+          {course.parts.map((p) => {
+            const first = course.lessons.find((l) => l.part === p.id);
+            const n = course.lessons.filter((l) => l.part === p.id).length;
+            return (
+              <li key={p.id}>
+                <a href={first ? lessonHref(course.id, first.id) : courseHref(course.id)}>
+                  <span className="t">{p.title}</span>
+                  <span className="no">{n}장</span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <div className="mj-units">
+          {course.parts.map((p) => (
+            <section key={p.id} className="mj-unit">
+              <h4>{p.title}</h4>
+              <ol>
+                {course.lessons
+                  .filter((l) => l.part === p.id)
+                  .map((l) => (
+                    <li key={l.id}>
+                      <a href={lessonHref(course.id, l.id)}>
+                        <span className="no">{lessonNo(course, l)}</span>
+                        <span className="t">{l.title}</span>
+                      </a>
+                    </li>
+                  ))}
+              </ol>
+            </section>
+          ))}
+        </div>
+      )}
     </article>
   );
 }
@@ -93,6 +112,20 @@ export default function MajorPage({ major }: { major: Major }) {
       lanes.set(key, list);
     }
     for (const list of lanes.values()) list.sort((p, q) => rects.get(p)!.top - rects.get(q)!.top);
+    // Arrows that must go around a card in the same column run down the gap on its left;
+    // each source gets its own lane there too.
+    const between = (from: string, to: string, a: DOMRect, b: DOMRect) =>
+      [...rects.entries()].some(([id, r]) => id !== from && id !== to && r && r.left < a.right && r.right > a.left && r.top > a.bottom - 1 && r.bottom < b.top + 1);
+    const detours = new Map<number, string[]>();
+    for (const { from, to, a, b } of pairs) {
+      if (b.left <= a.right - 1 && b.top > a.bottom - 1 && between(from, to, a, b)) {
+        const key = Math.round(a.left);
+        const list = detours.get(key) ?? [];
+        if (!list.includes(from)) list.push(from);
+        detours.set(key, list);
+      }
+    }
+    for (const list of detours.values()) list.sort((p, q) => rects.get(p)!.top - rects.get(q)!.top);
     const out: Edge[] = [];
     for (const { from, to, a, b } of pairs) {
       const y1 = a.top + 40 - box.top, y2 = b.top + 40 - box.top;
@@ -104,13 +137,13 @@ export default function MajorPage({ major }: { major: Major }) {
         const mx = x1 + ((x2 - x1) * k) / (lane.length + 1);
         out.push({ from, to, d: Math.abs(y1 - y2) < 2 ? `M${x1} ${y1} H${x2}` : `M${x1} ${y1} H${mx} V${y2} H${x2}`, head: `${x2},${y2 - 4.5} ${x2 + 8},${y2} ${x2},${y2 + 4.5}` });
       } else if (b.top > a.bottom - 1) {
-        const between = [...rects.entries()].some(([id, r]) => id !== from && id !== to && r && r.left < a.right && r.right > a.left && r.top > a.bottom - 1 && r.bottom < b.top + 1);
-        if (!between) {
+        if (!between(from, to, a, b)) {
           const x = a.left + 28 - box.left, ys = a.bottom - box.top, ye = b.top - box.top - 8;
           out.push({ from, to, d: `M${x} ${ys} V${ye}`, head: `${x - 4.5},${ye} ${x + 4.5},${ye} ${x},${ye + 8}` });
         } else {
           // another card sits in between: go around it through the gap on the left
-          const x1 = a.left - box.left, x = x1 - 22, x2 = b.left - box.left - 8;
+          const k = detours.get(Math.round(a.left))!.indexOf(from);
+          const x1 = a.left - box.left, x = x1 - 14 - 10 * k, x2 = b.left - box.left - 8;
           out.push({ from, to, d: `M${x1} ${y1} H${x} V${y2} H${x2}`, head: `${x2},${y2 - 4.5} ${x2 + 8},${y2} ${x2},${y2 + 4.5}` });
         }
       }
