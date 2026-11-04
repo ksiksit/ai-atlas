@@ -8,7 +8,6 @@ import {
   LES_H,
   LEVEL_IDS,
   PART_H,
-  STEP_ZOOM,
   clampK,
   edgeShape,
   layoutMap,
@@ -29,7 +28,6 @@ export interface MapRequest {
   lesson?: string;
 }
 
-const LEVEL_EN = { 1: 'BASIC', 2: 'INTERMEDIATE', 3: 'ADVANCED' } as const;
 const NARROW = '(max-width: 760px)';
 const FLY_MS = 520;
 
@@ -141,105 +139,31 @@ function CourseBox({ course, progress, x, y, h, classes, focusLesson, onKey }: {
 
 /* ───────────── side panel ───────────── */
 
-function PanelHome({ progress, onSelect }: { progress: Progress; onSelect: (id: string, lesson?: string) => void }) {
+/** One line above the map: the courses in progress and the lesson to continue with. */
+function ResumeBar({ progress }: { progress: Progress }) {
   const reading = COURSES.filter((c) => {
     const n = doneCount(progress, c);
     return (n > 0 || progress[c.id]?.last) && n < c.lessons.length;
   });
-  const finished = COURSES.filter((c) => doneCount(progress, c) === c.lessons.length);
-  const starters = COURSES.filter((c) => c.level === 1 && !c.prerequisites?.length && !reading.includes(c) && !finished.includes(c));
-  const color = (c: Course) => SUBJECTS.find((s) => s.id === c.subject)!.color;
-
+  if (!reading.length) return null;
   return (
-    <>
-      {reading.length > 0 && (
-        <section>
-          <h3>이어서 보기</h3>
-          <ul className="lm-resume">
-            {reading.map((c) => {
-              const last = c.lessons.find((l) => l.id === progress[c.id]?.last) ?? c.lessons[0];
-              return (
-                <li key={c.id} style={vars({ '--c': color(c) })}>
-                  <a href={lessonHref(c.id, last.id)}>
-                    <span className="t">
-                      <i />
-                      {c.title}
-                      <span className="mono">
-                        {doneCount(progress, c)}/{c.lessons.length}
-                      </span>
-                    </span>
-                    <span className="n">
-                      이어서: <mark>{last.title}</mark>
-                    </span>
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-        </section>
-      )}
-      {starters.length > 0 && (
-        <section>
-          <h3>{reading.length || finished.length ? '새로 시작하기' : '어디서 시작할까요'}</h3>
-          <div className="lm-chips">
-            {starters.map((c) => (
-              <button key={c.id} type="button" onClick={() => onSelect(c.id)}>
-                {c.title}
-              </button>
-            ))}
-          </div>
-        </section>
-      )}
-      {finished.length > 0 && (
-        <section>
-          <h3>다 본 과목</h3>
-          <div className="lm-chips">
-            {finished.map((c) => (
-              <button key={c.id} type="button" onClick={() => onSelect(c.id)}>
-                {c.title}
-              </button>
-            ))}
-          </div>
-        </section>
-      )}
-      <section>
-        <h3>지도 읽는 법</h3>
-        <div className="lm-legend">
-          <div>
-            <svg width="28" height="12" aria-hidden="true">
-              <circle cx="14" cy="6" r="4" fill="var(--accent)" stroke="var(--accent)" strokeWidth="1.5" />
-            </svg>
-            다 본 장
-          </div>
-          <div>
-            <svg width="28" height="12" aria-hidden="true">
-              <circle cx="14" cy="6" r="4" fill="var(--surface)" stroke="var(--accent)" strokeWidth="1.5" />
-            </svg>
-            아직 안 본 장
-          </div>
-          <div>
-            <span className="sw-marker" aria-hidden="true" />
-            마지막으로 연 장
-          </div>
-          <div>
-            <svg width="28" height="12" aria-hidden="true">
-              <path d="M1 6H20" stroke="var(--line-strong)" strokeWidth="1.5" />
-              <polygon points="19,1 19,11 27,6" fill="var(--line-strong)" />
-            </svg>
-            먼저 볼 과목 → 다음 과목
-          </div>
-        </div>
-      </section>
-      <section>
-        <h3>조작</h3>
-        <p>끌어서 옮기고, 휠이나 두 손가락으로 확대합니다. 가까이 갈수록 분야, 과목, 장 순서로 자세히 보입니다. 과목을 누르면 그 과목까지 가는 길이 표시됩니다.</p>
-      </section>
-    </>
+    <nav className="lm-resume" aria-label="이어서 보기">
+      <span className="lm-resume-label">이어서 보기</span>
+      {reading.map((c) => {
+        const last = c.lessons.find((l) => l.id === progress[c.id]?.last) ?? c.lessons[0];
+        return (
+          <a key={c.id} href={lessonHref(c.id, last.id)} style={vars({ '--c': SUBJECTS.find((s) => s.id === c.subject)!.color })}>
+            <i aria-hidden="true" />
+            <span className="c">{c.title}</span>
+            <span className="l">{last.title}</span>
+          </a>
+        );
+      })}
+    </nav>
   );
 }
 
 function PanelCourse({ course, progress, focusLesson, onSelect }: { course: Course; progress: Progress; focusLesson: string | null; onSelect: (id: string, lesson?: string) => void }) {
-  const subject = SUBJECTS.find((s) => s.id === course.subject)!;
   const done = doneOf(progress, course);
   const last = progress[course.id]?.last;
   const lastLesson = course.lessons.find((l) => l.id === last);
@@ -268,11 +192,6 @@ function PanelCourse({ course, progress, focusLesson, onSelect }: { course: Cour
             )}
           </span>
         </div>
-        <div className="lm-strip" style={vars({ '--c': subject.color })} aria-hidden="true">
-          {course.lessons.map((l) => (
-            <i key={l.id} data-done={done.has(l.id) || undefined} data-last={(l.id === last && !done.has(l.id)) || undefined} />
-          ))}
-        </div>
       </div>
       {focused && (
         <div className="btn-row">
@@ -290,31 +209,17 @@ function PanelCourse({ course, progress, focusLesson, onSelect }: { course: Cour
           목차
         </a>
       </div>
-      <section>
-        <h3>가는 길</h3>
-        {chain.length ? (
+      {(chain.length > 0 || next.length > 0) && (
+        <section>
+          <h3>순서</h3>
           <div className="lm-chips">
-            {[...chain, course.id].map((id, i) => (
+            {[...chain, course.id, ...next].map((id, i) => (
               <span key={id} className="lm-step">
                 {i > 0 && <span className="sep">→</span>}
-                <button type="button" aria-current={id === course.id ? 'step' : undefined} onClick={() => id !== course.id && onSelect(id)}>
+                <button type="button" aria-current={id === course.id ? 'step' : undefined} data-next={next.includes(id) || undefined} onClick={() => id !== course.id && onSelect(id)}>
                   {title(id)}
                 </button>
               </span>
-            ))}
-          </div>
-        ) : (
-          <p>먼저 볼 과목 없이 바로 시작할 수 있습니다.</p>
-        )}
-      </section>
-      {next.length > 0 && (
-        <section>
-          <h3>다음 과목</h3>
-          <div className="lm-chips">
-            {next.map((id) => (
-              <button key={id} type="button" onClick={() => onSelect(id)}>
-                {title(id)}
-              </button>
             ))}
           </div>
         </section>
@@ -357,13 +262,11 @@ export default function LibraryMap({ request }: { request: MapRequest | null }) 
   const [sel, setSel] = useState<string | null>(null);
   const [focusLesson, setFocusLesson] = useState<string | null>(null);
   const [mode, setMode] = useState<ZoomMode>('mid');
-  const [sheetOpen, setSheetOpen] = useState(false);
 
   const frameRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const worldRef = useRef<SVGGElement>(null);
   const panelRef = useRef<HTMLElement>(null);
-  const kRef = useRef<HTMLSpanElement>(null);
   const view = useRef({ x: 0, y: 0, k: 0.5 });
   const modeRef = useRef<ZoomMode>('mid');
   const anim = useRef(0);
@@ -380,7 +283,6 @@ export default function LibraryMap({ request }: { request: MapRequest | null }) 
       svg.style.setProperty('--lm-rfs', `${Math.min(54, Math.max(30, 15 / k))}px`);
       svg.style.setProperty('--lm-lfs', `${Math.min(46, Math.max(22, 12 / k))}px`);
     }
-    if (kRef.current) kRef.current.textContent = '×' + k.toFixed(2);
     const m = zoomMode(k);
     if (m !== modeRef.current) {
       modeRef.current = m;
@@ -457,7 +359,6 @@ export default function LibraryMap({ request }: { request: MapRequest | null }) 
     (id: string | null, opts: { lesson?: string; fly?: boolean } = {}) => {
       setSel(id);
       setFocusLesson(id && opts.lesson ? `${id}/${opts.lesson}` : null);
-      if (id && isNarrow()) setSheetOpen(true);
       if (!id || opts.fly === false) return;
       pendingFly.current = () => {
         const p = L.pos[id];
@@ -477,7 +378,6 @@ export default function LibraryMap({ request }: { request: MapRequest | null }) 
       if (!c) return;
       select(null);
       pendingFly.current = () => fitBox({ x: c.x, y: 24, w: c.w, h: L.height - 36 }, { pad: 24 });
-      setSheetOpen(false);
     },
     [L, fitBox, select],
   );
@@ -648,15 +548,7 @@ export default function LibraryMap({ request }: { request: MapRequest | null }) 
 
   return (
     <div className="lmap">
-      <div className="lm-subjects" aria-label="분야로 이동">
-        {L.subjects.map((s) => (
-          <button key={s.id} type="button" className="lm-subject-chip" style={vars({ '--c': s.color })} onClick={() => showSubject(s.id)}>
-            <i />
-            {s.name}
-            <span className="mono">{COURSES.filter((c) => c.subject === s.id).length}</span>
-          </button>
-        ))}
-      </div>
+      <ResumeBar progress={progress} />
 
       <div className="lm-frame" ref={frameRef}>
         <svg
@@ -676,29 +568,15 @@ export default function LibraryMap({ request }: { request: MapRequest | null }) 
                 <text className="lm-band-name" x={28} y={L.rowY[l] + 52}>
                   {LEVELS[l].name}
                 </text>
-                <text className="lm-band-en" x={28} y={L.rowY[l] + 74}>
-                  L{l} · {LEVEL_EN[l]}
-                </text>
               </g>
             ))}
             {L.subjects.map((s) => {
               const c = L.cols[s.id];
               return (
                 <g key={s.id}>
-                  <rect
-                    className="lm-region"
-                    x={c.x}
-                    y={24}
-                    width={c.w}
-                    height={L.height - 36}
-                    rx={14}
-                    style={{ fill: `color-mix(in srgb, ${s.color} 6%, transparent)`, stroke: `color-mix(in srgb, ${s.color} 45%, transparent)` }}
-                  />
-                  <text className="lm-region-name" x={c.x + L.colPad} y={92} fill={s.color}>
+                  <rect className="lm-region" x={c.x} y={24} width={c.w} height={L.height - 36} rx={14} style={{ fill: `color-mix(in srgb, ${s.color} 6%, transparent)` }} />
+                  <text className="lm-region-name" x={c.x + L.colPad} y={100} fill={s.color}>
                     {s.name}
-                  </text>
-                  <text className="lm-region-en" x={c.x + L.colPad} y={122}>
-                    {s.en.toUpperCase()} · {COURSES.filter((x) => x.subject === s.id).length}과목
                   </text>
                 </g>
               );
@@ -725,59 +603,37 @@ export default function LibraryMap({ request }: { request: MapRequest | null }) 
           </g>
         </svg>
 
-        <div className="lm-dock">
-          <div className="lm-zoom">
-            <button type="button" aria-label="축소" onClick={() => zoomBy(1 / 1.4)}>
-              −
-            </button>
-            <button type="button" aria-label="확대" onClick={() => zoomBy(1.4)}>
-              +
-            </button>
-            <button type="button" onClick={() => fitAll()}>
-              전체
-            </button>
-          </div>
-          <div className="lm-scale" role="group" aria-label="보이는 정도">
-            <span className="mono" ref={kRef} aria-hidden="true" />
-            {(['far', 'mid', 'near'] as ZoomMode[]).map((m) => (
-              <button
-                key={m}
-                type="button"
-                aria-pressed={mode === m}
-                onClick={() => {
-                  if (m === 'far') return fitAll();
-                  const fr = freeRect();
-                  const v = view.current;
-                  centerOn((fr.w / 2 - v.x) / v.k, (fr.h / 2 - v.y) / v.k, STEP_ZOOM[m]);
-                }}
-              >
-                {{ far: '분야', mid: '과목', near: '장' }[m]}
-              </button>
-            ))}
-          </div>
+        <div className="lm-zoom">
+          <button type="button" aria-label="확대" onClick={() => zoomBy(1.4)}>
+            +
+          </button>
+          <button type="button" aria-label="축소" onClick={() => zoomBy(1 / 1.4)}>
+            −
+          </button>
+          <button type="button" aria-label="전체 보기" title="전체 보기" onClick={() => fitAll()}>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" />
+            </svg>
+          </button>
         </div>
 
-        <aside className="lm-panel" ref={panelRef} data-open={sheetOpen || undefined} aria-label={selected ? `${selected.title} 자세히` : '이어서 보기'}>
-          <div className="lm-panel-head">
-            <span className="eyebrow">{selected ? `${subjectOfSel!.name} · ${LEVELS[selected.level].name}` : '내 서재'}</span>
-            <span className="spacer" />
-            <button type="button" className="lm-icon lm-sheet-toggle" aria-expanded={sheetOpen} aria-label={sheetOpen ? '패널 접기' : '패널 펼치기'} onClick={() => setSheetOpen((o) => !o)}>
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d={sheetOpen ? 'm6 9 6 6 6-6' : 'm6 15 6-6 6 6'} />
-              </svg>
-            </button>
-            {selected && (
-              <button type="button" className="lm-icon" aria-label="선택 해제" onClick={() => select(null)}>
+        {selected && (
+          <aside className="lm-panel" ref={panelRef} aria-label={`${selected.title} 자세히`}>
+            <div className="lm-panel-head">
+              <span className="eyebrow">
+                {subjectOfSel!.name} · {LEVELS[selected.level].name}
+              </span>
+              <button type="button" className="lm-icon" aria-label="닫기" onClick={() => select(null)}>
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M6 6l12 12M18 6 6 18" />
                 </svg>
               </button>
-            )}
-          </div>
-          <div className="lm-panel-body">
-            {selected ? <PanelCourse course={selected} progress={progress} focusLesson={focusLesson} onSelect={(id, lesson) => select(id, { lesson })} /> : <PanelHome progress={progress} onSelect={(id, lesson) => select(id, { lesson })} />}
-          </div>
-        </aside>
+            </div>
+            <div className="lm-panel-body">
+              <PanelCourse course={selected} progress={progress} focusLesson={focusLesson} onSelect={(id, lesson) => select(id, { lesson })} />
+            </div>
+          </aside>
+        )}
       </div>
     </div>
   );

@@ -1,47 +1,58 @@
 /* Library map: subjects as columns, levels as bands from 기초 (top) to 심화 (bottom).
    Course boxes show more as you zoom in — subject names, then courses, then lesson titles.
-   A panel on the right (a bottom sheet on phones) holds the selected course or "이어서 보기". */
+   Choosing a course opens a panel on the right (a bottom sheet on phones); otherwise the map
+   has the whole frame. */
 .lmap {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
-.lm-subjects {
+
+/* "이어서 보기": one line of links above the map */
+.lm-resume {
   display: flex;
-  gap: 6px;
   flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 16px;
+  font-size: var(--fs-sm);
+  line-height: 1.5;
 }
-.lm-subject-chip {
+.lm-resume-label {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--ink-3);
+}
+.lm-resume a {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 3px 12px 3px 9px;
-  min-height: 32px;
-  border: 1px solid var(--line-strong);
-  border-radius: 999px;
-  background: var(--surface);
+  gap: 8px;
+  min-width: 0;
   color: var(--ink);
-  font: inherit;
-  font-size: var(--fs-xs);
-  cursor: pointer;
+  text-decoration: none;
 }
-.lm-subject-chip:hover {
-  border-color: var(--ink-3);
-}
-.lm-subject-chip i {
-  width: 9px;
-  height: 9px;
+.lm-resume a i {
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: var(--c);
+  flex: none;
 }
-.lm-subject-chip .mono {
+.lm-resume a .c {
   color: var(--ink-3);
+}
+.lm-resume a .l {
+  background: var(--marker);
+  padding: 0 4px;
+}
+.lm-resume a:hover .l {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .lm-frame {
   position: relative;
   /* sized so the title, the tools and the whole frame fit on one screen */
-  height: clamp(480px, calc(100vh - 300px), 920px);
+  height: clamp(480px, calc(100vh - 280px), 920px);
   border: 1px solid var(--line-strong);
   border-radius: 6px;
   background: var(--bg);
@@ -49,7 +60,7 @@
 }
 @supports (height: 100dvh) {
   .lm-frame {
-    height: clamp(480px, calc(100dvh - 300px), 920px);
+    height: clamp(480px, calc(100dvh - 280px), 920px);
   }
 }
 .lm-svg {
@@ -75,26 +86,13 @@
 /* world: bands and regions */
 .lm-band {
   stroke: var(--line);
-  stroke-dasharray: 2 6;
   vector-effect: non-scaling-stroke;
 }
 .lm-band-name {
   font-family: var(--font-display);
   font-weight: 700;
   font-size: var(--lm-lfs, 22px);
-  fill: var(--ink-2);
-}
-.lm-band-en,
-.lm-region-en {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.08em;
   fill: var(--ink-3);
-}
-.lm-region {
-  stroke-width: 1;
-  stroke-dasharray: 4 4;
-  vector-effect: non-scaling-stroke;
 }
 .lm-region-name {
   font-family: var(--font-display);
@@ -219,7 +217,7 @@
 }
 
 /* what each zoom distance draws */
-.lm-svg[data-zoom='far'] :is(.lm-meta, .lm-title, .lm-sub, .lm-track, .lm-body, .lm-region-en, .lm-band-en) {
+.lm-svg[data-zoom='far'] :is(.lm-meta, .lm-title, .lm-sub, .lm-track, .lm-body) {
   display: none;
 }
 .lm-svg:not([data-zoom='far']) .lm-far {
@@ -240,66 +238,47 @@
   opacity: 0.2;
 }
 
-/* zoom dock */
-.lm-dock {
+/* zoom buttons, stacked in the corner */
+.lm-zoom {
   position: absolute;
+  z-index: 2;
   left: 12px;
   bottom: 12px;
-  z-index: 2;
   display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  align-items: center;
-}
-.lm-zoom,
-.lm-scale {
-  display: flex;
-  align-items: center;
+  flex-direction: column;
   border: 1px solid var(--line-strong);
   border-radius: var(--radius);
   background: var(--surface);
   overflow: hidden;
-  height: 34px;
 }
-.lm-zoom button,
-.lm-scale button {
+.lm-zoom button {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
   border: 0;
   background: transparent;
   color: var(--ink);
   font: inherit;
-  font-size: var(--fs-xs);
-  height: 100%;
-  min-width: 34px;
-  padding: 0 10px;
+  font-size: 1.125rem;
+  line-height: 1;
   cursor: pointer;
 }
 .lm-zoom button + button {
-  border-left: 1px solid var(--line);
+  border-top: 1px solid var(--line);
 }
-.lm-zoom button:hover,
-.lm-scale button:hover {
+.lm-zoom button:hover {
   background: var(--surface-2);
 }
-.lm-scale {
-  padding-left: 10px;
-  gap: 2px;
-}
-.lm-scale .mono {
-  color: var(--ink-3);
-  width: 3.8em;
-  font-size: 0.75rem;
-}
-.lm-scale button {
-  color: var(--ink-3);
-  padding: 0 8px;
-}
-.lm-scale button[aria-pressed='true'] {
-  background: var(--ink);
-  color: var(--bg);
-  font-weight: 600;
+.lm-zoom svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
 }
 
-/* side panel */
+/* panel for the chosen course */
 .lm-panel {
   position: absolute;
   z-index: 3;
@@ -320,6 +299,7 @@
   flex: none;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 4px;
   padding: 8px 8px 8px 18px;
   border-bottom: 1px solid var(--line);
@@ -328,9 +308,6 @@
   font-size: var(--fs-xs);
   font-weight: 600;
   color: var(--ink-3);
-}
-.lm-panel-head .spacer {
-  flex: 1;
 }
 .lm-icon {
   width: 32px;
@@ -352,9 +329,6 @@
   fill: none;
   stroke: currentColor;
   stroke-width: 2;
-}
-.lm-sheet-toggle {
-  display: none;
 }
 .lm-panel-body {
   overflow-y: auto;
@@ -393,23 +367,6 @@
 .lm-meta-row .mono {
   color: var(--ink);
 }
-.lm-strip {
-  display: flex;
-  gap: 2px;
-  margin-top: 8px;
-}
-.lm-strip i {
-  flex: 1;
-  height: 6px;
-  background: var(--surface-3);
-}
-.lm-strip i[data-done] {
-  background: var(--c);
-}
-.lm-strip i[data-last] {
-  background: var(--marker);
-  outline: 1px solid var(--ink-3);
-}
 .lm-panel .btn {
   max-width: 100%;
   overflow: hidden;
@@ -436,6 +393,9 @@
 .lm-chips button:hover {
   border-color: var(--accent);
 }
+.lm-chips button[data-next] {
+  border-style: dashed;
+}
 .lm-chips button[aria-current] {
   background: var(--accent);
   border-color: var(--accent);
@@ -449,72 +409,6 @@
 }
 .lm-step .sep {
   color: var(--ink-3);
-}
-.lm-resume {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.lm-resume a {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: 10px 12px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  color: var(--ink);
-  text-decoration: none;
-}
-.lm-resume a:hover {
-  border-color: var(--ink-3);
-}
-.lm-resume .t {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 600;
-}
-.lm-resume .t i {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--c);
-  flex: none;
-}
-.lm-resume .t .mono {
-  margin-left: auto;
-  font-weight: 400;
-  color: var(--ink-3);
-}
-.lm-resume .n {
-  font-size: var(--fs-xs);
-  color: var(--ink-3);
-}
-.lm-resume mark {
-  background: var(--marker);
-  color: var(--ink);
-  padding: 0 3px;
-}
-.lm-legend {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: var(--fs-xs);
-  color: var(--ink-2);
-}
-.lm-legend div {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.lm-legend .sw-marker {
-  width: 28px;
-  height: 12px;
-  background: var(--marker);
-  border-radius: 2px;
 }
 .lm-lessons,
 .lm-lessons ul {
@@ -563,16 +457,8 @@
   color: var(--ink-3);
 }
 
-/* phones: the panel becomes a bottom sheet, the dock moves to the top */
+/* phones: the panel becomes a bottom sheet */
 @media (max-width: 760px) {
-  .lm-subjects {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-  .lm-subject-chip {
-    flex: none;
-  }
   .lm-frame {
     height: clamp(400px, calc(100vh - 360px), 760px);
   }
@@ -587,17 +473,11 @@
     right: 0;
     bottom: 0;
     width: auto;
-    max-height: 55%;
+    max-height: 60%;
     border-radius: 10px 10px 0 0;
     border-width: 1px 0 0;
   }
-  .lm-panel:not([data-open]) .lm-panel-body {
-    display: none;
-  }
-  .lm-sheet-toggle {
-    display: grid;
-  }
-  .lm-dock {
+  .lm-zoom {
     top: 10px;
     bottom: auto;
     left: 10px;

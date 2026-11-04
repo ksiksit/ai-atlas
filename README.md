@@ -142,7 +142,7 @@ src/
   site.ts                 사이트 이름과 소개 문구
   pages/Library.tsx       서재: 목록/지도 보기 전환(마지막 선택을 기억), 검색, 목록의 난이도 필터
   pages/library/
-    LibraryMap.tsx        지도 보기: 확대·이동, 과목을 고르면 가는 길과 다음 과목 표시, 옆 패널(휴대폰은 아래 시트)
+    LibraryMap.tsx        지도 보기: 확대·이동, 위에 이어서 보기 한 줄, 과목을 고르면 순서(먼저 볼 과목 → 다음 과목)와 옆 패널(휴대폰은 아래 시트)
     mapLayout.ts          지도 배치 계산 (분야 = 세로 칸, 난이도 = 가로 띠, 선 = prerequisites)
     LibrarySearch.tsx     분야·과목·장 검색 (한글·영어 이름, / 키로 바로 이동)
   courses/

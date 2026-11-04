@@ -151,8 +151,6 @@ export function shortLines(title: string, max = 5): string[] {
 /** How much the map shows at a zoom: subject names, course boxes, or lesson titles. */
 export type ZoomMode = 'far' | 'mid' | 'near';
 export const zoomMode = (k: number): ZoomMode => (k < 0.42 ? 'far' : k < 0.95 ? 'mid' : 'near');
-/** Zoom each step button jumps to. */
-export const STEP_ZOOM: Record<ZoomMode, number> = { far: 0.32, mid: 0.62, near: 1.25 };
 export const K_MIN = 0.15;
 export const K_MAX = 2.6;
 export const clampK = (k: number) => Math.min(K_MAX, Math.max(K_MIN, k));
