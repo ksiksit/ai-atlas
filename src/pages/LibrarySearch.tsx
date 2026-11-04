@@ -1,7 +1,7 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
-import { COURSES, SUBJECTS, type Course, type Lesson, type Subject } from '../../courses';
+import { COURSES, MAJORS, courseCode, subjectOf, type Course, type Lesson, type Major } from '../courses';
 
-export type SearchHit = { kind: 'subject'; subject: Subject } | { kind: 'course'; course: Course } | { kind: 'lesson'; course: Course; lesson: Lesson };
+export type SearchHit = { kind: 'major'; major: Major } | { kind: 'course'; course: Course } | { kind: 'lesson'; course: Course; lesson: Lesson };
 
 interface Entry {
   hit: SearchHit;
@@ -11,21 +11,20 @@ interface Entry {
   hay: string;
 }
 
-const KIND = { subject: '분야', course: '과목', lesson: '장' } as const;
+const KIND = { major: '전공', course: '과목', lesson: '장' } as const;
 const MAX_RESULTS = 9;
 
 function buildIndex(): Entry[] {
   const out: Entry[] = [];
-  for (const s of SUBJECTS) out.push({ hit: { kind: 'subject', subject: s }, kind: KIND.subject, title: s.name, where: '', hay: `${s.name} ${s.en}`.toLowerCase() });
+  for (const m of MAJORS) out.push({ hit: { kind: 'major', major: m }, kind: KIND.major, title: m.name, where: '', hay: `${m.name} ${m.en}`.toLowerCase() });
   for (const c of COURSES) {
-    const subject = SUBJECTS.find((s) => s.id === c.subject)?.name ?? '';
-    out.push({ hit: { kind: 'course', course: c }, kind: KIND.course, title: c.title, where: subject, hay: `${c.title} ${c.subtitle}`.toLowerCase() });
+    out.push({ hit: { kind: 'course', course: c }, kind: KIND.course, title: c.title, where: `${courseCode(c)} · ${subjectOf(c).name}`, hay: `${c.title} ${c.subtitle} ${courseCode(c)}`.toLowerCase() });
     for (const l of c.lessons) out.push({ hit: { kind: 'lesson', course: c, lesson: l }, kind: KIND.lesson, title: l.title, where: c.title, hay: `${l.title} ${l.en}`.toLowerCase() });
   }
   return out;
 }
 
-/** Search box for subjects, courses and lessons by Korean or English name. Press / to focus it. */
+/** Search box for majors, courses (by name or code) and lessons (Korean or English name). Press / to focus it. */
 export default function LibrarySearch({ onPick }: { onPick: (hit: SearchHit) => void }) {
   const index = useMemo(buildIndex, []);
   const [q, setQ] = useState('');

@@ -2,6 +2,7 @@ import type { Subject } from '../types';
 
 const subject: Subject = {
   id: 'ai',
+  code: 'AI',
   name: '인공지능',
   en: 'Artificial Intelligence',
   color: 'var(--accent)',

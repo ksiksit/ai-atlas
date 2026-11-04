@@ -312,7 +312,7 @@ code {
   color: var(--ink-3);
 }
 
-/* rail: back link to the library, "read to the end" mark */
+/* rail: back link to the home page */
 .rail-back {
   font-size: var(--fs-xs);
   color: var(--ink-3);
@@ -322,11 +322,6 @@ code {
 .rail-back:hover {
   color: var(--ink);
   text-decoration: underline;
-}
-.rail-link .done-mark {
-  color: var(--good);
-  font-size: 0.75rem;
-  margin-left: 6px;
 }
 
 /* difficulty: ●○○ 기초 */

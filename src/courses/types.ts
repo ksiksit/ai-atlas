@@ -3,12 +3,15 @@ import type { ComponentType, LazyExoticComponent } from 'react';
 /**
  * Content hierarchy: Subject (분야) → Course (과목) → Part (파트) → Lesson (장).
  * A subject such as 통계학 can hold several courses at different levels.
+ * Majors (전공) sit on top: each one picks courses from any subject, in the order to take them.
  */
 
 /** A field of study. Groups courses on the library page and gives them a color. */
 export interface Subject {
   /** Short slug; also the folder name under src/courses/. */
   id: string;
+  /** Prefix of its course codes, e.g. "STAT" for STAT 101. */
+  code: string;
   /** Name of the field, e.g. "통계학". */
   name: string;
   /** English name, shown as a small label. */
@@ -69,4 +72,22 @@ export interface Course {
   lessons: Lesson[];
   /** The course's landing page (hero + table of contents). */
   Cover: LazyExoticComponent<ComponentType>;
+}
+
+/** How a course counts toward a major: 전공기초 (from another field, taken first), 전공필수, 전공선택. */
+export type CourseRole = 'base' | 'core' | 'elect';
+
+/** A major: a curated path through courses, shown as a curriculum chart (이수체계도). */
+export interface Major {
+  /** URL segment: #majors/<id>. */
+  id: string;
+  /** e.g. "인공지능 전공". */
+  name: string;
+  /** English name, shown as a small label. */
+  en: string;
+  /** Subject that runs the major; courses from other subjects are marked as such. */
+  subject: string;
+  /** One or two sentences for the major's card and page. */
+  blurb: string;
+  courses: { course: string; role: CourseRole }[];
 }
