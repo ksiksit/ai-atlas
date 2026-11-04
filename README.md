@@ -196,7 +196,7 @@ npm run build:single    # dist-single/index.html — 파일 하나로 된 버전
 
 ```
 src/
-  App.tsx                 레이아웃, 목차(전공·과목 / 과목의 장), 해시 라우팅
+  App.tsx                 레이아웃(위쪽 막대: 현재 위치, 과목 목차, 화면 테마), 해시 라우팅
   site.ts                 사이트 이름과 소개 문구
   pages/
     Home.tsx              첫 화면(전공 안내): 검색, 전공 타일
@@ -244,6 +244,6 @@ src/
 1. 분야가 새로 필요하면 `src/courses/<분야>/subject.ts`를 만들고 `src/courses/index.ts`의 `SUBJECTS`에 넣습니다.
 2. `src/courses/<분야>/<과목>/course.ts`에 `Course`를 만듭니다. 파트 색이 새로 필요하면 `global.css`의 밝은 테마와 어두운 테마(두 곳)에 모두 토큰을 추가합니다.
 3. 장 본문은 `src/courses/<분야>/<과목>/lessons/`에 둡니다. 공용 부품은 `../../../../components/ui`와 `../../../../lib/`에서 가져옵니다.
-4. `COURSES`에 등록하면 과목 코드가 붙고, 왼쪽 목차와 검색에 나타납니다.
+4. `COURSES`에 등록하면 과목 코드가 붙고 검색에 나타납니다. 첫 화면에서 찾아 들어오게 하려면 5번처럼 전공에 넣어야 합니다.
 5. 과목을 전공에 넣으려면 `src/courses/majors.ts`에서 그 전공의 `courses`에 `{ course: '<과목>', role: 'base' | 'core' | 'elect' }`를 추가합니다. 이수체계도에서는 이수 구분 줄과 난이도 칸이 만나는 자리에 놓이고, 같은 전공 안에 있는 `prerequisites` 과목에서 화살표가 이어집니다. 새 전공은 `MAJORS`에 항목을 하나 더하면 첫 화면에 타일이 생깁니다. 타일에는 `tagline`(이름 아래 한 줄)이 보이고, `blurb`는 이수체계도 맨 위에 나옵니다. 전공이 7개 이상이 되면 첫 화면에 `field`(계열, 예: "공학")로 좁히는 필터가 생깁니다.
 6. 장 사이 링크는 `lessonHref('<과목>', '<장>')`나 `href="#<과목>/<장>"`으로 겁니다. 다른 과목의 장으로도 링크할 수 있습니다.

@@ -104,7 +104,7 @@
   flex-direction: column;
   gap: 4px;
   position: sticky;
-  top: calc(16px + env(safe-area-inset-top, 0px));
+  top: calc(var(--bar-h) + 16px + env(safe-area-inset-top, 0px));
 }
 .map-part-en {
   font-family: var(--font-mono);

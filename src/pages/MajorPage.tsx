@@ -139,12 +139,6 @@ export default function MajorPage({ major }: { major: Major }) {
 
   return (
     <div className="major-page" style={vars({ '--sc': subjectOf(major.subject).color })}>
-      <nav className="crumbs" aria-label="현재 위치">
-        <a href="#">전공 안내</a>
-        <span aria-hidden="true">›</span>
-        <span aria-current="page">{major.name}</span>
-      </nav>
-
       <header className="major-head">
         <span className="major-en">{major.en}</span>
         <h1>{major.name} 이수체계도</h1>
