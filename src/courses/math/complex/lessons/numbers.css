@@ -1,0 +1,40 @@
+/* 복소해석 · 복소수와 복소 함수 (prefix cn-) */
+
+.cn-readouts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+@media (max-width: 560px) {
+  .cn-readouts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.cn-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  vertical-align: 0;
+  margin-right: 4px;
+}
+.cn-wheel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.cn-wheel i {
+  display: inline-block;
+  width: 64px;
+  height: 10px;
+  border-radius: 5px;
+  vertical-align: -1px;
+  margin-inline: 6px;
+  background: linear-gradient(90deg, hsl(0 85% 50%), hsl(60 85% 50%), hsl(120 85% 50%), hsl(180 85% 50%), hsl(240 85% 50%), hsl(300 85% 50%), hsl(360 85% 50%));
+}
+.cn-band i {
+  background: linear-gradient(90deg, hsl(0 0% 20%), hsl(0 0% 75%), hsl(0 0% 20%), hsl(0 0% 75%));
+}
