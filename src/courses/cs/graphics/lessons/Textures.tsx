@@ -322,13 +322,16 @@ function FloorFigure() {
     return { fb, st, sd };
   }, [mips, mode, P, levelRgb, tex]);
 
-  const { wrapRef, canvasRef } = useCanvas2D(
+  const [W, setW] = useState(640);
+  const unitFor = (w: number) => Math.min(1.6, (w - 6 * 8) / 127);
+  const floorHeight = Math.round((W / FLOOR_W) * FLOOR_H + 18 + 64 * unitFor(W) + 20);
+  const { wrapRef, canvasRef, size } = useCanvas2D(
     (ctx, { w }) => {
       const s = w / FLOOR_W;
       present(ctx, result.fb, 0, 0, s);
       // the pyramid, side by side, each level drawn at its true size relative to the first
       const top = FLOOR_H * s + 18;
-      const unit = Math.min(1.6, (w - 6 * 8) / 127);
+      const unit = unitFor(w);
       let x = 0;
       mipFbs.forEach((fb, i) => {
         const side = Math.max(4, fb.w * unit);
@@ -345,8 +348,11 @@ function FloorFigure() {
       });
     },
     [P, result, mipFbs, mode],
-    { aspect: 1.1, maxHeight: 900, minHeight: 60 },
+    { height: floorHeight, maxHeight: 2000, minHeight: 60 },
   );
+  useEffect(() => {
+    if (size.w !== W) setW(size.w);
+  }, [size.w, W]);
 
   return (
     <Figure
