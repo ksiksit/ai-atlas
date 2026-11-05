@@ -1,0 +1,160 @@
+/* 현대대수학 · 환과 체 */
+
+.rf-proof {
+  border-left: 3px solid var(--c-math-3);
+  background: var(--surface-2);
+  padding: 12px 16px;
+  margin-block: 1em 1.4em;
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+}
+.rf-proof > b:first-child {
+  color: var(--ink);
+  margin-right: 6px;
+}
+.rf-proof p {
+  margin: 0 0 8px;
+}
+.rf-proof p:last-child {
+  margin: 0;
+}
+.rf-qed {
+  float: right;
+  color: var(--ink);
+}
+
+/* multiplication tables */
+.rf-tablewrap {
+  overflow-x: auto;
+  max-width: 100%;
+}
+table.rf-table {
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+.rf-table th,
+.rf-table td {
+  min-width: 26px;
+  height: 24px;
+  padding: 0 4px;
+  text-align: center;
+  border: 1px solid var(--line);
+}
+.rf-table.small th,
+.rf-table.small td {
+  min-width: 34px;
+  height: 22px;
+  font-size: 0.6875rem;
+}
+.rf-table th {
+  background: var(--surface-2);
+  color: var(--ink-2);
+  font-weight: 600;
+}
+.rf-table th button {
+  all: unset;
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+.rf-table th button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+.rf-table th[data-sel] {
+  background: var(--ink);
+  color: var(--surface);
+}
+.rf-table td[data-k='one'] {
+  background: color-mix(in srgb, var(--good) 26%, transparent);
+  color: var(--ink);
+  font-weight: 700;
+}
+.rf-table td[data-k='zero'] {
+  background: color-mix(in srgb, var(--bad) 26%, transparent);
+  color: var(--ink);
+  font-weight: 700;
+}
+.rf-table td[data-dim] {
+  color: var(--ink-3);
+}
+.rf-table tr[data-sel] td {
+  outline: 1px solid var(--ink-3);
+  outline-offset: -1px;
+}
+.rf-table td[data-shade] {
+  background: color-mix(in srgb, var(--accent) calc(var(--s) * 1%), transparent);
+}
+
+/* long division */
+.rf-div {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-x: auto;
+}
+.rf-div .row {
+  display: grid;
+  grid-template-columns: 7.5em minmax(0, 1fr);
+  gap: 10px;
+  white-space: nowrap;
+}
+.rf-div .row > span:first-child {
+  color: var(--ink-3);
+  font-family: var(--font-body);
+  font-size: var(--fs-xs);
+}
+.rf-div .row[data-now] > span:last-child {
+  background: color-mix(in srgb, var(--hl) 40%, transparent);
+}
+.rf-div .row[data-later] {
+  visibility: hidden;
+}
+
+/* chips for powers */
+.rf-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  font-size: var(--fs-xs);
+}
+.rf-chip {
+  display: inline-grid;
+  place-items: center;
+  min-width: 46px;
+  padding: 3px 5px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.3;
+}
+.rf-chip small {
+  color: var(--ink-3);
+  font-size: 0.625rem;
+}
+.rf-chip[data-one] {
+  border-color: var(--good);
+  background: color-mix(in srgb, var(--good) 18%, transparent);
+}
+.rf-pickrow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+.rf-pickrow select {
+  font: inherit;
+  font-family: var(--font-mono);
+  padding: 4px 6px;
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--line-strong);
+}

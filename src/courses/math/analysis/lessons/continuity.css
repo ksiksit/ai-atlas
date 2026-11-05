@@ -1,0 +1,67 @@
+/* 해석학 · 연속 함수 */
+
+.ct-proof {
+  margin-block: 1em 1.4em;
+  padding: 12px 16px;
+  border-left: 3px solid var(--c-math-1);
+  background: color-mix(in srgb, var(--surface-2) 55%, transparent);
+  font-size: var(--fs-sm);
+  line-height: 1.75;
+}
+.ct-proof > .ct-proof-head {
+  font-weight: 700;
+  margin-right: 0.4em;
+}
+.ct-proof p {
+  margin: 0 0 0.6em;
+}
+.ct-proof p:last-child {
+  margin-bottom: 0;
+}
+.ct-proof .ct-qed {
+  float: right;
+  font-weight: 700;
+}
+
+.ct-thm {
+  margin-block: 1em;
+  padding: 10px 14px;
+  border: 1px solid var(--line-strong);
+  font-size: var(--fs-sm);
+}
+.ct-thm > b {
+  margin-right: 0.4em;
+}
+
+.ct-table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: var(--fs-xs);
+  font-variant-numeric: tabular-nums;
+}
+.ct-table th,
+.ct-table td {
+  padding: 5px 10px;
+  border-bottom: 1px solid var(--line);
+  text-align: right;
+  white-space: nowrap;
+}
+.ct-table th {
+  color: var(--ink-3);
+  font-weight: 600;
+  border-bottom-color: var(--line-strong);
+}
+.ct-table th:first-child,
+.ct-table td:first-child {
+  text-align: left;
+}
+
+.ct-steps {
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  min-height: 4.8em;
+  overflow-wrap: anywhere;
+}
+.ct-steps b {
+  color: var(--ink);
+}

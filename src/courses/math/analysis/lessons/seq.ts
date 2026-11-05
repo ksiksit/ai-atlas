@@ -43,7 +43,8 @@ export function epsN(s: SeqInfo, L: number, eps: number, upTo = N_CHECK): EpsN {
   let lastBad: number | null = null;
   let badCount = 0;
   for (let n = 1; n <= upTo; n++) {
-    if (!(Math.abs(s.a(n) - L) < eps)) {
+    // strict "< ε", with a hair of slack so that 1 − 0.9 = 0.0999…98 does not sneak inside ε = 0.1
+    if (!(Math.abs(s.a(n) - L) < eps - 1e-12)) {
       lastBad = n;
       badCount++;
     }
