@@ -58,9 +58,9 @@ npm run build:single    # dist-single/index.html — 파일 하나로 된 버전
 
 | 전공 | 전공기초 | 전공필수 | 전공선택 | 주소 |
 | --- | --- | --- | --- | --- |
-| 인공지능 전공 | MATH 102, STAT 101, MATH 201, CS 102 | AI 101, AI 201, AI 301 | | `#majors/ai` |
+| 인공지능 전공 | CS 101, MATH 102, STAT 101, MATH 201, CS 102 | AI 101, AI 201, AI 301 | CS 201, CS 203, CS 207, CS 303 | `#majors/ai` |
 | 컴퓨터과학 전공 | MATH 101, MATH 102, MATH 201 | CS 101, CS 102, CS 103, CS 201, CS 202, CS 204, CS 302, CS 303 | NET 101, AI 101, STAT 101, CS 203, CS 205, CS 206, CS 207, NET 201, CS 301 | `#majors/cs` |
-| 네트워크·보안 전공 | CS 102 | NET 101, NET 201 | | `#majors/net` |
+| 네트워크·보안 전공 | CS 101, MATH 101, CS 102 | NET 101, NET 201 | CS 103, CS 202, CS 203, CS 303 | `#majors/net` |
 
 - **전공기초**: 다른 분야의 과목으로, 전공을 시작하기 전에 들으면 좋은 과목
 - **전공필수**: 그 전공의 뼈대가 되는 과목
