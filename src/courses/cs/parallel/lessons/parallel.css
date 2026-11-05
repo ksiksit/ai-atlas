@@ -1,0 +1,65 @@
+/* 병렬·분산 컴퓨팅: figure styles shared by the lessons and the cover.
+   Lesson-specific styles live in their own files (amdahl.css, raft.css, …). */
+
+.pd-note {
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  min-height: 3.2em;
+  overflow-wrap: anywhere;
+}
+.pd-note[data-bad] {
+  color: var(--bad);
+}
+.pd-note[data-good] {
+  color: var(--good);
+}
+.pd-small {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  line-height: 1.6;
+}
+.pd-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+/* a row of chips: logs, timestamps, messages */
+.pd-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  min-height: 28px;
+  font-size: var(--fs-xs);
+}
+.pd-chips .lbl {
+  color: var(--ink-3);
+  min-width: 3.4em;
+}
+.pd-chip {
+  display: inline-grid;
+  place-items: center;
+  min-width: 26px;
+  height: 26px;
+  padding: 0 5px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+.pd-chip[data-c] {
+  border-color: var(--c);
+  background: color-mix(in srgb, var(--c) 18%, transparent);
+}
+.pd-chip[data-on] {
+  background: var(--c, var(--ink));
+  border-color: var(--c, var(--ink));
+  color: var(--surface);
+}
+.pd-chip[data-dim] {
+  opacity: 0.45;
+}

@@ -216,7 +216,7 @@ export default function Cover() {
             나눠 씁니다.
           </h1>
           <p className="hero-lede">
-            오른쪽 그림에서 프로세스 여섯 개가 CPU 하나를 몇 틱씩 번갈아 씁니다. 디스크나 네트워크를 기다리는 동안에는 CPU를 내놓고, 그 틈을 다른 프로세스가 채웁니다. 이렇게 CPU와 메모리와 디스크를 나눠 주고, 서로를 지키고, 전원이 꺼져도 데이터를 지키는 소프트웨어가 운영체제입니다. {course.lessons.length}개의 장에서 프로세스, 스케줄링, 락, 가상 메모리, 파일 시스템을 직접 움직여 보며 따라갑니다.
+            오른쪽 그림에서 프로세스 여섯 개가 CPU 하나를 몇 틱씩 번갈아 씁니다. 디스크나 네트워크를 기다리는 동안에는 CPU를 내놓고, 그 틈을 다른 프로세스가 채웁니다. 이렇게 CPU와 메모리와 디스크를 나눠 주고, 서로를 지키고, 전원이 꺼져도 데이터를 지키는 소프트웨어가 운영체제입니다. {course.lessons.length}개의 장에서 프로세스, 스케줄링, 락, 가상 메모리, 파일 시스템, 보호와 보안을 직접 움직여 보며 따라갑니다.
           </p>
           <div className="btn-row">
             <a className="btn primary" href={lessonHref(course.id, start.id)}>
