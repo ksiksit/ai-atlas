@@ -58,3 +58,7 @@
   color: var(--bad);
   font-weight: 600;
 }
+
+.ho-readouts.ho-wide-first > :first-child {
+  grid-column: 1 / -1;
+}

@@ -132,7 +132,7 @@ function fold(id: SquareId, u: number, v: number, t: number): V3 {
     return [x, (Rb - dz) * Math.sin(ph), zc + Rb - (Rb - dz) * Math.cos(ph)];
   }
   // cylinder and Möbius band: a strip rolled across u, with a half twist for the band
-  const half = 0.45;
+  const half = 0.28;
   const hgt = (2 * v - 1) * half;
   if (t < 1e-4) return [(2 * u - 1) * 1.6, hgt, 0];
   const th = (2 * u - 1) * Math.PI * t, R = 1.6 / (Math.PI * t);

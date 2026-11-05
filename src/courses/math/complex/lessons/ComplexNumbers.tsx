@@ -142,7 +142,7 @@ function MultiplyFigure() {
             <Button small onClick={() => { setRw(1); setTw(90); }}>w = i</Button>
             <Button small onClick={() => { setRw(1); setTw(180); }}>w = −1</Button>
           </div>
-          <div className="cn-readouts">
+          <div className="cn-readouts cn-wide-first">
             <Readout label="zw" value={fmtC(zw)} color="var(--pos)" />
             <Readout label="|zw|" value={abs(zw).toFixed(2)} />
             <Readout label="zw의 편각" value={fmtDeg(arg(zw))} />
@@ -441,7 +441,7 @@ function DomainFigure() {
     },
   });
 
-  const windText = wind > 0 ? `영점이 ${wind}개 더 많음` : wind < 0 ? `극이 ${-wind}개 더 많음` : '같음 (또는 둘 다 없음)';
+  const windText = wind > 0 ? `영점이 ${wind}개 더` : wind < 0 ? `극이 ${-wind}개 더` : '같은 수';
   return (
     <Figure
       no={4}
@@ -449,7 +449,7 @@ function DomainFigure() {
       hint="함수를 고르고, 그림을 눌러 원을 옮기세요"
       caption={
         <>
-          점 z를 f(z)의 편각에 따라 색칠했습니다. 편각 0은 빨강, 120°는 초록, 240°는 파랑입니다. 밝기는 |f(z)|가 두 배가 될 때마다 어두운 색에서 밝은 색으로 한 번씩 올라갑니다. 흰 점선 원을 시계 반대 방향으로 한 바퀴 돌 때 f(z)가 0 둘레를 감는 횟수를 오른쪽에 셉니다.
+          점 z를 f(z)의 편각에 따라 색칠했습니다. 편각 0은 빨강, 120°는 초록, 240°는 파랑입니다. 밝기는 |f(z)|가 두 배가 될 때마다 어두운 색에서 밝은 색으로 한 번씩 올라갑니다. 흰 점선 원을 시계 반대 방향으로 한 바퀴 돌 때 f(z)가 0 둘레를 감는 횟수를 '감는 횟수' 칸에 셉니다.
         </>
       }
     >
@@ -477,9 +477,9 @@ function DomainFigure() {
           <Slider label="원의 중심 Re" value={cx} min={-1.9} max={1.9} step={0.05} onChange={setCx} format={(v) => v.toFixed(2)} />
           <Slider label="원의 중심 Im" value={cy} min={-1.9} max={1.9} step={0.05} onChange={setCy} format={(v) => v.toFixed(2)} />
           <Slider label="원의 반지름" value={cr} min={0.1} max={1.9} step={0.05} onChange={setCr} format={(v) => v.toFixed(2)} />
-          <div className="cn-readouts">
+          <div className="cn-readouts cn-wide-first">
             <Readout label="감는 횟수" value={wind} color={wind > 0 ? 'var(--good)' : wind < 0 ? 'var(--bad)' : undefined} />
-            <Readout label="원 안의 영점과 극" value={windText} />
+            <Readout label="원 안의 영점 − 극" value={windText} />
             <Readout label="f(중심)" value={fmtC(fn.f([cx, cy]))} />
           </div>
         </div>

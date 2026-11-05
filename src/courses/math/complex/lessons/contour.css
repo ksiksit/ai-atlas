@@ -83,3 +83,6 @@
   color: var(--accent);
   font-weight: 700;
 }
+.ci-narrow {
+  max-width: 360px;
+}

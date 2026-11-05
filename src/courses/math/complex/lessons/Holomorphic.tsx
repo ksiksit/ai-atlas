@@ -100,7 +100,7 @@ function DirectionFigure() {
       dot(ctx, P, b.X(q[0]), b.Y(q[1]), P.pos, 6);
     },
     [P, id, h, phi, curve, qBox],
-    { aspect: 1.8, maxHeight: 380, minHeight: 40 },
+    { aspect: 1.8, maxHeight: 400, minHeight: 360 },
   );
 
   return (
@@ -118,7 +118,7 @@ function DirectionFigure() {
           <Seg label="함수" value={id} onChange={setId} options={DIR_FNS.map((k) => ({ value: k, label: FNS[k].name }))} />
           <Slider label="h" value={h} min={0.01} max={0.5} step={0.01} onChange={setH} format={(v) => v.toFixed(2)} />
           <Slider label="방향 φ" value={phi} min={0} max={360} step={1} onChange={setPhi} format={(v) => `${v}°`} color="var(--pos)" />
-          <div className="ho-readouts">
+          <div className="ho-readouts ho-wide-first">
             <Readout label="지금 방향의 차분몫" value={fmtC(q, 3)} color="var(--pos)" />
             <Readout label="방향마다 값이 퍼진 폭" value={curve.spread.toFixed(3)} />
           </div>
@@ -282,7 +282,7 @@ function ConformalFigure() {
       dot(ctx, P, b.X(fz[0]), b.Y(fz[1]), P.ink, 4);
     },
     [P, lines, imgBox, x, y, s],
-    { aspect: 1.8, maxHeight: 360, minHeight: 40 },
+    { aspect: 1.8, maxHeight: 400, minHeight: 360 },
   );
 
   return (
@@ -406,7 +406,12 @@ function FlowFigure() {
     },
   });
 
-  const sci = (v: number) => (Math.abs(v) < 1e-12 ? '0' : v.toExponential(1).replace('-', '−').replace('e', '×10^').replace('^−', '^−'));
+  const sci = (v: number) => {
+    if (Math.abs(v) < 1e-12) return '0';
+    const [mant, ex] = v.toExponential(1).split('e');
+    const sup = ex.replace('+', '').replace(/[-\d]/g, (c) => (c === '-' ? '⁻' : '⁰¹²³⁴⁵⁶⁷⁸⁹'[+c]));
+    return `${mant.replace('-', '−')}×10${sup}`;
+  };
   return (
     <Figure
       no={4}

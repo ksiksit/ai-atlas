@@ -84,7 +84,7 @@ export const presets: Record<string, Preset> = {
   sin: { name: 'sin z', tex: '\\sin z', f: csin, df: ccos },
   sqrt: { name: '√z', tex: '\\sqrt{z}', f: csqrt, df: (z) => div([0.5, 0], csqrt(z)) },
   essential: {
-    name: 'e^{1/z}',
+    name: 'e^(1/z)',
     tex: 'e^{1/z}',
     f: (z) => cexp(div([1, 0], z)),
     df: (z) => scale(div(cexp(div([1, 0], z)), mul(z, z)), -1),

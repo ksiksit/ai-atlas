@@ -76,7 +76,7 @@ export const POLE_EXAMPLES: PoleExample[] = [
     others: [[0, -1]],
     order: 1,
     res: [0, -0.5],
-    how: '\\operatorname{Res}_{z=i} \\frac{1}{(z-i)(z+i)} = \\frac{1}{i + i} = \\frac{1}{2i} = -\\frac{i}{2}',
+    how: '\\operatorname{Res}_{i} f = \\frac{1}{i + i} = -\\frac{i}{2}',
   },
   {
     id: 'simple2',
@@ -87,7 +87,7 @@ export const POLE_EXAMPLES: PoleExample[] = [
     others: [[2, 0]],
     order: 1,
     res: [-0.5, 0],
-    how: '\\operatorname{Res}_{z=0} \\frac{1}{z(z-2)} = \\frac{1}{0 - 2} = -\\frac{1}{2}',
+    how: '\\operatorname{Res}_{0} f = \\frac{1}{0 - 2} = -\\frac{1}{2}',
   },
   {
     id: 'double',
@@ -101,7 +101,7 @@ export const POLE_EXAMPLES: PoleExample[] = [
     others: [],
     order: 2,
     res: [Math.E, 0],
-    how: '\\operatorname{Res}_{z=1} \\frac{e^z}{(z-1)^2} = \\frac{d}{dz} e^z \\Big|_{z=1} = e',
+    how: '\\operatorname{Res}_{1} f = (e^z)\'\\big|_{z=1} = e',
   },
 ];
 

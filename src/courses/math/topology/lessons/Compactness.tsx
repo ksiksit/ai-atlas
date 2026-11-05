@@ -50,8 +50,9 @@ function xAxis(p: Plot, step: number, fmt: (v: number) => string = (v) => String
 }
 
 /** The number line [0, 1] with its endpoints drawn open or closed. */
-function drawSpace(p: Plot, y: number, space: Space, color: string) {
+function drawSpace(p: Plot, y: number, space: Space, color: string, gap?: { to: number; color: string }) {
   p.line(0, y, 1, y, color, 4);
+  if (gap) p.line(0, y, gap.to, y, gap.color, 6);
   for (const x of [0, 1]) {
     if (space === 'closed') p.dot(x, y, 5, color, color, 0);
     else p.dot(x, y, 5, p.p.surface, color, 2);
@@ -88,10 +89,9 @@ function NestedFigure() {
         p.dot(delta, y, 3.5, P.surface, P.good, 1.5);
         p.text('(−δ, δ)', -0.25, y, P.ink3, { dx: 2, align: 'left', font: `11px ${P.fontMono}` });
       }
-      drawSpace(p, -0.8, space, P.ink);
-      // the uncovered part (0, 1/N] for the open interval
+      // the uncovered part (0, 1/N] for the open interval, drawn under the endpoint marks
+      drawSpace(p, -0.8, space, P.ink, space === 'open' ? { to: 1 / N, color: P.bad } : undefined);
       if (space === 'open') {
-        p.line(0, -0.8, 1 / N, -0.8, P.bad, 6);
         p.text(`(0, 1/${N}]`, 1 / N, -0.8, P.bad, { dx: 6, dy: -10, align: 'left', font: `600 11px ${P.fontMono}`, bg: P.surface });
       }
     },
@@ -106,13 +106,13 @@ function NestedFigure() {
       hint="집합의 개수 N과 공간을 바꿔 보세요"
       caption={
         <>
-          파란 막대가 열린 집합 <M>{'U_n = (1/n, 2)'}</M>입니다(오른쪽 끝은 그림 밖까지 이어짐). 맨 아래 검은 선이 덮어야 할 공간이고, 속이 빈 동그라미는 그 끝점이 빠졌다는 표시입니다. (0, 1)에서는 몇 개를 쓰든 빨간 부분 (0, 1/N]이 남습니다. [0, 1]에서는 0을 덮을 집합 (−δ, δ)를 하나 더해야 덮개가 되고, 그러면 초록으로 칠한 두 집합으로 충분합니다.
+          파란 막대가 열린 집합 <M>{'U_n = (1/n, 2)'}</M>입니다(오른쪽 끝은 그림 밖까지 이어짐). 맨 아래 굵은 선이 덮어야 할 공간이고, 속이 빈 동그라미는 그 끝점이 빠졌다는 표시입니다. (0, 1)에서는 몇 개를 쓰든 빨간 부분 (0, 1/N]이 남습니다. [0, 1]에서는 0을 덮을 집합 (−δ, δ)를 하나 더해야 덮개가 되고, 그러면 초록으로 칠한 두 집합으로 충분합니다.
         </>
       }
     >
       <div className="controls row">
         <Seg value={space} onChange={setSpace} options={[{ value: 'open' as Space, label: '(0, 1)' }, { value: 'closed' as Space, label: '[0, 1]' }]} />
-        <Slider id="cp-n" label="쓰는 집합 U₂ … U_N" value={N} min={2} max={40} step={1} onChange={setN} />
+        <Slider id="cp-n" label="마지막 집합의 번호 N" value={N} min={2} max={40} step={1} onChange={setN} />
         {space === 'closed' && <Slider id="cp-delta" label="δ" value={delta} min={0.03} max={0.4} step={0.01} onChange={setDelta} format={(v) => v.toFixed(2)} />}
       </div>
       <div ref={wrapRef} className="canvas-box" role="img" aria-label={space === 'open' ? `열린 구간 (0, 1)과 집합 U₂부터 U${N}까지. 0과 1/${N} 사이가 덮이지 않고 남습니다.` : `닫힌 구간 [0, 1]과 집합 (−${delta}, ${delta}), U₂부터 U${N}. (−δ, δ)와 U${need} 두 개로 덮입니다.`}>
@@ -237,8 +237,11 @@ function BisectFigure() {
       const p = new Plot(ctx, w, h, P, { xMin: -0.12 * span, xMax: span, yMin: -1, yMax: 1.4, pad: { l: 10, r: 10, t: 8, b: 26 } });
       xAxis(p, st.b / 2, (v) => (v === 0 ? '0' : v < 0.01 ? v.toExponential(1) : String(+v.toFixed(4))));
       p.line(0, 0, Math.min(1, p.xMax), 0, P.ink, 3);
-      if (space === 'closed') p.dot(0, 0, 5, P.ink, P.ink, 0);
-      else p.dot(0, 0, 5, P.surface, P.ink, 2);
+      for (const x of [0, 1]) {
+        if (x > p.xMax) continue;
+        if (space === 'closed') p.dot(x, 0, 5, P.ink, P.ink, 0);
+        else p.dot(x, 0, 5, P.surface, P.ink, 2);
+      }
       // the kept left half and the discarded right half
       const mid = st.b / 2;
       p.line(0, 0.5, mid, 0.5, contradiction ? P.good : P.bad, 7);

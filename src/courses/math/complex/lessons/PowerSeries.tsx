@@ -110,7 +110,7 @@ function LorentzFigure() {
       mark(p, P, [x, 0]);
     },
     [P, x],
-    { aspect: 1, maxHeight: 320 },
+    { aspect: 1, maxHeight: 420 },
   );
 
   return (
@@ -120,7 +120,7 @@ function LorentzFigure() {
       hint="항의 수 N과 x를 바꿔 보세요"
       caption={
         <>
-          왼쪽: 검은 곡선(어두운 테마에서는 흰 곡선)이 <M>{'1/(1+x^2)'}</M>, 주황 곡선이 테일러 다항식 <M>{'S_N(x)=\\sum_{k=0}^{N}(-1)^k x^{2k}'}</M>입니다. 초록 띠 밖에서는 N을 늘려도 맞지 않습니다. 오른쪽: 같은 함수를 복소 평면 전체에서 색칠한 그림입니다. 색은 값의 방향(편각)이고, 양의 실수는 빨강, 120°는 초록, 240°는 파랑입니다. 밝기는 절댓값이 두 배가 될 때마다 한 번씩 어두운 쪽에서 밝은 쪽으로 바뀝니다. 흰 가로선이 실수축, 흰 점선이 단위원이고, 모든 색이 한 점에 모이는 ±i가 극입니다.
+          첫째 그림(넓은 화면에서는 왼쪽): 검은 곡선(어두운 테마에서는 흰 곡선)이 <M>{'1/(1+x^2)'}</M>, 주황 곡선이 테일러 다항식 <M>{'S_N(x)=\\sum_{k=0}^{N}(-1)^k x^{2k}'}</M>입니다. 초록 띠 밖에서는 N을 늘려도 맞지 않습니다. 둘째 그림: 같은 함수를 복소 평면 전체에서 색칠한 그림입니다. 색은 값의 방향(편각)이고, 양의 실수는 빨강, 120°는 초록, 240°는 파랑입니다. 밝기는 절댓값이 두 배가 될 때마다 한 번씩 어두운 쪽에서 밝은 쪽으로 바뀝니다. 흰 가로선이 실수축, 흰 점선이 단위원이고, 모든 색이 한 점에 모이는 ±i가 극입니다.
         </>
       }
     >
@@ -128,7 +128,7 @@ function LorentzFigure() {
         <div ref={real.wrapRef} className="canvas-box" role="img" aria-label={`실수축 위의 1/(1+x²)와 ${N}차까지의 테일러 다항식. x = ${nf(x, 2)}에서 다항식 값 ${nf(s)}, 참값 ${nf(truth)}.`}>
           <canvas ref={real.canvasRef} />
         </div>
-        <div ref={plane.wrapRef} className="canvas-box" role="img" aria-label="1/(1+z²)의 정의역 색칠. 실수축 위에는 아무 문제가 없지만, 원점에서 거리 1인 i와 −i에 극이 있습니다.">
+        <div ref={plane.wrapRef} className="canvas-box ps-square" role="img" aria-label="1/(1+z²)의 정의역 색칠. 실수축 위에는 아무 문제가 없지만, 원점에서 거리 1인 i와 −i에 극이 있습니다.">
           <canvas ref={plane.canvasRef} />
         </div>
       </div>
@@ -188,7 +188,7 @@ function GeomFigure() {
       p.dot(z[0], z[1], 7, P.accent, P.surface, 2.5);
     },
     [P, n, z, cols],
-    { aspect: 1, maxHeight: 380 },
+    { aspect: 1, maxHeight: 420 },
   );
   useDrag(wrapRef, {
     hit: () => 'z',
@@ -213,7 +213,7 @@ function GeomFigure() {
       }
     >
       <div className="fig-split">
-        <div ref={wrapRef} className="canvas-box grab" role="img" aria-label={`등비급수 부분합의 오차 지도. n = ${n}, z = ${fmtC(z, 2)}, |z| = ${nf(cabs(z), 3)}, 오차 ${sci(err)}.`}>
+        <div ref={wrapRef} className="canvas-box grab ps-square" role="img" aria-label={`등비급수 부분합의 오차 지도. n = ${n}, z = ${fmtC(z, 2)}, |z| = ${nf(cabs(z), 3)}, 오차 ${sci(err)}.`}>
           <canvas ref={canvasRef} />
         </div>
         <div className="controls">
@@ -248,7 +248,7 @@ function LaurentFigure() {
 
   const { wrapRef, canvasRef } = useCanvas2D(
     (ctx, { w, h }) => {
-      const p = new Plot(ctx, w, h, P, { xMin: -2.6, xMax: 2.6, yMin: -2.6, yMax: 2.6, equal: true, pad: { l: 8, r: 8, t: 8, b: 8 } });
+      const p = new Plot(ctx, w, h, P, { xMin: -2.2, xMax: 2.2, yMin: -2.2, yMax: 2.2, equal: true, pad: { l: 8, r: 8, t: 8, b: 8 } });
       paintDomain(p, laurentF);
       // dim everything outside the chosen annulus: outside the unit circle for the inner one, inside it for the outer one
       ctx.save();
@@ -265,7 +265,7 @@ function LaurentFigure() {
       mark(p, P, [1, 0], '1');
     },
     [P, ringId, r],
-    { aspect: 1, maxHeight: 360 },
+    { aspect: 1, maxHeight: 420 },
   );
 
   return (
@@ -280,7 +280,7 @@ function LaurentFigure() {
       }
     >
       <div className="fig-split">
-        <div ref={wrapRef} className="canvas-box" role="img" aria-label={`1/(z(z−1))의 정의역 색칠과 ${ringId === 'inner' ? '0 < |z| < 1' : '|z| > 1'} 고리, 반지름 ${nf(r, 2)}인 원.`}>
+        <div ref={wrapRef} className="canvas-box ps-square" role="img" aria-label={`1/(z(z−1))의 정의역 색칠과 ${ringId === 'inner' ? '0 < |z| < 1' : '|z| > 1'} 고리, 반지름 ${nf(r, 2)}인 원.`}>
           <canvas ref={canvasRef} />
         </div>
         <div className="controls">
@@ -341,7 +341,7 @@ function SingFigure() {
       p.text(`보이는 범위 |Re z|, |Im z| ≤ ${R < 0.1 ? R.toFixed(3) : nf(R, 2)}`, -R, R, P.ink, { dx: 6, dy: 14, font: `500 11px ${P.fontMono}`, bg: P.surface });
     },
     [P, f, R, hits],
-    { aspect: 1, maxHeight: 380 },
+    { aspect: 1, maxHeight: 420 },
   );
 
   return (
@@ -351,12 +351,12 @@ function SingFigure() {
       hint="종류를 고르고 확대해 보세요"
       caption={
         <>
-          세 함수 모두 0에서 정의되지 않습니다. 점선 원은 <M>{'|z|=R/2'}</M>이고, 오른쪽 수치는 그 원 위에서 <M>{'|f|'}</M>의 가장 작은 값과 가장 큰 값입니다. 제거 가능한 특이점은 확대할수록 한 가지 색으로 고르게 퍼지고, 극은 어떤 크기에서 보아도 색이 같은 순서로 두 바퀴 돕니다. 진성 특이점 <M>{'e^{1/z}'}</M>에서는 확대할수록 색이 더 촘촘하게 뒤섞입니다. 흰 동그라미는 <M>{'e^{1/z}=2'}</M>가 되는 점입니다.
+          세 함수 모두 0에서 정의되지 않습니다. 점선 원은 <M>{'|z|=R/2'}</M>이고, 수치 칸은 그 원 위에서 <M>{'|f|'}</M>의 가장 작은 값과 가장 큰 값입니다. 제거 가능한 특이점은 확대할수록 한 가지 색으로 고르게 퍼지고, 극은 어떤 크기에서 보아도 색이 같은 순서로 두 바퀴 돕니다. 진성 특이점 <M>{'e^{1/z}'}</M>에서는 확대할수록 색이 더 촘촘하게 뒤섞입니다. 흰 동그라미는 <M>{'e^{1/z}=2'}</M>가 되는 점입니다.
         </>
       }
     >
       <div className="fig-split">
-        <div ref={wrapRef} className="canvas-box" role="img" aria-label={`${SING[id].name} 특이점을 가진 함수의 0 근처 정의역 색칠, 보이는 범위 ${nf(R, 3)}. 반지름 R/2 원 위에서 |f|는 ${sci(rng.min)}부터 ${sci(rng.max)}까지입니다.`}>
+        <div ref={wrapRef} className="canvas-box ps-square" role="img" aria-label={`${SING[id].name} 특이점을 가진 함수의 0 근처 정의역 색칠, 보이는 범위 ${nf(R, 3)}. 반지름 R/2 원 위에서 |f|는 ${sci(rng.min)}부터 ${sci(rng.max)}까지입니다.`}>
           <canvas ref={canvasRef} />
         </div>
         <div className="controls">
@@ -431,7 +431,7 @@ export default function PowerSeries() {
       </p>
       <LorentzFigure />
       <p>
-        N = 6이면 <M>{'x=0.5'}</M>에서 다항식이 0.8000으로 참값과 넷째 자리까지 맞습니다. 같은 N으로 <M>{'x=0.9'}</M>에서는 0.6789로 참값 0.5525와 꽤 떨어져 있고, N = 20이 되어서야 0.5591까지 다가갑니다. <M>{'x=1.1'}</M>에서는 N = 6일 때 2.1708, N = 20일 때 25.2324로 참값 0.4525에서 점점 멀어집니다. 답은 오른쪽 복소 평면에 있습니다. <M>{'1+z^2=0'}</M>이 되는 <M>{'z=\\pm i'}</M>에서 함수가 무한히 커지고, 두 점은 원점에서 정확히 거리 1에 있습니다. 실수축에서 보이지 않던 장애물이 복소 평면에서는 바로 옆에 있었던 것입니다.
+        N = 6이면 <M>{'x=0.5'}</M>에서 다항식이 0.8000으로 참값과 넷째 자리까지 맞습니다. 같은 N으로 <M>{'x=0.9'}</M>에서는 0.6789로 참값 0.5525와 꽤 떨어져 있고, N = 20이 되어서야 0.5591까지 다가갑니다. <M>{'x=1.1'}</M>에서는 N = 6일 때 2.1708, N = 20일 때 25.2324로 참값 0.4525에서 점점 멀어집니다. 답은 둘째 그림의 복소 평면에 있습니다. <M>{'1+z^2=0'}</M>이 되는 <M>{'z=\\pm i'}</M>에서 함수가 무한히 커지고, 두 점은 원점에서 정확히 거리 1에 있습니다. 실수축에서 보이지 않던 장애물이 복소 평면에서는 바로 옆에 있었던 것입니다.
       </p>
 
       <h2>수렴 원판</h2>

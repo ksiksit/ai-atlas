@@ -141,7 +141,7 @@ function PowerFigure() {
       hint="거듭제곱 n과 반지름을 바꿔 보세요"
       caption={
         <>
-          왼쪽은 반지름 r인 원을 시계 반대 방향으로 한 바퀴 도는 경로입니다. 오른쪽은 경로를 따라가며 작은 조각 <M>{'z^n\\,dz'}</M>를 하나씩 더해 갈 때 그 합이 복소 평면에서 그리는 자취로, 0에서 출발해 주황 점에서 끝납니다. 원을 400조각으로 나눠 각도에 대한 사다리꼴 규칙으로 계산했습니다.
+          첫째 그림(넓은 화면에서는 왼쪽)은 반지름 r인 원을 시계 반대 방향으로 한 바퀴 도는 경로입니다. 둘째 그림은 경로를 따라가며 작은 조각 <M>{'z^n\\,dz'}</M>를 하나씩 더해 갈 때 그 합이 복소 평면에서 그리는 자취로, 0에서 출발해 주황 점에서 끝납니다. 원을 400조각으로 나눠 각도에 대한 사다리꼴 규칙으로 계산했습니다.
         </>
       }
     >
@@ -158,26 +158,24 @@ function PowerFigure() {
         <Slider id="ci-r" label="반지름 r" value={r} min={0.3} max={2.5} step={0.05} onChange={setR} format={(v) => nf(v, 2)} />
       </div>
       <div className="tbl-wrap">
-        <table className="ci-table">
+        <table className="ci-table ci-narrow">
           <thead>
             <tr>
               <th>n</th>
-              {table.map(({ k }) => (
-                <th key={k} data-on={k === n || undefined}>
-                  {k}
-                </th>
-              ))}
+              <th>∮ zⁿ dz (반지름 {nf(r, 2)})</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>∮ zⁿ dz</td>
-              {table.map(({ k, v }) => (
-                <td key={k} className="mono" data-on={k === n || undefined}>
+            {table.map(({ k, v }) => (
+              <tr key={k}>
+                <td className="mono" data-on={k === n || undefined}>
+                  {k}
+                </td>
+                <td className="mono" data-on={k === n || undefined}>
                   {fmtC(v)}
                 </td>
-              ))}
-            </tr>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
@@ -254,10 +252,10 @@ function PathFigure() {
     <Figure
       no={2}
       title="경로를 바꿔도 같은 적분"
-      hint="흰 점을 끌어 경로를 바꾸고, 함수를 바꿔 보세요"
+      hint="동그라미 점을 끌어 경로를 바꾸고, 함수를 바꿔 보세요"
       caption={
         <>
-          파란 곡선은 흰 점 다섯 개를 지나는 닫힌 곡선이고, 화살표가 도는 방향입니다. 빨간 ✕는 고른 함수의 특이점입니다. 적분은 곡선을 800조각으로 나눠 각 조각의 가운데에서 계산했습니다. 오른쪽 아래의 예측값은 각 특이점을 몇 번 감는지(감김 수)에 <M>{'2\\pi i'}</M>를 곱해 더한 값입니다.
+          파란 곡선은 동그라미 점 다섯 개를 지나는 닫힌 곡선이고(노란 점이 지금 슬라이더로 움직이는 점), 화살표가 도는 방향입니다. 빨간 ✕는 고른 함수의 특이점입니다. 적분은 곡선을 800조각으로 나눠 각 조각의 가운데에서 계산했습니다. 예측값은 각 특이점을 몇 번 감는지(감김 수)에 <M>{'2\\pi i'}</M>를 곱해 더한 값입니다.
         </>
       }
     >
@@ -352,7 +350,7 @@ function CauchyFigure() {
       hint="z₀을 끌어 보고, 경계에서 쓰는 점의 수를 바꿔 보세요"
       caption={
         <>
-          굵은 원이 경로이고, 그 색은 경계에서 f가 갖는 값입니다(색은 편각, 밝기 띠는 절댓값). 원 위의 작은 점들이 공식이 실제로 더하는 점입니다(64개가 넘으면 64개까지만 그립니다). 공식은 이 경계값만 써서 <M>{'f(z_0)'}</M>와 <M>{"f'(z_0)"}</M>를 계산하고, 오른쪽에서 직접 계산한 값과 비교합니다. <M>{'z_0'}</M>을 원 밖으로 끌어내면 공식은 0을 줍니다.
+          굵은 원이 경로이고, 그 색은 경계에서 f가 갖는 값입니다(색은 편각, 밝기 띠는 절댓값). 원 위의 작은 점들이 공식이 실제로 더하는 점입니다(64개가 넘으면 64개까지만 그립니다). 공식은 이 경계값만 써서 <M>{'f(z_0)'}</M>와 <M>{"f'(z_0)"}</M>를 계산하고, 직접 계산한 값과 비교합니다. 공식의 값은 주황 점이 원 안에 있을 때만 의미가 있고, <M>{'z_0'}</M>을 원 밖으로 끌어내면 공식은 0을 줍니다.
         </>
       }
     >
@@ -366,9 +364,11 @@ function CauchyFigure() {
           <Slider id="ci-cr" label="원의 반지름" value={r} min={0.8} max={2} step={0.05} onChange={setR} format={(v) => nf(v, 2)} />
           <Slider id="ci-zx" label="Re z₀" value={z0[0]} min={-2.2} max={2.2} step={0.05} onChange={(v) => setZ0([v, z0[1]])} format={(v) => nf(v, 2)} />
           <Slider id="ci-zy" label="Im z₀" value={z0[1]} min={-2.2} max={2.2} step={0.05} onChange={(v) => setZ0([z0[0], v])} format={(v) => nf(v, 2)} />
+          <div className="readouts" style={{ gridTemplateColumns: '1fr' }}>
+            <Readout label="직접 계산한 f(z₀)" value={fmtC(direct)} />
+            <Readout label="경계로 계산한 f(z₀)" value={fmtC(num)} color={inside ? 'var(--pos)' : 'var(--ink-3)'} />
+          </div>
           <div className="readouts" style={{ gridTemplateColumns: '1fr 1fr' }}>
-            <Readout label="직접 f(z₀)" value={fmtC(direct)} />
-            <Readout label="공식" value={fmtC(num)} color={inside ? 'var(--pos)' : 'var(--ink-3)'} />
             <Readout label="차이" value={inside ? sci(err) : '원 밖'} color={inside ? (err < 1e-6 ? 'var(--good)' : undefined) : 'var(--bad)'} />
             <Readout label="f′(z₀) 차이" value={inside ? sci(dErr) : '원 밖'} />
           </div>
@@ -403,7 +403,7 @@ function MaxModFigure() {
 
   const { wrapRef, canvasRef } = useCanvas2D(
     (ctx, { w, h }) => {
-      const p = new Plot(ctx, w, h, P, { xMin: -1.15, xMax: 1.15, yMin: -1.15, yMax: 1.15, equal: true, pad: { l: 26, r: 8, t: 8, b: 22 } });
+      const p = new Plot(ctx, w, h, P, { xMin: -1.15, xMax: 1.15, yMin: -1.15, yMax: 1.15, equal: true, pad: { l: 36, r: 8, t: 8, b: 22 } });
       plotRef.current = p;
       const bg = rgbOf(P.surface);
       p.heatmap((x, y) => {
@@ -462,7 +462,7 @@ function MaxModFigure() {
             <Readout label="원판 위 최대 |f|" value={nf(info.max)} color="var(--pos)" />
             <Readout label="그 위치 |z|" value={nf(cabs(info.at), 3)} />
             <Readout label="중심에서 |f(0)|" value={nf(cabs(F.f([0, 0])))} />
-            <Readout label={`끈 점 ${fmtC(probe, 2)}에서 |f|`} value={nf(pv)} />
+            <Readout label={`점 z = ${fmtC(probe, 2)}에서 |f|`} value={nf(pv)} />
           </div>
           <Legend
             items={[
@@ -491,7 +491,7 @@ export default function ContourIntegrals() {
       </p>
       <PowerFigure />
       <p>
-        표의 값은 n = −1만 빼고 모두 반올림 오차 크기(<M>{'10^{-16}'}</M> 정도)입니다. n = −1에서는 6.2832i, 곧 <M>{'2\\pi i'}</M>가 나오고, 반지름을 0.3에서 2.5까지 바꿔도 그대로입니다. 오른쪽 자취를 보면 이유가 보입니다. n = 0, 1, 2에서는 합이 한 바퀴 이상 돌다가 출발점 0으로 돌아오지만, n = −1에서는 조각마다 같은 방향 <M>{'i\\,d\\theta'}</M>를 더해 위로 곧게 올라갑니다.
+        표의 값은 n = −1만 빼고 모두 0입니다. 실제 계산 결과는 <M>{'10^{-16}'}</M> 정도의 반올림 오차입니다. n = −1에서는 6.2832i, 곧 <M>{'2\\pi i'}</M>가 나오고, 반지름을 0.3에서 2.5까지 바꿔도 그대로입니다. 둘째 그림의 자취를 보면 이유가 보입니다. n = 0, 1, 2에서는 합이 한 바퀴 이상 돌다가 출발점 0으로 돌아오지만, n = −1에서는 조각마다 같은 방향 <M>{'i\\,d\\theta'}</M>를 더해 위로 곧게 올라갑니다.
       </p>
       <Proof title="증명.">
         <p>

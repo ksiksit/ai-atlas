@@ -77,3 +77,10 @@
 .ps-tex {
   font-size: var(--fs-sm);
 }
+
+/* domain-colouring canvases stay square so the visible range is the same in x and y */
+.ps-square {
+  width: 100%;
+  max-width: 420px;
+  margin-inline: auto;
+}

@@ -281,11 +281,11 @@ function FlowFigure() {
   const flow = { U: 1, a: 1, gamma };
   const st = stagnation(flow);
 
-  const cylSegs = useMemo(() => contours((x, y) => cylStream({ U: 1, a: 1, gamma }, x, y), -3.2, 3.2, -2.2, 2.2, 160, 110, LEVELS, (x, y) => x * x + y * y < 1).flat(), [gamma]);
+  const cylSegs = useMemo(() => contours((x, y) => cylStream({ U: 1, a: 1, gamma }, x, y), -4.6, 4.6, -2.6, 2.6, 230, 130, LEVELS, (x, y) => x * x + y * y < 1).flat(), [gamma]);
   const foilSegs = useMemo(() => {
     const a: Airfoil = { cx: -thick, cy: camber, alpha: (alphaDeg * Math.PI) / 180, U: 1 };
     const rr = airfoilRadius(a), g = kuttaGamma(a);
-    return contours((x, y) => airfoilStream(a, g, x, y), -3.4, 3.4, -2.6, 2.6, 170, 130, LEVELS, (x, y) => (x - a.cx) ** 2 + (y - a.cy) ** 2 < rr * rr).flat();
+    return contours((x, y) => airfoilStream(a, g, x, y), -4.4, 4.4, -3, 3, 220, 150, LEVELS, (x, y) => (x - a.cx) ** 2 + (y - a.cy) ** 2 < rr * rr).flat();
   }, [thick, camber, alphaDeg]);
 
   const { wrapRef, canvasRef } = useCanvas2D(
@@ -319,7 +319,7 @@ function FlowFigure() {
         p.dot(2, 0, 5.5, P.bad, P.surface);
       }
       p.unclip();
-      p.text(view === 'cyl' ? `Γ = ${gamma.toFixed(2)}` : `Γ = ${kg.toFixed(3)} (쿠타 조건)`, -2.95, 1.9, P.ink3, { align: 'left', base: 'top', font: `11px ${P.fontMono}` });
+      p.text(view === 'cyl' ? `Γ = ${gamma.toFixed(2)}` : `Γ = ${kg.toFixed(3)} (쿠타 조건)`, -2.95, 1.9, P.ink3, { align: 'left', base: 'top', font: `11px ${P.fontMono}`, bg: P.surface });
     },
     [P, view, cylSegs, foilSegs, st, gamma, kg, thick, camber, alphaDeg],
     { aspect: 1.5, maxHeight: 400 },

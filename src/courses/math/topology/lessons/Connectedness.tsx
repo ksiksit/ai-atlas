@@ -327,12 +327,20 @@ function TemperaturePanel() {
         ctx.fill();
         ctx.stroke();
       }
-      ctx.fillStyle = P.ink2;
+      // temperature labels beside each end, pushed off the diameter so they never sit on the line
       ctx.font = `600 11px ${P.fontMono}`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(`${T(th).toFixed(1)}°C`, cx + (R - 34) * Math.cos(th), cy - (R - 34) * Math.sin(th));
-      ctx.fillText(`${T(th + Math.PI).toFixed(1)}°C`, cx + (R - 34) * Math.cos(th + Math.PI), cy - (R - 34) * Math.sin(th + Math.PI));
+      const label = (a: number, s: string) => {
+        const lx = cx + (R - 40) * Math.cos(a) - 14 * Math.sin(a), ly = cy - (R - 40) * Math.sin(a) - 14 * Math.cos(a);
+        const tw = ctx.measureText(s).width;
+        ctx.fillStyle = P.surface;
+        ctx.fillRect(lx - tw / 2 - 3, ly - 8, tw + 6, 16);
+        ctx.fillStyle = P.ink2;
+        ctx.fillText(s, lx, ly);
+      };
+      label(th, `${T(th).toFixed(1)}°C`);
+      label(th + Math.PI, `${T(th + Math.PI).toFixed(1)}°C`);
     },
     [P, T, th, g, range],
     { aspect: 1, maxHeight: 280 },
