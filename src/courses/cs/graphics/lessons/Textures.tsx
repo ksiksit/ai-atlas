@@ -63,7 +63,9 @@ function UVFigure() {
     return fb;
   }, [atlas, mesh, yaw, pitch, dist, persp, face, P]);
 
-  const { wrapRef, canvasRef } = useCanvas2D(
+  const [W, setW] = useState(640);
+  const stackH = (w: number) => Math.min(w, 300) + 34 + ((w - 36) * 96) / 128 + 26;
+  const { wrapRef, canvasRef, size } = useCanvas2D(
     (ctx, { w, h }) => {
       const stack = w < 560;
       const cs = stack ? Math.min(w, 300) : Math.min(h - 26, w * 0.4);
@@ -109,8 +111,11 @@ function UVFigure() {
       ctx.restore();
     },
     [P, cubeFb, atlasFb, face],
-    { height: 300, minHeight: 60 },
+    { height: W < 560 ? Math.round(stackH(W)) : 300, minHeight: 60, maxHeight: 1200 },
   );
+  useEffect(() => {
+    if (size.w !== W) setW(size.w);
+  }, [size.w, W]);
 
   const [c, r] = ATLAS_CELL[face];
   return (
@@ -118,7 +123,7 @@ function UVFigure() {
       no={1}
       title="주사위 하나와 그 전개도"
       hint="주사위를 돌리고, 면을 골라 전개도에서 찾아보세요"
-      caption={<>오른쪽은 텍스처 한 장(128×96 텍셀)이고, 가로가 u, 세로가 v입니다. 정육면체의 꼭짓점 24개는 각자 이 그림 위의 한 점 (u, v)를 기억하고, 삼각형 안쪽의 픽셀은 꼭짓점의 uv를 보간해서 그 자리의 텍셀 색을 가져옵니다. 고른 면은 화면에서는 노랗게, 전개도에서는 굵은 테두리로 표시됩니다. 회색 칸은 어느 면도 쓰지 않는 자리입니다.</>}
+      caption={<>전개도는 텍스처 한 장(128×96 텍셀)이고, 가로가 u, 세로가 v입니다. 정육면체의 꼭짓점 24개는 각자 이 그림 위의 한 점 (u, v)를 기억하고, 삼각형 안쪽의 픽셀은 꼭짓점의 uv를 보간해서 그 자리의 텍셀 색을 가져옵니다. 고른 면은 화면에서는 노랗게, 전개도에서는 굵은 테두리로 표시됩니다. 회색 칸은 어느 면도 쓰지 않는 자리입니다.</>}
     >
       <div ref={wrapRef} className="canvas-box" role="img" aria-label={`정육면체 주사위를 가로 ${yaw}도, 세로 ${pitch}도 돌린 화면과 6개 면이 십자 모양으로 펼쳐진 텍스처. 고른 면은 ${FACE_NAME[face]}, 눈 ${FACE_PIPS[face]}개이며 텍스처에서 가로 ${c + 1}번째, 위에서 ${r + 1}번째 칸입니다.${persp ? '' : ' 원근 보정을 꺼서 면 위의 직선이 휘어 보입니다.'}`}>
         <canvas ref={canvasRef} />
@@ -147,7 +152,7 @@ function MagnifyFigure() {
   const P = usePalette();
   const [zoom, setZoom] = useState(8);
   const tex = useMemo(() => {
-    const brick = mix(cssToRgb(P.neg), [0.5, 0.25, 0.2], 0.4);
+    const brick = mix(cssToRgb(P.bad), [0.55, 0.25, 0.2], 0.4);
     return bricks(16, brick, [0.88, 0.86, 0.8], mix(brick, [0, 0, 0], 0.3));
   }, [P]);
   const fbs = useMemo(

@@ -345,7 +345,7 @@ function HickPlot({ results }: { results: Partial<Record<Choice, number[]>> }) {
       <div className="readouts">
         <Readout label="a (기본 시간)" value={fit ? ms(fit.a) : '–'} />
         <Readout label="b (비트당 시간)" value={fit ? `${Math.round(fit.b)}ms/비트` : '–'} color="var(--accent)" />
-        <Readout label="직선이 설명하는 정도 r²" value={fit ? fit.r2.toFixed(3) : '–'} />
+        <Readout label="r²" value={fit ? fit.r2.toFixed(3) : '–'} />
       </div>
       <Legend
         items={[

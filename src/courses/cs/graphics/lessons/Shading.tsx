@@ -209,7 +209,7 @@ function LambertFigure() {
       no={1}
       title="비스듬히 비추면 어두워지는 이유"
       hint="노란 광원을 끌거나 슬라이더를 움직이세요"
-      caption={<>같은 굵기의 빛다발(노란 선 다섯 줄)이 비스듬히 들어오면 표면에 닿는 폭이 1/cos θ배로 넓어집니다. 같은 양의 빛이 넓게 퍼지므로 넓이당 받는 빛은 cos θ배가 됩니다. 표면의 노란 띠가 진할수록 밝습니다. 오른쪽 그래프는 θ에 따른 cos θ입니다.</>}
+      caption={<>같은 굵기의 빛다발(노란 선 다섯 줄)이 비스듬히 들어오면 표면에 닿는 폭이 1/cos θ배로 넓어집니다. 같은 양의 빛이 넓게 퍼지므로 넓이당 받는 빛은 cos θ배가 됩니다. 표면의 노란 띠가 진할수록 밝습니다. 곡선 그래프는 θ에 따른 cos θ입니다.</>}
     >
       <div ref={wrapRef} className="canvas-box grab" role="img" aria-label={`표면에 수직인 법선 n과 광원 쪽을 가리키는 l 사이의 각도가 ${deg}도입니다. n·l = cos θ = ${cos.toFixed(2)}이고, 빛이 닿는 폭은 정면일 때의 ${(1 / cos).toFixed(2)}배입니다.`}>
         <canvas ref={canvasRef} />
