@@ -511,7 +511,7 @@ function StiffFigure() {
       if (narrow) ctx.translate(0, lh);
       else ctx.translate(lw, 0);
       const rw = narrow ? w : w - lw, rh = narrow ? H - lh : H;
-      const zp = new Plot(ctx, rw, rh, P, { xMin: -5.5, xMax: 2.5, yMin: -3.5, yMax: 3.5, pad: { l: 26, r: 10, t: 12, b: 24 }, equal: true });
+      const zp = new Plot(ctx, rw, rh, P, { xMin: -5.5, xMax: 2.5, yMin: -3.5, yMax: 3.5, pad: { l: 26, r: 10, t: 12, b: 24 }, equal: !narrow });
       const [fr, fg, fb] = rgbOf(P.good);
       zp.heatmap((x, y) => (amplification(reg, x, y) <= 1 ? [fr, fg, fb, 70] : [0, 0, 0, 0]), 3);
       zp.grid({ xStep: 1, yStep: 1, xLabel: 'Re hλ', yLabel: 'Im hλ' });
