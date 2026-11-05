@@ -1,0 +1,125 @@
+/* 데이터 병렬과 GPU: figure styles that are plain HTML rather than canvas */
+
+/* ── SIMD lanes: three rows of 32 cells (a, b, c) ── */
+.dp-vec {
+  display: grid;
+  grid-template-columns: 28px repeat(16, minmax(0, 1fr));
+  gap: 3px;
+  min-width: 0;
+}
+.dp-vec .row-l {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ink-3);
+  align-self: center;
+}
+.dp-cell {
+  display: grid;
+  place-items: center;
+  height: 26px;
+  min-width: 0;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.dp-cell[data-done] {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--c-cs-2) 14%, var(--surface));
+}
+.dp-cell[data-now] {
+  color: var(--surface);
+  background: var(--c-cs-2);
+  border-color: var(--c-cs-2);
+}
+.dp-vec .gap {
+  grid-column: 1 / -1;
+  height: 6px;
+}
+
+/* ── warps: 32 lane squares per warp, plus a cycle bar ── */
+.dp-warps {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+.dp-warp {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr);
+  gap: 4px 10px;
+  align-items: center;
+}
+.dp-warp .wl {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ink-3);
+}
+.dp-lanes {
+  display: grid;
+  grid-template-columns: repeat(32, minmax(0, 1fr));
+  gap: 1px;
+}
+.dp-lane {
+  height: 14px;
+  background: var(--c);
+}
+.dp-lane[data-off] {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c) 55%, transparent);
+}
+.dp-bar {
+  grid-column: 2;
+  display: flex;
+  height: 12px;
+  background: var(--surface-2);
+}
+.dp-bar span {
+  display: block;
+  height: 100%;
+  background: var(--c);
+}
+.dp-bar span + span {
+  border-left: 1px solid var(--surface);
+}
+.dp-bar-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 4.5em;
+  gap: 8px;
+  align-items: center;
+  grid-column: 2;
+}
+.dp-bar-row .cy {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ink-2);
+  text-align: right;
+}
+.dp-bar-row .cy[data-bad] {
+  color: var(--bad);
+}
+.dp-code {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  padding: 8px 10px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  overflow-x: auto;
+  white-space: pre;
+}
+
+@media (max-width: 480px) {
+  .dp-vec {
+    grid-template-columns: 22px repeat(16, minmax(0, 1fr));
+    gap: 2px;
+  }
+  .dp-cell {
+    height: 22px;
+    font-size: 0.5625rem;
+  }
+  .dp-warp {
+    grid-template-columns: 40px minmax(0, 1fr);
+  }
+}

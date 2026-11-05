@@ -1,0 +1,21 @@
+/* 일관성과 CAP: quorum grid and the list of session reads */
+
+.cn-grid canvas {
+  cursor: pointer;
+}
+.cn-reads {
+  margin: 0;
+  padding-left: 22px;
+  font-size: var(--fs-xs);
+  color: var(--ink-2);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr));
+  gap: 2px 16px;
+}
+.cn-reads li[data-bad] {
+  color: var(--bad);
+}
+.cn-reads .mono {
+  color: var(--ink-3);
+  margin-right: 4px;
+}

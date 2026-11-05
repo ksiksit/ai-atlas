@@ -5,6 +5,7 @@ const parts: Part[] = [
   { id: 'processes', title: '프로세스와 스케줄링', en: 'Processes & Scheduling', color: 'var(--c-cs-1)', blurb: '실행 중인 프로그램을 나누고, 누구에게 CPU를 줄지 정하는 법.' },
   { id: 'concurrency', title: '동시성', en: 'Concurrency', color: 'var(--c-cs-3)', blurb: '여러 흐름이 같은 데이터를 건드릴 때 생기는 문제와 막는 법.' },
   { id: 'storage', title: '메모리와 저장', en: 'Memory & Storage', color: 'var(--c-cs-4)', blurb: '프로그램마다 자기만의 메모리가 있는 것처럼 보이게 하고, 디스크에 파일을 담는 법.' },
+  { id: 'protection', title: '보호와 보안', en: 'Protection & Security', color: 'var(--c-cs-2)', blurb: '프로그램이 커널과 다른 프로그램을 건드리지 못하게 막는 장치, 그리고 그 벽을 넘으려는 공격.' },
 ];
 
 const lessons: Lesson[] = [
@@ -53,16 +54,25 @@ const lessons: Lesson[] = [
     learn: ['블록과 아이노드', '디렉터리와 경로 찾기', '충돌 복구와 저널링'],
     Component: lazy(() => import('./lessons/FileSystems')),
   },
+  {
+    id: 'protection',
+    part: 'protection',
+    title: '보호와 보안',
+    en: 'Protection & Security',
+    lede: '버그 있는 프로그램 하나가 컴퓨터 전체를 망가뜨리지 못하는 것은 CPU와 운영체제가 세운 벽 덕분입니다. 사용자 모드와 커널 모드, 시스템 호출을 따라가고, 버퍼 오버플로로 그 벽을 넘으려는 공격과 막는 장치를 봅니다.',
+    learn: ['사용자 모드, 커널 모드, 시스템 호출', '버퍼 오버플로와 반환 주소 덮어쓰기', '스택 카나리아, 실행 금지 비트, ASLR, 최소 권한'],
+    Component: lazy(() => import('./lessons/Protection')),
+  },
 ];
 
 const course: Course = {
   id: 'cs-operating-systems',
   subject: 'cs',
   title: '운영체제',
-  subtitle: '프로세스에서 파일 시스템까지',
+  subtitle: '프로세스에서 보안까지',
   level: 2,
   prerequisites: ['cs-architecture'],
-  blurb: 'CPU 하나와 메모리 한 덩어리로 수십 개의 프로그램을 동시에 돌리는 소프트웨어를 다룹니다. 프로세스와 스레드, CPU 스케줄링, 경쟁 조건과 락, 가상 메모리와 페이징, 파일 시스템을 시뮬레이션으로 따라갑니다.',
+  blurb: 'CPU 하나와 메모리 한 덩어리로 수십 개의 프로그램을 동시에 돌리는 소프트웨어를 다룹니다. 프로세스와 스레드, CPU 스케줄링, 경쟁 조건과 락, 가상 메모리와 페이징, 파일 시스템, 보호와 보안을 시뮬레이션으로 따라갑니다.',
   parts,
   lessons,
   Cover: lazy(() => import('./Cover')),

@@ -1,0 +1,95 @@
+/* 시간과 순서: space-time diagram tools and the replicated shopping cart */
+
+.ck-diagram canvas {
+  cursor: pointer;
+}
+.ck-diagram[data-mode='event'] canvas,
+.ck-diagram[data-mode='msg'] canvas {
+  cursor: crosshair;
+}
+.ck-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px 24px;
+  margin-block: 10px 12px;
+}
+.ck-send {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 8px;
+}
+.ck-send label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.ck-send select {
+  font: inherit;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  padding: 4px 6px;
+  min-height: 30px;
+}
+
+.ck-reps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: 12px;
+  margin-block: 12px;
+}
+.ck-rep {
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--c);
+  background: var(--surface);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  min-height: 96px;
+}
+.ck-rep-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  font-size: var(--fs-sm);
+}
+.ck-rep-head strong {
+  color: var(--c);
+}
+.ck-rep-head span {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.ck-rep-head span[data-bad] {
+  color: var(--bad);
+  font-weight: 600;
+}
+.ck-ver {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding-top: 6px;
+  border-top: 1px dashed var(--line);
+}
+.ck-vec {
+  font-size: 0.8125rem;
+  color: var(--ink-2);
+  min-width: 4.4em;
+}
+.ck-log {
+  margin: 0 0 8px;
+  padding-left: 22px;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  columns: 2 220px;
+}

@@ -1,0 +1,181 @@
+/* 복제와 합의: the Raft lesson's logs, event list and cluster canvas. */
+
+.rf-canvas {
+  cursor: pointer;
+}
+
+/* logs, one row per server and one column per log index */
+.rf-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+.rf-row {
+  display: grid;
+  grid-template-columns: 9.5rem 1fr auto;
+  align-items: center;
+  gap: 10px;
+  width: max-content;
+  min-width: 100%;
+}
+.rf-row[data-dead] .rf-cells {
+  opacity: 0.5;
+}
+.rf-who {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+.rf-who b {
+  display: inline-grid;
+  place-items: center;
+  min-width: 2.2em;
+  height: 22px;
+  padding: 0 4px;
+  border: 1.5px solid var(--ink);
+  border-radius: 11px;
+  color: var(--ink);
+  font-size: 0.75rem;
+}
+.rf-who b[data-role='leader'] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--surface);
+}
+.rf-who b[data-role='candidate'] {
+  background: var(--hl);
+  border-color: var(--ink);
+  color: var(--ink);
+}
+.rf-who b[data-role='dead'] {
+  border-color: var(--line-strong);
+  color: var(--ink-3);
+  text-decoration: line-through;
+}
+.rf-head .rf-who {
+  font-weight: 600;
+}
+.rf-cells {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+.rf-idx,
+.rf-cell,
+.rf-more {
+  flex: 0 0 auto;
+  width: 30px;
+  text-align: center;
+}
+.rf-idx {
+  font-size: 0.6875rem;
+  color: var(--ink-3);
+  border-bottom: 2px solid transparent;
+}
+.rf-idx[data-mark='on'] {
+  color: var(--ink);
+  font-weight: 700;
+  border-bottom-color: var(--hl);
+}
+.rf-idx[data-mark='bad'] {
+  color: var(--bad);
+  font-weight: 700;
+  border-bottom-color: var(--bad);
+}
+.rf-more {
+  color: var(--ink-3);
+  font-size: var(--fs-xs);
+  width: 14px;
+}
+.rf-cell {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 1px;
+  height: 28px;
+  line-height: 25px;
+  border: 1.5px solid var(--c, var(--line));
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
+.rf-cell b {
+  font-weight: 700;
+}
+.rf-cell i {
+  font-style: normal;
+  font-size: 0.6875rem;
+  opacity: 0.8;
+}
+.rf-cell[data-empty] {
+  border: 1px dashed var(--line);
+  background: transparent;
+}
+.rf-cell[data-on] {
+  background: var(--c);
+  color: var(--surface);
+}
+.rf-cell[data-mark='on'] {
+  box-shadow: 0 0 0 2px var(--hl);
+}
+.rf-cell[data-mark='bad'] {
+  box-shadow: 0 0 0 2px var(--bad);
+}
+.rf-sample {
+  display: inline-flex;
+  width: 24px;
+  height: 20px;
+  line-height: 17px;
+  vertical-align: -4px;
+  margin: 0 2px;
+}
+.rf-key {
+  max-width: 44rem;
+}
+
+/* latest events, newest first */
+.rf-events {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 6.6em;
+  font-size: var(--fs-sm);
+  color: var(--ink-3);
+}
+.rf-events > div {
+  display: grid;
+  grid-template-columns: 4.6em minmax(0, 1fr);
+  gap: 8px;
+  overflow-wrap: anywhere;
+}
+.rf-events > div[data-latest] {
+  color: var(--ink);
+}
+.rf-events > div[data-latest][data-kind='commit'] {
+  color: var(--good);
+}
+.rf-events > div[data-latest][data-kind='overwrite'],
+.rf-events > div[data-latest][data-kind='noleader'] {
+  color: var(--bad);
+}
+.rf-events .mono {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  padding-top: 2px;
+}
+
+@media (max-width: 560px) {
+  .rf-row {
+    grid-template-columns: 6.6rem 1fr auto;
+  }
+  .rf-who span {
+    white-space: normal;
+    line-height: 1.3;
+  }
+}

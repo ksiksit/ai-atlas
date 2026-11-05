@@ -1,0 +1,34 @@
+/* 병렬·분산 컴퓨팅, 2장: 일과 경로 */
+
+.ws-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-xs);
+  font-variant-numeric: tabular-nums;
+}
+.ws-table th,
+.ws-table td {
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--line);
+  text-align: right;
+  white-space: nowrap;
+}
+.ws-table th {
+  color: var(--ink-3);
+  font-weight: 500;
+}
+.ws-table td {
+  font-family: var(--font-mono);
+}
+.ws-table th:first-child,
+.ws-table td:first-child {
+  text-align: left;
+  font-family: var(--font-body);
+}
+.ws-table tr[data-c] td:first-child {
+  color: var(--c);
+  font-weight: 600;
+}
+.ws-table-wrap {
+  overflow-x: auto;
+}

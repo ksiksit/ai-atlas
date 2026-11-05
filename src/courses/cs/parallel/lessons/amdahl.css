@@ -1,0 +1,38 @@
+/* 병렬·분산 컴퓨팅, 1장: 병렬성과 암달의 법칙 */
+
+.am-status {
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  min-height: 3.2em;
+  overflow-wrap: anywhere;
+}
+.am-status[data-bad] {
+  color: var(--bad);
+}
+.am-table {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-variant-numeric: tabular-nums;
+  width: 100%;
+  border-collapse: collapse;
+}
+.am-table th,
+.am-table td {
+  padding: 3px 6px;
+  border-bottom: 1px solid var(--line);
+  text-align: right;
+  white-space: nowrap;
+}
+.am-table th {
+  color: var(--ink-3);
+  font-weight: 500;
+  font-family: var(--font-body);
+}
+.am-table td:first-child,
+.am-table th:first-child {
+  text-align: left;
+}
+.am-table-wrap {
+  max-height: 260px;
+  overflow: auto;
+}
