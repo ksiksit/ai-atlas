@@ -276,6 +276,9 @@
   position: relative;
 }
 .mj-grid {
+  /* above the arrows, so an arrow that skips a column passes behind the cards in between */
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: 120px repeat(3, minmax(0, 1fr));
   column-gap: 44px;
@@ -446,6 +449,7 @@
 
 .mj-links {
   position: absolute;
+  z-index: 0;
   inset: 0;
   overflow: visible;
   pointer-events: none;
