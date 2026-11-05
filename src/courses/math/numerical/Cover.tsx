@@ -75,7 +75,7 @@ function RaceHero() {
 
   const { wrapRef, canvasRef } = useCanvas2D(
     (ctx, { w, h }) => {
-      const pad = { l: 34, r: 10, t: 14, b: 30 };
+      const pad = { l: 34, r: 10, t: 26, b: 30 };
       const X = (i: number) => pad.l + (i / MAX_STEPS) * (w - pad.l - pad.r);
       const Y = (d: number) => pad.t + (1 - d / MAX_DIGITS) * (h - pad.t - pad.b);
       ctx.strokeStyle = P.grid;
@@ -96,8 +96,9 @@ function RaceHero() {
       for (const i of [0, 10, 20, 30, 40, 50]) ctx.fillText(String(i), X(i), h - pad.b + 6);
       ctx.textAlign = 'left';
       ctx.fillText('반복 횟수', pad.l, h - pad.b + 18);
-      ctx.textBaseline = 'bottom';
-      ctx.fillText('맞는 자릿수', pad.l + 4, pad.t + 10);
+      // the axis title sits above the plot so it never meets the dashed ceiling
+      ctx.textBaseline = 'middle';
+      ctx.fillText('맞는 자릿수', pad.l, 10);
       // the ceiling a double can reach
       ctx.setLineDash([4, 4]);
       ctx.strokeStyle = alpha(P.ink3, 0.8);
