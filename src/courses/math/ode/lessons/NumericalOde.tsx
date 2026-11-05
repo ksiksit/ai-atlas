@@ -188,7 +188,7 @@ const STAGE_NOTE = [
   '④ k₃을 따라 한 걸음 끝까지 간 점에서 k₄를 잽니다.',
   '⑤ 네 기울기를 1 : 2 : 2 : 1로 평균 내어 한 걸음을 갑니다.',
 ];
-const STAGE_CSS = ['var(--pos)', 'var(--good)', 'var(--neg)', 'var(--c-math-3)'];
+const STAGE_CSS = ['var(--pos)', 'var(--good)', 'var(--c-stats-2)', 'var(--ink-2)'];
 
 function StagesFigure() {
   const P = usePalette();
@@ -218,7 +218,7 @@ function StagesFigure() {
         }
       pl.fn(testExact, P.ink, 2, { from: 0, to: 1.1 });
       pl.line(h, -0.05, h, 1.15, alpha(P.ink3, 0.6), 1, [3, 3]);
-      const colors = [P.pos, P.good, P.neg, P.math];
+      const colors = [P.pos, P.good, P.stats2, P.ink2];
       const shown = Math.min(4, k + 1);
       for (let s = 0; s < shown; s++) {
         const g = r.stages[s];
@@ -302,15 +302,13 @@ function OrderFigure() {
   const { wrapRef, canvasRef } = useCanvas2D(
     (ctx, { w, h }) => {
       const pl = new Plot(ctx, w, h, P, { xMin: Math.log10(0.012), xMax: Math.log10(0.6), yMin: -10.5, yMax: 0, pad: { l: 44, r: 12, t: 12, b: 26 } });
-      logFrame(pl, P, '보폭 h', 't = 2에서의 오차', [-1], [-10, -8, -6, -4, -2, 0]);
+      logFrame(pl, P, '보폭 h', 't = 2에서의 오차', [], [-10, -8, -6, -4, -2, 0]);
       // minor x ticks for the step sizes used
       ctx.fillStyle = P.ink3;
       ctx.font = `10px ${P.fontMono}`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'top';
-      for (const hh of [0.5, 0.25, 0.125, 0.0625, 0.03125, 0.015625]) {
-        if (hh === 0.125 || hh === 0.5 || hh === 0.03125) ctx.fillText(hh === 0.5 ? '½' : hh === 0.125 ? '⅛' : '1/32', pl.X(Math.log10(hh)), pl.pad.t + pl.ph + 5);
-      }
+      for (const hh of HS) ctx.fillText(`1/${Math.round(1 / hh)}`, pl.X(Math.log10(hh)), pl.pad.t + pl.ph + 5);
       pl.line(Math.log10(pick.h), -10.5, Math.log10(pick.h), 0, alpha(P.ink3, 0.6), 1, [3, 3]);
       const cols: Record<Method, string> = { euler: P.pos, heun: P.good, rk4: P.accent };
       for (const m of ['euler', 'heun', 'rk4'] as Method[]) {
@@ -339,7 +337,7 @@ function OrderFigure() {
       hint="표시할 보폭을 고르세요"
       caption={
         <>
-          <M>{"y' = t - y,\\; y(0)=1"}</M>을 t = 2까지 풀고, 정확한 값 <M>{'1 + 2e^{-2}'}</M>와의 차이를 보폭마다 쟀습니다. 두 축이 모두 로그 눈금이라 <M>{'\\text{오차} \\approx C h^p'}</M>는 기울기 p인 직선이 됩니다. 이름 옆의 수는 여섯 점에 맞춘 직선의 기울기입니다. 직선 왼쪽 끝이 RK4에서 조금 휘는 것은 오차가 이미 10⁻¹⁰ 근처라 다른 오차가 섞이기 시작하기 때문입니다.
+          <M>{"y' = t - y,\\; y(0)=1"}</M>을 t = 2까지 풀고, 정확한 값 <M>{'1 + 2e^{-2}'}</M>와의 차이를 보폭마다 쟀습니다. 두 축이 모두 로그 눈금이라 <M>{'\\text{오차} \\approx C h^p'}</M>는 기울기 p인 직선이 됩니다. 이름 옆의 수는 여섯 점에 맞춘 직선의 기울기입니다. RK4의 기울기가 4보다 조금 큰 것은 보폭이 아직 충분히 작지 않아 다음 차수의 항이 섞여 있기 때문으로, 보폭을 반으로 줄일 때마다 오차는 19.8, 17.8, 16.9, 16.4, 16.2배로 줄어 2⁴ = 16에 다가갑니다.
         </>
       }
     >
@@ -603,7 +601,7 @@ export default function NumericalOde() {
         맞춘 기울기는 오일러 1.02, 호인 2.11, RK4 4.11로 이론값 1, 2, 4에 가깝습니다. 차이를 실감하려면 같은 정확도를 얻는 데 드는 계산을 세 보면 됩니다. t = 2에서 오차를 10⁻⁶ 아래로 낮추려면, 보폭을 1에서 시작해 반씩 줄였을 때 오일러는 걸음 1,048,576개(f 계산 1,048,576번)가, 호인은 1,024걸음(2,048번)이, RK4는 32걸음(128번)이 필요합니다. 한 걸음이 비싸도 차수가 높은 방법이 압도적으로 쌉니다.
       </p>
       <Callout kind="note">
-        보폭을 끝없이 줄인다고 오차가 끝없이 줄지는 않습니다. 걸음 수가 늘면 걸음마다 섞이는 반올림 오차가 쌓이기 때문입니다. 그림 3에서 RK4의 왼쪽 끝이 10⁻¹⁰ 근처에서 기울기가 살짝 꺾이는 것이 그 시작입니다. 컴퓨터가 수를 담는 방식과 반올림 오차는 <a href={lessonHref('math-numerical-analysis', 'floating-point')}>수치해석</a>에서 자세히 다룹니다.
+        보폭을 끝없이 줄인다고 오차가 끝없이 줄지는 않습니다. 걸음 수가 늘면 걸음마다 섞이는 반올림 오차가 쌓이기 때문입니다. 그림 3의 문제에서 RK4는 보폭을 1/2048(약 0.0005)까지 줄이면 오차가 6.7×10⁻¹⁶으로 배정밀도 수의 한계에 닿고, 그보다 더 줄이면 오차가 오히려 10⁻¹⁵와 10⁻¹⁴ 사이를 오르내립니다. 컴퓨터가 수를 담는 방식과 반올림 오차는 <a href={lessonHref('math-numerical-analysis', 'floating-point')}>수치해석</a>에서 자세히 다룹니다.
       </Callout>
 
       <h2>보폭을 스스로 고르기</h2>

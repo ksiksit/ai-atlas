@@ -116,7 +116,7 @@ function SimpsonFigure() {
       hint="함수를 바꿔 기울기가 어떻게 달라지는지 보세요"
       caption={
         <>
-          왼쪽(좁은 화면에서는 위)은 구간을 n개로 나누고 두 조각마다 세 점을 지나는 포물선을 그어 그 아래 넓이를 더하는 심프슨 공식입니다. 점선이 원래 함수입니다. 오른쪽은 n을 2부터 1,024까지 두 배씩 늘릴 때 오차를 로그-로그 눈금으로 그린 것으로, 회색 점선이 사다리꼴 공식, 파란 선이 심프슨 공식입니다. 기울기가 −k이면 n을 두 배로 할 때 오차가 <M>{'2^k'}</M>분의 1로 줄어듭니다.
+          왼쪽(좁은 화면에서는 위)은 구간을 n개로 나누고 두 조각마다 세 점을 지나는 포물선을 그어 그 아래 넓이를 더하는 심프슨 공식입니다. 점선이 원래 함수입니다. 오른쪽(좁은 화면에서는 아래)은 n을 2부터 1,024까지 두 배씩 늘릴 때 오차를 로그-로그 눈금으로 그린 것으로, 회색 점선이 사다리꼴 공식, 파란 선이 심프슨 공식입니다. 기울기가 −k이면 n을 두 배로 할 때 오차가 <M>{'2^k'}</M>분의 1로 줄어듭니다.
         </>
       }
     >
@@ -244,7 +244,7 @@ function GaussFigure() {
       });
     },
     [P, fn, gl],
-    { aspect: 2.2, maxHeight: 300, minHeight: 40 },
+    { aspect: NARROW ? 1.3 : 2.2, maxHeight: 300, minHeight: 40 },
   );
 
   return (
@@ -329,7 +329,7 @@ function AdaptiveFigure() {
       });
     },
     [P, A],
-    { aspect: 2.4, maxHeight: 280, minHeight: 40 },
+    { aspect: NARROW ? 1.4 : 2.4, maxHeight: 280, minHeight: 40 },
   );
 
   const missed = A.evals <= 9;
@@ -409,7 +409,7 @@ function DimensionFigure() {
       p.text('차원 d', 12.9, -9, P.ink3, { dy: -10, align: 'right', font: `11px ${P.fontBody}` });
     },
     [P, grid, rms, one],
-    { aspect: 2.2, maxHeight: 300, minHeight: 40 },
+    { aspect: NARROW ? 1.3 : 2.2, maxHeight: 300, minHeight: 40 },
   );
 
   return (

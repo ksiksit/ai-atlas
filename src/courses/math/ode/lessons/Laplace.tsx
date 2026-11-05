@@ -58,7 +58,7 @@ function DefinitionFigure() {
       pb.unclip();
       pb.line(s, 0, s, Math.min(exact, fmax * 1.1), alpha(P.accent, 0.6), 1.5, [3, 3]);
       pb.dot(s, Math.min(exact, fmax * 1.1), 5, P.accent, P.surface, 2);
-      pb.text('F(s)', sMin, Math.min(pair.F(sMin), fmax * 1.05), P.ink2, { dx: 6, dy: 2, font: `600 11px ${P.fontMono}` });
+      pb.text('F(s)', sMax, fmax * 1.1, P.ink2, { align: 'right', dx: -4, dy: 8, font: `600 11px ${P.fontMono}`, bg: P.surface });
       ctx.restore();
     },
     [P, pair, s, exact],
@@ -114,12 +114,12 @@ function DefinitionFigure() {
 const STEPS: { title: string; tex: string; note: string }[] = [
   {
     title: '문제',
-    tex: "y'' + 3y' + 2y = 1, \\qquad y(0) = 1,\\; y'(0) = 0",
+    tex: "\\begin{gathered} y'' + 3y' + 2y = 1 \\\\ y(0) = 1,\\; y'(0) = 0 \\end{gathered}",
     note: '처음 위치 1에서 정지해 있던 추가, 크기 1인 힘을 계속 받습니다. 감쇠가 커서 진동하지 않는 계입니다.',
   },
   {
     title: '양변을 변환',
-    tex: "\\bigl(s^2 Y - s\\cdot 1 - 0\\bigr) + 3\\bigl(sY - 1\\bigr) + 2Y = \\frac{1}{s}",
+    tex: "\\begin{gathered} \\bigl(s^2 Y - s\\cdot 1 - 0\\bigr) + 3\\bigl(sY - 1\\bigr) \\\\ {} + 2Y = \\frac{1}{s} \\end{gathered}",
     note: '미분 규칙 L{y′} = sY − y(0), L{y″} = s²Y − s y(0) − y′(0)를 씁니다. 처음 조건이 이 단계에서 식 안으로 들어옵니다.',
   },
   {
@@ -252,7 +252,7 @@ function PolesFigure() {
       const planeW = narrow ? w : Math.round(w * 0.4);
       const planeH = narrow ? Math.round(h * 0.45) : h;
       // s-plane
-      const sp = new Plot(ctx, planeW, planeH, P, { xMin: SIG_MIN - 0.2, xMax: SIG_MAX + 0.2, yMin: -OM_MAX - 0.2, yMax: OM_MAX + 0.2, pad: { l: 30, r: 10, t: 12, b: 24 }, equal: true });
+      const sp = new Plot(ctx, planeW, planeH, P, { xMin: SIG_MIN - 0.2, xMax: SIG_MAX + 0.2, yMin: -OM_MAX - 0.2, yMax: OM_MAX + 0.2, pad: { l: 30, r: 10, t: 12, b: 24 }, equal: !narrow });
       ctx.fillStyle = alpha(P.good, 0.07);
       ctx.fillRect(sp.pad.l, sp.pad.t, sp.X(0) - sp.pad.l, sp.ph);
       ctx.fillStyle = alpha(P.bad, 0.07);

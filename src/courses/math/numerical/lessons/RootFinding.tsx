@@ -43,11 +43,11 @@ function RaceFigure() {
 
   const cell = (m: MethodId, j: number) => {
     const r = runs[m];
-    if (!r.xs.length) return <td className="na">구간 없음</td>;
-    if (j >= r.xs.length) return <td className="na">멈춤</td>;
+    if (!r.xs.length) return <td key={m} className="na">구간 없음</td>;
+    if (j >= r.xs.length) return <td key={m} className="na">멈춤</td>;
     const d = r.digits[j];
     return (
-      <td>
+      <td key={m}>
         <span className="x">{r.xs[j].toPrecision(12)}</span>
         <span className="dig">
           <span className="bar" style={{ width: Math.max(1, d * 3), ['--c' as string]: METHODS.find((q) => q.id === m)!.css }} />

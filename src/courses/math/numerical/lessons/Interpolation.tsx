@@ -361,7 +361,7 @@ function SplineFigure() {
       pts.forEach((q) => p.dot(q.x, q.y, 4.5, P.good, P.surface, 1.5));
     },
     [P, s, poly, showPoly, n],
-    { aspect: 2.0, maxHeight: 320, minHeight: 40 },
+    { aspect: NARROW ? 1.4 : 2.0, maxHeight: 320, minHeight: 40 },
   );
 
   return (

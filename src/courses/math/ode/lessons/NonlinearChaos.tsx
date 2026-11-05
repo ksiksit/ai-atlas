@@ -298,7 +298,7 @@ function LorenzFigure() {
   const twins = useMemo(() => lorenzTwins(LZ_T, LZ_H), []);
   const ts = useMemo(() => twins.logd.map((_, i) => i * LZ_H), [twins]);
   const fit = useMemo(() => slope(ts, twins.logd, 2, 20), [ts, twins]);
-  const [yaw, setYaw] = useState(0.6);
+  const [yaw, setYaw] = useState(0.15);
   const [playing, setPlaying] = useState(!still);
   const t = useRef(still ? LZ_T : 0);
   const [, setTick] = useState(0);
@@ -347,7 +347,16 @@ function LorenzFigure() {
       }
       // log10 of the distance between the twins
       const pl = new Plot(ctx, w, h, P, { xMin: 0, xMax: LZ_T, yMin: -9, yMax: 2, pad: { l: 40, r: 10, t: topH + 8, b: 26 } });
-      pl.grid({ xStep: 5, yStep: 2, labels: true, axes: false, fmt: (v) => `10^${String(Math.round(v)).replace('-', '−')}` });
+      pl.grid({ xStep: 5, yStep: 2, labels: false, axes: false });
+      // tick labels by hand: time below, powers of ten on the left
+      ctx.fillStyle = P.ink3;
+      ctx.font = `10px ${P.fontMono}`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+      for (let v = 0; v <= LZ_T; v += 10) ctx.fillText(String(v), pl.X(v), pl.Y(-9) + 5);
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+      for (let v = -8; v <= 2; v += 2) ctx.fillText(`10^${String(v).replace('-', '−')}`, pl.X(0) - 4, pl.Y(v));
       pl.clip();
       ctx.strokeStyle = P.ink;
       ctx.lineWidth = 1.5;
@@ -407,7 +416,7 @@ function LorenzFigure() {
       <div className="readouts">
         <Readout label="시각 t" value={nf(t.current, 1)} />
         <Readout label="두 점 사이 거리" value={sci(dNow)} color={dNow > 1 ? 'var(--bad)' : undefined} />
-        <Readout label="맞춘 직선의 기울기" value={`${nf(fit, 3)} (자릿수/시간)`} />
+        <Readout label="직선의 기울기 (자릿수/시간)" value={nf(fit, 3)} />
       </div>
     </Figure>
   );

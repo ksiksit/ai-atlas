@@ -46,16 +46,6 @@ function drawPortrait(pl: Plot, P: Palette, A: M2, R: number) {
     const ux = (vx / s) * L, uy = (vy / s) * L;
     pl.arrow(x - ux / 2, y - uy / 2, x + ux / 2, y + uy / 2, alpha(P.ink3, 0.25 + 0.45 * (s / vmax)), 1.2, 5);
   }
-  // straight-line solutions along real eigenvectors: green if they flow in, red if they flow out
-  const e = eig(A);
-  if (e.real) {
-    for (const l of e.l1 === e.l2 ? [e.l1] : [e.l1, e.l2]) {
-      const v = eigvec(A, l);
-      if (!v) continue;
-      const c = Math.abs(l) < 1e-9 ? P.ink3 : l < 0 ? P.good : P.bad;
-      pl.line(-v[0] * R * 2, -v[1] * R * 2, v[0] * R * 2, v[1] * R * 2, alpha(c, 0.85), 2.5, [7, 5]);
-    }
-  }
   // trajectories, with an arrowhead halfway along each in the direction of time
   for (const line of portrait(A, R)) {
     if (line.length < 2) continue;
@@ -70,6 +60,16 @@ function drawPortrait(pl: Plot, P: Palette, A: M2, R: number) {
       const k = Math.floor(vis.length / 2);
       const [x1, y1] = vis[k - 1], [x2, y2] = vis[k];
       if (Math.hypot(x2 - x1, y2 - y1) > 1e-6) pl.arrow(x1, y1, x2, y2, P.accent, 1.6, 7);
+    }
+  }
+  // straight-line solutions along real eigenvectors: green if they flow in, red if they flow out
+  const e = eig(A);
+  if (e.real) {
+    for (const l of e.l1 === e.l2 ? [e.l1] : [e.l1, e.l2]) {
+      const v = eigvec(A, l);
+      if (!v) continue;
+      const c = Math.abs(l) < 1e-9 ? P.ink3 : l < 0 ? P.good : P.bad;
+      pl.line(-v[0] * R * 2, -v[1] * R * 2, v[0] * R * 2, v[1] * R * 2, alpha(c, 0.85), 2.5, [7, 5]);
     }
   }
   pl.unclip();
@@ -212,8 +212,8 @@ function TraceDetFigure() {
       lab('안장점', 0, -1.8);
       lab('안정 나선', -1.2, 3.8);
       lab('불안정 나선', 1.2, 3.8);
-      lab('안정 마디', -3.2, 1.3);
-      lab('불안정 마디', 3.2, 1.3);
+      lab('안정 마디', -2.9, 1.3);
+      lab('불안정 마디', 2.9, 1.3);
       pl.text('중심 (τ = 0)', 0, DMAX, P.ink2, { dy: 10, dx: 4, align: 'left', font: `600 10px ${P.fontBody}` });
       pl.text('τ² = 4Δ', 3.6, 3.24, P.ink3, { dx: -4, dy: -10, align: 'right', font: `10px ${P.fontMono}` });
       pl.dot(tau, del, 8, P.accent, P.surface, 2.5);

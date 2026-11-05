@@ -192,10 +192,14 @@ function MomentumFigure() {
 
   const { wrapRef, canvasRef } = useCanvas2D(
     (ctx, { w, h }) => {
-      const pl = new Plot(ctx, w, h, P, { xMin: -4.5, xMax: 1.5, yMin: -1.5, yMax: 1.5, pad: { l: 26, r: 8, t: 8, b: 22 } });
+      // tall enough for every path drawn so far
+      let ymax = 1.5;
+      for (const { path } of paths) for (let i = 0; i <= Math.min(k, path.length - 1); i++) ymax = Math.max(ymax, Math.abs(path[i][1]) * 1.1);
+      ymax = Math.min(ymax, 6);
+      const pl = new Plot(ctx, w, h, P, { xMin: -4.5, xMax: 1.5, yMin: -ymax, yMax: ymax, pad: { l: 26, r: 8, t: 8, b: 22 } });
       const top = F.f(START);
       contourBands(pl, P, F.f, (v) => 10 + 3 * Math.log10(Math.max(v, 1e-9) / top), 10);
-      pl.grid({ xStep: 1, yStep: 1 });
+      pl.grid({ xStep: 1 });
       for (const { m, path } of paths) drawPath(pl, path, colors[m], k, m === 'gd' ? 1.4 : 2);
       pl.dot(0, 0, 4, P.good, P.surface);
     },
@@ -214,7 +218,7 @@ function MomentumFigure() {
       hint="걸음 수를 늘려 가며 세 공을 비교하세요"
       caption={
         <>
-          같은 골짜기, 같은 출발점에서 세 방법이 k걸음 동안 간 길입니다. 운동량은 지난 걸음의 방향을 일정 비율 이어 가므로 골짜기를 가로지르는 흔들림은 서로 상쇄되고, 골짜기를 따라가는 움직임은 쌓입니다. 네스테로프는 관성으로 갈 곳을 먼저 내다보고 그 자리의 기울기를 씁니다.
+          같은 골짜기, 같은 출발점에서 세 방법이 k걸음 동안 간 길입니다(그림 1과 같은 계수). 운동량은 계수를 이 골짜기에 맞춰 가장 좋게 고르면 걸음이 커서 골짜기를 크게 가로지르지만, 그 흔들림이 매 걸음 일정한 비율로 줄고 골짜기를 따라가는 움직임은 관성으로 쌓여 가장 먼저 도착합니다. 네스테로프는 관성으로 갈 곳을 먼저 내다보고 그 자리의 기울기를 씁니다. 여기서는 걸음 크기 1/κ가 가파른 방향의 곡률과 딱 맞아 첫 걸음에 골짜기 바닥으로 내려간 뒤 바닥을 따라 미끄러집니다.
         </>
       }
     >
@@ -497,7 +501,7 @@ export default function Optimization() {
 
       <h2>관성: 운동량과 네스테로프</h2>
       <p>
-        좁은 골짜기에서 경사하강법이 느린 것은 기울기가 거의 골짜기를 가로지르는 방향을 가리키기 때문입니다. 공이 골짜기를 굴러 내려가듯 지난 걸음의 방향을 이어 가면, 가로 방향의 흔들림은 매번 방향이 바뀌어 상쇄되고 골짜기를 따라가는 움직임은 쌓입니다. 이것이 <T en="momentum, heavy ball">운동량</T> 방법입니다.
+        좁은 골짜기에서 경사하강법이 느린 것은 기울기가 거의 골짜기를 가로지르는 방향을 가리키고, 걸음 크기는 가파른 방향에 맞춰 작게 잡아야 해서 완만한 방향으로는 조금밖에 못 가기 때문입니다. 공이 골짜기를 굴러 내려가듯 지난 걸음의 방향을 일정 비율 이어 가면, 완만한 방향으로는 같은 방향의 걸음이 계속 쌓여 속도가 붙습니다. 이것이 <T en="momentum, heavy ball">운동량</T> 방법입니다.
       </p>
       <MB>{'x_{k+1} = x_k - \\eta \\nabla f(x_k) + \\beta\\,(x_k - x_{k-1})'}</MB>
       <MomentumFigure />

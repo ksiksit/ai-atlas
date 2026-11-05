@@ -329,9 +329,9 @@ function IterFigure() {
       ctx.textAlign = 'right';
       ctx.textBaseline = 'bottom';
       ctx.fillText('반복 횟수 (로그 눈금)', pad.l + pw, pad.t + ph - 4);
-      ctx.textAlign = 'left';
+      ctx.textAlign = 'right';
       ctx.textBaseline = 'top';
-      ctx.fillText('상대 잔차', pad.l + 6, pad.t + 4);
+      ctx.fillText('상대 잔차 (로그 눈금)', pad.l + pw - 4, pad.t + 4);
     },
     [P, runs, maxIt],
     { aspect: 1.7, maxHeight: 320 },
