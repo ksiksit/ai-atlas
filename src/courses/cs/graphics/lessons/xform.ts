@@ -89,8 +89,11 @@ export function renderCube(s: CamState, base: RGB, bg: RGB, w = FW, h = FH): Fra
     mul(P, V),
     (f) => {
       const n: Vec3 = [f.a[3], f.a[4], f.a[5]];
-      const k = 0.32 + 0.68 * Math.max(0, dot(n, LIGHT));
-      return [base[0] * k, base[1] * k, base[2] * k];
+      // a light face is the base colour lifted toward white, a dark face is the base colour dimmed
+      const l = Math.max(0, dot(n, LIGHT));
+      const k = 0.45 + 0.55 * l;
+      const lift = 0.35 * l * l;
+      return [base[0] * k + lift * (1 - base[0]), base[1] * k + lift * (1 - base[1]), base[2] * k + lift * (1 - base[2])];
     },
     { cullBack: true },
   );
