@@ -1,0 +1,152 @@
+/* 정적 분석과 오염 추적: code listings, taint chips, the benchmark table */
+
+.sa-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+@media (max-width: 760px) {
+  .sa-split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.sa-code {
+  margin: 0;
+  padding: 10px 0;
+  list-style: none;
+  counter-reset: sa-line;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  overflow-x: auto;
+}
+.sa-code li {
+  counter-increment: sa-line;
+  display: grid;
+  grid-template-columns: 2.4em minmax(0, 1fr) auto;
+  gap: 8px;
+  padding: 1px 10px 1px 0;
+  white-space: pre;
+  border-left: 3px solid transparent;
+}
+.sa-code li::before {
+  content: counter(sa-line);
+  text-align: right;
+  color: var(--ink-3);
+}
+.sa-code li[data-s='todo'] {
+  color: var(--ink-3);
+}
+.sa-code li[data-s='now'] {
+  background: color-mix(in srgb, var(--hl) 45%, transparent);
+  border-left-color: var(--ink);
+}
+.sa-code li[data-dead] {
+  opacity: 0.45;
+  text-decoration: line-through;
+  text-decoration-color: var(--ink-3);
+}
+.sa-code li[data-flag='real'] {
+  border-left-color: var(--bad);
+  background: color-mix(in srgb, var(--bad) 10%, transparent);
+}
+.sa-code li[data-flag='false'] {
+  border-left-color: var(--c-net-2);
+  background: color-mix(in srgb, var(--c-net-2) 10%, transparent);
+}
+.sa-code .sa-mark {
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  align-self: center;
+  white-space: nowrap;
+}
+.sa-mark[data-k='real'] {
+  color: var(--bad);
+}
+.sa-mark[data-k='false'] {
+  color: var(--c-net-2);
+}
+.sa-mark[data-k='find'] {
+  color: var(--bad);
+}
+
+/* the taint table: one row per variable, chips for the sink kinds it is still dangerous for */
+.sa-taint {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: var(--fs-xs);
+}
+.sa-taint-row {
+  display: grid;
+  grid-template-columns: 5.2em minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+  min-height: 24px;
+}
+.sa-taint-row > span:first-child {
+  font-family: var(--font-mono);
+  color: var(--ink);
+}
+.sa-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.sa-chip {
+  display: inline-block;
+  padding: 1px 6px;
+  border: 1px solid var(--bad);
+  background: color-mix(in srgb, var(--bad) 14%, transparent);
+  color: var(--ink);
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+.sa-chip[data-clean] {
+  border-color: var(--good);
+  background: color-mix(in srgb, var(--good) 14%, transparent);
+}
+
+.sa-findings {
+  margin: 0;
+  padding-left: 1.2em;
+  font-size: var(--fs-xs);
+  color: var(--ink-2);
+}
+.sa-findings li {
+  margin-bottom: 2px;
+}
+.sa-head {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--ink-3);
+  margin-bottom: 4px;
+}
+
+/* benchmark table rows */
+table.sa-bench td,
+table.sa-bench th {
+  padding: 5px 8px;
+}
+table.sa-bench tr[data-rep] td {
+  background: color-mix(in srgb, var(--hl) 30%, transparent);
+}
+table.sa-bench td.sa-verdict[data-k='tp'] {
+  color: var(--bad);
+  font-weight: 600;
+}
+table.sa-bench td.sa-verdict[data-k='fp'] {
+  color: var(--c-net-2);
+  font-weight: 600;
+}
+table.sa-bench td.sa-verdict[data-k='fn'] {
+  color: var(--bad);
+}
+table.sa-bench td.sa-verdict[data-k='tn'] {
+  color: var(--ink-3);
+}
