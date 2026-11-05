@@ -113,7 +113,7 @@ export const DEFAULT_HALVES: Half[] = Array.from({ length: 12 }, (_, k) => (k % 
  * reader may keep either half; the counts over the first `sample` terms show both halves keep filling up.
  * Then take the next index n_k > n_{k−1} whose term lies in the kept half.
  */
-export function bolzano(choices: Half[], sample = 20000, a: (n: number) => number = Math.sin): Halving[] {
+export function bolzano(choices: Half[], sample = 200000, a: (n: number) => number = Math.sin): Halving[] {
   let lo = -1, hi = 1;
   let nk = 1;
   const out: Halving[] = [{ k: 0, lo, hi, nk, term: a(nk), lowerCount: 0, upperCount: 0, chose: null }];
