@@ -1,0 +1,146 @@
+/* 현대대수학 · 순열군과 군의 작용 (graphics.css already uses gx-note, gx-small, gx-col; this file avoids them) */
+
+.gx-proof {
+  border-left: 3px solid var(--c-math-1);
+  background: var(--surface-2);
+  padding: 12px 16px;
+  margin: 1.2em 0;
+  font-size: var(--fs-sm);
+}
+.gx-proof > b:first-child {
+  display: block;
+  margin-bottom: 4px;
+}
+.gx-proof p {
+  margin: 0 0 8px;
+}
+.gx-proof p:last-child {
+  margin-bottom: 0;
+}
+.gx-qed {
+  float: right;
+  color: var(--ink-3);
+}
+
+/* permutation arrows */
+.gx-perm svg {
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+}
+.gx-twoline {
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+}
+.gx-twoline td {
+  padding: 2px 8px;
+  text-align: center;
+}
+.gx-twoline tr:first-child td {
+  border-bottom: 1px solid var(--line-strong);
+}
+
+/* the 8-puzzle */
+.gx-board {
+  display: grid;
+  grid-template-columns: repeat(3, 64px);
+  grid-template-rows: repeat(3, 64px);
+  gap: 4px;
+  padding: 4px;
+  background: var(--line);
+  width: max-content;
+}
+.gx-tile {
+  display: grid;
+  place-items: center;
+  font: 700 1.5rem var(--font-mono);
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+}
+.gx-tile[data-blank] {
+  background: transparent;
+  border-color: transparent;
+  cursor: default;
+}
+.gx-tile[data-movable] {
+  border-color: var(--accent);
+}
+.gx-tile[data-picked] {
+  background: color-mix(in srgb, var(--bad) 22%, var(--surface));
+  border-color: var(--bad);
+}
+.gx-tile[data-home] {
+  color: var(--good);
+}
+.gx-tile:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* necklaces */
+.gx-neck svg {
+  display: block;
+}
+.gx-bead {
+  cursor: pointer;
+}
+.gx-bead:focus-visible {
+  outline: none;
+  stroke: var(--accent);
+  stroke-width: 3px;
+}
+.gx-orbit {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.gx-orbit svg {
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+.gx-stab {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
+.gx-stab span {
+  padding: 2px 7px;
+  border: 1px solid var(--line-strong);
+}
+.gx-stab span[data-on] {
+  background: color-mix(in srgb, var(--good) 20%, var(--surface));
+  border-color: var(--good);
+}
+
+/* Burnside table */
+.gx-burn {
+  border-collapse: collapse;
+  font-size: var(--fs-xs);
+  width: 100%;
+}
+.gx-burn th,
+.gx-burn td {
+  padding: 3px 8px;
+  border-bottom: 1px solid var(--line);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.gx-burn th:first-child,
+.gx-burn td:first-child {
+  text-align: left;
+}
+.gx-burn tfoot td {
+  font-weight: 600;
+  border-top: 1px solid var(--line-strong);
+}
+.gx-scroll {
+  max-height: 320px;
+  overflow: auto;
+  min-width: 0;
+}

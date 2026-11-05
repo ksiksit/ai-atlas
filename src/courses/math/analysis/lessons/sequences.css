@@ -1,0 +1,80 @@
+/* 해석학 · 수열의 수렴 (prefix sq-) */
+
+.sq-proof {
+  margin: 1.2em 0;
+  padding: 14px 18px;
+  border-left: 3px solid var(--c-math-1);
+  background: var(--surface-2);
+  font-size: var(--fs-sm);
+  line-height: 1.75;
+}
+.sq-proof > .sq-proof-head {
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--ink);
+}
+.sq-proof p {
+  margin: 0 0 8px;
+}
+.sq-proof p:last-child {
+  margin-bottom: 0;
+}
+.sq-proof .sq-qed {
+  float: right;
+  color: var(--ink-2);
+  margin-left: 12px;
+}
+
+.sq-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-xs);
+  font-variant-numeric: tabular-nums;
+}
+.sq-table th,
+.sq-table td {
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--line);
+  text-align: right;
+  white-space: nowrap;
+}
+.sq-table th {
+  color: var(--ink-3);
+  font-weight: 600;
+}
+.sq-table th:first-child,
+.sq-table td:first-child {
+  text-align: left;
+}
+.sq-table td.sq-mono {
+  font-family: var(--font-mono);
+}
+.sq-table tr[data-now] td {
+  background: color-mix(in srgb, var(--hl) 22%, transparent);
+}
+
+.sq-halves {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.sq-half {
+  border: 1px solid var(--line-strong);
+  padding: 8px 10px;
+  font-size: var(--fs-xs);
+  color: var(--ink-2);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.sq-half strong {
+  font-family: var(--font-mono);
+  color: var(--ink);
+  font-size: 0.875rem;
+}
+.sq-settex {
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  overflow-x: auto;
+}

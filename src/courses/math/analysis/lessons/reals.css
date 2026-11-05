@@ -1,0 +1,85 @@
+/* 해석학 · 실수와 완비성 (prefix rn-) */
+
+/* a proof set apart from the prose, closed with ∎ */
+.rn-proof {
+  margin: 1.2em 0;
+  padding: 14px 18px;
+  border-left: 3px solid var(--c-math-1);
+  background: var(--surface-2);
+  font-size: var(--fs-sm);
+  line-height: 1.75;
+}
+.rn-proof > .rn-proof-head {
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--ink);
+}
+.rn-proof p {
+  margin: 0 0 8px;
+}
+.rn-proof p:last-child {
+  margin-bottom: 0;
+}
+.rn-proof .rn-qed {
+  float: right;
+  color: var(--ink-2);
+  margin-left: 12px;
+}
+
+.rn-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-xs);
+  font-variant-numeric: tabular-nums;
+}
+.rn-table th,
+.rn-table td {
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--line);
+  text-align: right;
+  white-space: nowrap;
+}
+.rn-table th {
+  color: var(--ink-3);
+  font-weight: 600;
+}
+.rn-table th:first-child,
+.rn-table td:first-child {
+  text-align: left;
+}
+.rn-table td.rn-mono {
+  font-family: var(--font-mono);
+}
+.rn-table tr[data-now] td {
+  background: color-mix(in srgb, var(--hl) 22%, transparent);
+}
+
+.rn-verdict {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  font-size: var(--fs-sm);
+}
+.rn-verdict span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.rn-verdict i {
+  font-style: normal;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  width: 1.4em;
+  text-align: center;
+}
+.rn-verdict [data-ok] i {
+  color: var(--good);
+}
+.rn-verdict [data-no] i {
+  color: var(--bad);
+}
+.rn-settex {
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  overflow-x: auto;
+}

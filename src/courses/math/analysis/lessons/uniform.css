@@ -1,0 +1,28 @@
+/* 해석학 · 함수열과 균등 수렴 */
+
+.uc-proof {
+  border-left: 3px solid var(--c-math-2);
+  background: color-mix(in srgb, var(--c-math-2) 6%, var(--surface));
+  padding: 12px 16px;
+  margin-block: 1em 1.4em;
+  font-size: var(--fs-sm);
+  line-height: 1.75;
+}
+.uc-proof > .uc-proof-head {
+  font-weight: 700;
+  color: var(--c-math-2);
+  margin-bottom: 4px;
+}
+.uc-proof p {
+  margin: 0 0 0.6em;
+}
+.uc-proof p:last-child {
+  margin-bottom: 0;
+}
+.uc-qed {
+  float: right;
+  color: var(--ink-2);
+}
+.uc-verdict {
+  font-weight: 600;
+}

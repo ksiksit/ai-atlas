@@ -29,6 +29,8 @@ import mathLinearAlgebra from './math/linear/course';
 import mathProbability from './math/probability/course';
 import mathCalculus from './math/calculus/course';
 import mathMultivariable from './math/multivariable/course';
+import mathAnalysis from './math/analysis/course';
+import mathAbstractAlgebra from './math/algebra/course';
 import { MAJORS } from './majors';
 import type { Course, CourseRole, Lesson, Level, Major, Part, Subject } from './types';
 
@@ -39,7 +41,7 @@ export { MAJORS } from './majors';
 export const SUBJECTS: Subject[] = [aiSubject, statsSubject, mathSubject, csSubject, netSubject];
 
 /** Every course. Within a subject the library sorts them by level, then by this order. */
-export const COURSES: Course[] = [aiBasics, aiDeepLearning, aiLlm, aiReinforcementLearning, statsBasics, mathDiscrete, mathLinearAlgebra, mathProbability, mathCalculus, mathMultivariable, csProgramming, csAlgorithms, csAlgorithmDesign, csSystemAlgorithms, csArchitecture, csOperatingSystems, csDatabases, csComputation, csSoftwareDesign, csProgrammingLanguages, csParallelDistributed, csGraphics, csHci, netBasics, netSecurity, netSoftwareSecurity];
+export const COURSES: Course[] = [aiBasics, aiDeepLearning, aiLlm, aiReinforcementLearning, statsBasics, mathDiscrete, mathLinearAlgebra, mathProbability, mathCalculus, mathMultivariable, mathAnalysis, mathAbstractAlgebra, csProgramming, csAlgorithms, csAlgorithmDesign, csSystemAlgorithms, csArchitecture, csOperatingSystems, csDatabases, csComputation, csSoftwareDesign, csProgrammingLanguages, csParallelDistributed, csGraphics, csHci, netBasics, netSecurity, netSoftwareSecurity];
 
 export const LEVELS: Record<Level, { name: string; en: string }> = {
   1: { name: '기초', en: 'Basic' },

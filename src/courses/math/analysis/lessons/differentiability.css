@@ -1,0 +1,72 @@
+/* 해석학 · 미분과 평균값 정리 */
+
+.df-proof {
+  border-left: 3px solid var(--c-math-2);
+  background: color-mix(in srgb, var(--c-math-2) 6%, var(--surface));
+  padding: 12px 16px;
+  margin-block: 1em 1.4em;
+  font-size: var(--fs-sm);
+  line-height: 1.75;
+}
+.df-proof > .df-proof-head {
+  font-weight: 700;
+  color: var(--c-math-2);
+  margin-bottom: 4px;
+}
+.df-proof p {
+  margin: 0 0 0.6em;
+}
+.df-proof p:last-child {
+  margin-bottom: 0;
+}
+.df-qed {
+  float: right;
+  color: var(--ink-2);
+}
+
+.df-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-xs);
+  font-variant-numeric: tabular-nums;
+}
+.df-table th,
+.df-table td {
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--line);
+  text-align: right;
+  white-space: nowrap;
+}
+.df-table th {
+  color: var(--ink-3);
+  font-weight: 600;
+}
+.df-table td:first-child,
+.df-table th:first-child {
+  text-align: left;
+}
+
+.df-checks {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: var(--fs-sm);
+}
+.df-checks div {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}
+.df-checks i {
+  font-style: normal;
+  font-weight: 700;
+  width: 1.2em;
+  text-align: center;
+  flex: none;
+}
+.df-checks [data-ok] i {
+  color: var(--good);
+}
+.df-checks [data-no] i {
+  color: var(--bad);
+}
