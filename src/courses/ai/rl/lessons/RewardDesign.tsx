@@ -28,6 +28,19 @@ import {
 import './rl.css';
 import './reward.css';
 
+/** True while the window is narrow (phones), so a figure can give its canvas more height. */
+function useNarrow(limit = 600): boolean {
+  const get = () => typeof window !== 'undefined' && window.innerWidth < limit;
+  const [narrow, setNarrow] = useState(get);
+  useEffect(() => {
+    const on = () => setNarrow(get());
+    window.addEventListener('resize', on);
+    return () => window.removeEventListener('resize', on);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  return narrow;
+}
+
 /** Draw a grid of cells with a path; `mark` colours special cells. */
 function drawGrid(ctx: CanvasRenderingContext2D, P: Palette, gw: number, gh: number, x0: number, y0: number, cell: number, mark: (x: number, y: number) => string | null) {
   for (let y = 0; y < gh; y++)
@@ -83,6 +96,7 @@ function ShapingFigure() {
     };
   }, []);
   const cur = res[kind];
+  const tall = useNarrow();
 
   const { wrapRef, canvasRef } = useCanvas2D(
     (ctx, { w, h }) => {
@@ -151,7 +165,7 @@ function ShapingFigure() {
       }
     },
     [P, res, kind, cur],
-    { height: 300, minHeight: 40 },
+    { height: tall ? 470 : 300, minHeight: 40 },
   );
 
   const seedArrives = cur ? cur.path.some(([x, y]) => x === OPEN.goal[0] && y === OPEN.goal[1]) : false;
