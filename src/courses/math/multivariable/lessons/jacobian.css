@@ -1,0 +1,16 @@
+/* 연쇄 법칙과 야코비 행렬: figure styles */
+
+.jc-pair {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+}
+@media (max-width: 640px) {
+  .jc-pair {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.jc-math {
+  overflow-x: auto;
+  font-size: var(--fs-sm);
+}

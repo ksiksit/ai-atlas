@@ -1,0 +1,24 @@
+/* 벡터장과 선적분: formula boxes and the big work readout */
+
+.li-tex {
+  padding: 8px 10px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  font-size: var(--fs-sm);
+  overflow-x: auto;
+  max-width: 100%;
+}
+.li-big {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 12px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  overflow-x: auto;
+}
+.li-big > span {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  font-weight: 600;
+}

@@ -1,0 +1,56 @@
+/* 미적분학 · 극한과 연속 */
+
+.lm-table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: var(--fs-xs);
+  font-variant-numeric: tabular-nums;
+}
+.lm-table th,
+.lm-table td {
+  padding: 5px 10px;
+  border-bottom: 1px solid var(--line);
+  text-align: right;
+  white-space: nowrap;
+}
+.lm-table th {
+  color: var(--ink-3);
+  font-weight: 600;
+  border-bottom-color: var(--line-strong);
+}
+.lm-table th:first-child,
+.lm-table td:first-child {
+  text-align: left;
+}
+.lm-table tr.lm-at td {
+  color: var(--ink-3);
+  text-align: left;
+}
+.lm-table td.lm-l {
+  color: var(--neg);
+}
+.lm-table td.lm-r {
+  color: var(--pos);
+}
+
+.lm-checks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: var(--fs-sm);
+}
+.lm-checks li {
+  display: grid;
+  grid-template-columns: 1.4em minmax(0, 1fr);
+  color: var(--ink-2);
+}
+.lm-checks li > span:first-child {
+  color: var(--bad);
+  font-weight: 700;
+}
+.lm-checks li[data-ok] > span:first-child {
+  color: var(--good);
+}

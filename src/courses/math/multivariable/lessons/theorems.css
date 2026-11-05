@@ -1,0 +1,24 @@
+/* 그린, 스토크스, 발산 정리: formula boxes and the per-face readout */
+
+.vt-tex {
+  padding: 8px 10px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  font-size: var(--fs-sm);
+  overflow-x: auto;
+  max-width: 100%;
+}
+.vt-faces {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px 10px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+.vt-faces b {
+  color: var(--ink-3);
+  font-weight: 600;
+  margin-right: 4px;
+}

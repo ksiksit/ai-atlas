@@ -1,0 +1,15 @@
+/* 미적분학 · 수열, 급수, 테일러 급수: figure styles that are plain HTML rather than canvas */
+
+.sr-trace {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+.sr-trace b {
+  color: var(--ink);
+  font-weight: 600;
+}

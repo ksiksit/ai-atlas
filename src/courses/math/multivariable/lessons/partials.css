@@ -1,0 +1,34 @@
+/* 편미분과 경사: figure styles */
+
+.pd-pair {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: center;
+}
+@media (max-width: 720px) {
+  .pd-pair {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.pd-plane {
+  font-size: var(--fs-sm);
+  overflow-x: auto;
+  padding: 8px 10px;
+  background: var(--surface-2);
+}
+.pd-err {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-xs);
+}
+.pd-err th,
+.pd-err td {
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--line);
+  text-align: right;
+}
+.pd-err th {
+  color: var(--ink-3);
+  font-weight: 600;
+}

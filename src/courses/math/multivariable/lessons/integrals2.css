@@ -1,0 +1,38 @@
+/* 다변수 미적분 · 다중 적분 */
+
+.mi-tex {
+  overflow-x: auto;
+}
+.mi-tex .tex-block {
+  margin: 0;
+}
+.mi-sandwich {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: var(--fs-xs);
+}
+.mi-sandwich > div {
+  display: grid;
+  grid-template-columns: 4.6em minmax(0, 1fr) 4.4em;
+  align-items: center;
+  gap: 8px;
+}
+.mi-sandwich span {
+  color: var(--ink-2);
+}
+.mi-sandwich i {
+  display: block;
+  height: 10px;
+  min-width: 2px;
+  max-width: 100%;
+}
+.mi-sandwich b {
+  font-weight: 600;
+  text-align: right;
+  color: var(--ink);
+}
+.mi-pi i {
+  width: 100%;
+  background: repeating-linear-gradient(90deg, var(--ink-3) 0 4px, transparent 4px 7px);
+}

@@ -1,0 +1,35 @@
+/* 미적분학 · 미분 */
+
+.dv-table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: var(--fs-xs);
+  font-variant-numeric: tabular-nums;
+}
+.dv-table th,
+.dv-table td {
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--line);
+  text-align: right;
+  white-space: nowrap;
+}
+.dv-table th {
+  color: var(--ink-3);
+  font-weight: 600;
+  border-bottom-color: var(--line-strong);
+}
+.dv-table th:first-child,
+.dv-table td:first-child {
+  text-align: left;
+}
+.dv-table tr[data-on] td {
+  background: color-mix(in srgb, var(--neg) 14%, transparent);
+  color: var(--ink);
+}
+
+.dv-formula {
+  overflow-x: auto;
+}
+.dv-formula .tex-block {
+  margin-block: 0;
+}

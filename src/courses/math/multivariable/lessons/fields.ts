@@ -189,9 +189,10 @@ export function inside(path: V2[], x: number, y: number): boolean {
 
 /**
  * ∬ g dA over the region a closed path encloses. Rows of height h; on each row the exact
- * crossings with the boundary are found, and g is integrated between them with the midpoint rule.
+ * crossings with the boundary are found, and g is integrated between them with the midpoint rule
+ * in steps of at most dx0.
  */
-export function areaIntegral(g: (x: number, y: number) => number, path: V2[], h = 0.02): number {
+export function areaIntegral(g: (x: number, y: number) => number, path: V2[], h = 0.02, dx0 = h): number {
   let y0 = Infinity, y1 = -Infinity;
   for (const [, y] of path) {
     y0 = Math.min(y0, y);
@@ -207,7 +208,7 @@ export function areaIntegral(g: (x: number, y: number) => number, path: V2[], h 
     xs.sort((a, b) => a - b);
     for (let k = 0; k + 1 < xs.length; k += 2) {
       const a = xs[k], b = xs[k + 1];
-      const m = Math.max(2, Math.ceil((b - a) / h));
+      const m = Math.max(2, Math.ceil((b - a) / dx0));
       const dx = (b - a) / m;
       for (let q = 0; q < m; q++) s += g(a + (q + 0.5) * dx, y) * dx;
     }
