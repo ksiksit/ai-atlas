@@ -11,22 +11,24 @@ import './lessons/algebra.css';
 
 /**
  * A symmetry is a permutation of the three corner positions: the label at position i moves to σ[i].
- * Positions sit at the top (0), bottom right (1) and bottom left (2).
+ * Positions sit at the top (0), bottom left (1) and bottom right (2), so r turns counterclockwise
+ * and s mirrors across the vertical axis, as in the lessons (group.ts's dihedral(3)).
  */
 const SYM: { name: string; p: number[] }[] = [
   { name: 'e', p: [0, 1, 2] },
   { name: 'r', p: [1, 2, 0] },
   { name: 'r²', p: [2, 0, 1] },
-  { name: 's₀', p: [0, 2, 1] },
-  { name: 's₁', p: [2, 1, 0] },
-  { name: 's₂', p: [1, 0, 2] },
+  { name: 's', p: [0, 2, 1] },
+  { name: 'sr', p: [2, 1, 0] },
+  { name: 'sr²', p: [1, 0, 2] },
 ];
 /** "x 다음 y": first x, then y, as one symmetry. */
 const then = (x: number, y: number) => {
   const q = SYM[x].p.map((i) => SYM[y].p[i]);
   return SYM.findIndex((s) => s.p.every((v, i) => v === q[i]));
 };
-const TABLE = SYM.map((_, x) => SYM.map((__, y) => then(x, y)));
+/** The product ab, as in the lessons: b first, then a. Row a, column b. */
+const TABLE = SYM.map((_, a) => SYM.map((__, b) => then(b, a)));
 const STEP = 0.9; // seconds per product
 const ORDER = Array.from({ length: 36 }, (_, k) => k); // fill row by row
 
@@ -63,7 +65,7 @@ function TriangleHero() {
       const slotW = w / 5;
       const tri = (cx: number, cy: number, R: number, labels: number[], title: string) => {
         const pos = [0, 1, 2].map((i) => {
-          const ang = -Math.PI / 2 + (i * 2 * Math.PI) / 3;
+          const ang = -Math.PI / 2 - (i * 2 * Math.PI) / 3;
           return [cx + R * Math.cos(ang), cy + R * Math.sin(ang)];
         });
         ctx.fillStyle = alpha(P.math, 0.12);
@@ -93,12 +95,13 @@ function TriangleHero() {
       };
       const R = Math.min(triH * 0.55, slotW * 0.42);
       const cy = top + R + 4;
+      // row x, column y: y first, then x
       const start = [0, 1, 2];
-      const mid = apply(start, x);
-      const end = apply(mid, y);
+      const mid = apply(start, y);
+      const end = apply(mid, x);
       tri(slotW * 0.6, cy, R, start, '처음');
-      tri(slotW * 2.5, cy, R, mid, `${SYM[x].name} 한 뒤`);
-      tri(slotW * 4.4, cy, R, end, `${SYM[y].name}까지 = ${SYM[z].name}`);
+      tri(slotW * 2.5, cy, R, mid, `${SYM[y].name} 먼저`);
+      tri(slotW * 4.4, cy, R, end, `다음 ${SYM[x].name} = ${SYM[z].name}`);
       ctx.fillStyle = P.ink3;
       ctx.font = `600 16px ${P.fontBody}`;
       ctx.textAlign = 'center';
@@ -106,7 +109,7 @@ function TriangleHero() {
       ctx.fillText('→', slotW * 1.55, cy);
       ctx.fillText('→', slotW * 3.45, cy);
 
-      // the multiplication table: row = first move, column = second move
+      // the multiplication table: row a, column b, cell ab (b first, then a)
       const ty = cy + R * 0.5 + 40;
       const cs = Math.min((w - 40) / 7, (h - ty - 6) / 7);
       const tx = (w - cs * 7) / 2;
@@ -136,7 +139,7 @@ function TriangleHero() {
 
   return (
     <div ref={outer}>
-      <div ref={wrapRef} className="canvas-box" role="img" aria-label={`정삼각형의 대칭 여섯 가지(항등 e, 회전 r과 r², 뒤집기 s₀, s₁, s₂)를 둘씩 이어 해 보며 곱셈표를 채우는 그림. 지금은 ${SYM[x].name} 다음 ${SYM[y].name}을 하면 ${SYM[z].name}과 같다는 것을 보여 주고, 표의 ${filled}칸이 채워졌습니다.`}>
+      <div ref={wrapRef} className="canvas-box" role="img" aria-label={`정삼각형의 대칭 여섯 가지(항등 e, 회전 r과 r², 뒤집기 s, sr, sr²)를 둘씩 이어 해 보며 곱셈표를 채우는 그림. 지금은 ${SYM[y].name}을 먼저 하고 ${SYM[x].name}을 하면 ${SYM[x].name}${SYM[y].name} = ${SYM[z].name}이라는 것을 보여 주고, 표의 ${filled}칸이 채워졌습니다.`}>
         <canvas ref={canvasRef} />
       </div>
       <div className="hero-figure-cap">
@@ -150,7 +153,7 @@ function TriangleHero() {
             뒤집기
           </span>
         </span>
-        행은 먼저 한 대칭, 열은 그다음 대칭 · {SYM[x].name} 다음 {SYM[y].name} = <strong>{SYM[z].name}</strong>
+        칸 ab는 열의 b를 먼저, 행의 a를 나중에 · {SYM[x].name}·{SYM[y].name} = <strong>{SYM[z].name}</strong>
       </div>
     </div>
   );
