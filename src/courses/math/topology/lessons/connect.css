@@ -1,0 +1,69 @@
+/* 위상수학 · 연결성 */
+
+.cc2-thm {
+  margin-block: 1em;
+  padding: 10px 14px;
+  border: 1px solid var(--line-strong);
+  font-size: var(--fs-sm);
+  line-height: 1.75;
+}
+.cc2-thm > b {
+  margin-right: 0.4em;
+}
+
+.cc2-proof {
+  margin-block: 1em 1.4em;
+  padding: 12px 16px;
+  border-left: 3px solid var(--c-math-1);
+  background: color-mix(in srgb, var(--surface-2) 55%, transparent);
+  font-size: var(--fs-sm);
+  line-height: 1.75;
+}
+.cc2-proof p {
+  margin: 0 0 0.6em;
+}
+.cc2-proof p:last-child {
+  margin-bottom: 0;
+}
+.cc2-proof .cc2-head {
+  font-weight: 700;
+  margin-right: 0.4em;
+}
+.cc2-proof .cc2-qed {
+  float: right;
+  font-weight: 700;
+}
+
+.cc2-readouts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9.5rem), 1fr));
+  gap: 10px;
+}
+
+.cc2-table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: var(--fs-xs);
+  font-variant-numeric: tabular-nums;
+}
+.cc2-table th,
+.cc2-table td {
+  padding: 5px 10px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+.cc2-table th {
+  color: var(--ink-3);
+  font-weight: 600;
+  border-bottom-color: var(--line-strong);
+  white-space: nowrap;
+}
+.cc2-yes {
+  color: var(--good);
+  font-weight: 700;
+}
+.cc2-no {
+  color: var(--bad);
+  font-weight: 700;
+}

@@ -1,0 +1,64 @@
+/* 복소해석 · 정칙 함수와 코시-리만 방정식 (prefix ho-) */
+
+/* a theorem and its proof, set apart from the prose and closed with ∎ */
+.ho-proof {
+  margin: 1.2em 0;
+  padding: 14px 18px;
+  border-left: 3px solid var(--c-math-1);
+  background: var(--surface-2);
+  font-size: var(--fs-sm);
+  line-height: 1.75;
+}
+.ho-proof > .ho-proof-head {
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--ink);
+}
+.ho-proof p {
+  margin: 0 0 8px;
+}
+.ho-proof p:last-child {
+  margin-bottom: 0;
+}
+.ho-proof .ho-qed {
+  float: right;
+  color: var(--ink-2);
+  margin-left: 12px;
+}
+
+.ho-readouts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.ho-cr {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+  font-variant-numeric: tabular-nums;
+}
+.ho-cr th,
+.ho-cr td {
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--line);
+  text-align: right;
+}
+.ho-cr th:first-child,
+.ho-cr td:first-child {
+  text-align: left;
+}
+.ho-cr td.mono {
+  font-family: var(--font-mono);
+}
+.ho-cr tr[data-ok] td:last-child {
+  color: var(--good);
+  font-weight: 600;
+}
+.ho-cr tr[data-bad] td:last-child {
+  color: var(--bad);
+  font-weight: 600;
+}
+
+.ho-readouts.ho-wide-first > :first-child {
+  grid-column: 1 / -1;
+}

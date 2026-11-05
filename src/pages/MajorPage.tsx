@@ -101,12 +101,15 @@ export default function MajorPage({ major }: { major: Major }) {
     const box = wrap.getBoundingClientRect();
     const rects = new Map(ids.map((id) => [id, cards.current[id]?.getBoundingClientRect()] as const));
     const pairs = ids.flatMap((id) => (findCourse(id)?.prerequisites ?? []).filter((p) => rects.get(p) && rects.get(id)).map((p) => ({ from: p, to: id, a: rects.get(p)!, b: rects.get(id)! })));
-    // Several courses in one column can send arrows across the same gap. Each source gets its own
-    // vertical lane in that gap, so two arrows never merge into one line.
+    // An arrow to a later column turns down in the gap just before its target, so an arrow that skips
+    // a column never runs its vertical part through the cards of the column it skips (its horizontal
+    // part passes behind those cards). Several arrows can share that gap: each source gets its own
+    // vertical lane there, so two arrows never merge into one line.
+    const GAP = 44; // matches .mj-grid's column-gap
     const lanes = new Map<number, string[]>();
     for (const { from, a, b } of pairs) {
       if (b.left <= a.right - 1) continue;
-      const key = Math.round(a.right);
+      const key = Math.round(b.left);
       const list = lanes.get(key) ?? [];
       if (!list.includes(from)) list.push(from);
       lanes.set(key, list);
@@ -131,10 +134,12 @@ export default function MajorPage({ major }: { major: Major }) {
       const y1 = a.top + 40 - box.top, y2 = b.top + 40 - box.top;
       if (b.left > a.right - 1) {
         const x1 = a.right - box.left, x2 = b.left - box.left - 8;
-        const lane = lanes.get(Math.round(a.right))!;
-        // upper sources take the lanes nearer the target, so their long drops do not cut across the others' starts
+        const lane = lanes.get(Math.round(b.left))!;
+        // the lanes sit in the gap left of the target; upper sources take the lanes nearer the target,
+        // so their long drops do not cut across the others' starts
+        const gx = Math.max(x1, b.left - box.left - GAP);
         const k = lane.length - lane.indexOf(from);
-        const mx = x1 + ((x2 - x1) * k) / (lane.length + 1);
+        const mx = gx + ((x2 - gx) * k) / (lane.length + 1);
         out.push({ from, to, d: Math.abs(y1 - y2) < 2 ? `M${x1} ${y1} H${x2}` : `M${x1} ${y1} H${mx} V${y2} H${x2}`, head: `${x2},${y2 - 4.5} ${x2 + 8},${y2} ${x2},${y2 + 4.5}` });
       } else if (b.top > a.bottom - 1) {
         if (!between(from, to, a, b)) {

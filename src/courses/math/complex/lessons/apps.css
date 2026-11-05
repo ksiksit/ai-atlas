@@ -1,0 +1,47 @@
+/* 복소해석 · 응용: 신호와 흐름 */
+
+.ap2-proof {
+  margin-block: 1em 1.4em;
+  padding: 12px 16px;
+  border-left: 3px solid var(--c-math-2);
+  background: color-mix(in srgb, var(--surface-2) 55%, transparent);
+  font-size: var(--fs-sm);
+  line-height: 1.75;
+}
+.ap2-proof > .ap2-proof-head {
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.ap2-proof p {
+  margin: 0 0 0.6em;
+}
+.ap2-proof p:last-child {
+  margin-bottom: 0;
+}
+.ap2-qed {
+  float: right;
+  font-weight: 700;
+}
+
+.ap2-two {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 14px;
+}
+.ap2-two .ap2-title {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  margin-bottom: 4px;
+}
+@media (max-width: 640px) {
+  .ap2-two {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.ap2-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
