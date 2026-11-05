@@ -63,3 +63,23 @@
 .pd-chip[data-dim] {
   opacity: 0.45;
 }
+
+/* the cover's legend */
+.cover-key {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin-right: 8px;
+  font-size: 11px;
+  vertical-align: 1px;
+}
+.cover-key span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.cover-key i {
+  width: 8px;
+  height: 8px;
+  display: inline-block;
+}
