@@ -1,0 +1,160 @@
+/* 의존성과 공급망 보안: dependency tree, hash comparison, name checker */
+
+.sc-tree {
+  margin: 0;
+  padding: 10px 12px;
+  list-style: none;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  overflow-x: auto;
+}
+.sc-tree li {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 2px 6px 2px calc(var(--d) * 22px + 6px);
+  position: relative;
+  white-space: nowrap;
+  border-left: 3px solid transparent;
+}
+.sc-tree li[data-d]:not([data-d='0'])::before {
+  content: '└';
+  position: absolute;
+  left: calc(var(--d) * 22px - 12px);
+  color: var(--ink-3);
+}
+.sc-tree li[data-vuln] {
+  background: color-mix(in srgb, var(--bad) 13%, transparent);
+  border-left-color: var(--bad);
+}
+.sc-tree li[data-onpath] {
+  border-left-color: var(--bad);
+}
+.sc-tree li[data-fixed] {
+  background: color-mix(in srgb, var(--good) 12%, transparent);
+}
+.sc-tree .sc-name {
+  color: var(--ink);
+  font-weight: 600;
+}
+.sc-tree .sc-range {
+  color: var(--ink-3);
+}
+.sc-tree .sc-ver {
+  color: var(--ink);
+}
+.sc-tree .sc-ver[data-missing] {
+  color: var(--bad);
+  font-family: var(--font-body);
+  font-weight: 600;
+}
+.sc-tree .sc-tag {
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--bad);
+}
+.sc-tree .sc-tag[data-good] {
+  color: var(--good);
+}
+
+.sc-sbom {
+  max-height: 320px;
+  overflow: auto;
+}
+
+/* integrity */
+.sc-hashes {
+  display: grid;
+  gap: 8px;
+  font-size: var(--fs-xs);
+}
+.sc-hash {
+  display: grid;
+  grid-template-columns: 9em minmax(0, 1fr);
+  gap: 8px;
+  align-items: baseline;
+}
+.sc-hash code {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  overflow-wrap: anywhere;
+  word-break: break-all;
+  color: var(--ink);
+}
+.sc-hash code b {
+  color: var(--bad);
+  font-weight: 700;
+}
+.sc-file {
+  width: 100%;
+  min-height: 11em;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  padding: 8px 10px;
+  background: var(--surface-2);
+  color: var(--ink);
+  border: 1px solid var(--line-strong);
+  resize: vertical;
+}
+.sc-file:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+.sc-verdict {
+  font-weight: 600;
+  font-size: var(--fs-sm);
+}
+.sc-verdict[data-bad] {
+  color: var(--bad);
+}
+.sc-verdict[data-good] {
+  color: var(--good);
+}
+
+/* name checker */
+.sc-name-input {
+  font-family: var(--font-mono);
+  font-size: 0.9375rem;
+  padding: 6px 10px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink);
+  width: min(100%, 16em);
+}
+.sc-name-input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+.sc-near {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: var(--fs-sm);
+}
+.sc-near-row {
+  display: grid;
+  grid-template-columns: 9em 5em minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+}
+.sc-near-row code {
+  font-family: var(--font-mono);
+}
+.sc-bar {
+  height: 8px;
+  background: var(--surface-2);
+  position: relative;
+}
+.sc-bar i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--ink-3);
+}
+.sc-bar i[data-warn] {
+  background: var(--bad);
+}

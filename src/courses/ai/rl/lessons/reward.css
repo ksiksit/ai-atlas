@@ -1,0 +1,78 @@
+/* 강화학습 · 보상 설계: the preference cards are plain HTML around small canvases. */
+
+.rw-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+@media (max-width: 520px) {
+  .rw-pair {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.rw-card {
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.rw-card .canvas-box {
+  border: 0;
+}
+.rw-feats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  font-size: var(--fs-xs);
+  color: var(--ink-2);
+  font-family: var(--font-mono);
+}
+.rw-weights {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 4px 10px;
+  align-items: center;
+  font-size: var(--fs-xs);
+}
+.rw-weights .lbl {
+  color: var(--ink-2);
+}
+.rw-weights .val {
+  font-family: var(--font-mono);
+  color: var(--ink);
+  text-align: right;
+  min-width: 4.5em;
+}
+.rw-track {
+  position: relative;
+  height: 14px;
+  background: var(--surface-2);
+}
+.rw-track::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -2px;
+  bottom: -2px;
+  width: 1px;
+  background: var(--line-strong);
+}
+.rw-bar {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  background: var(--accent);
+}
+.rw-bar[data-neg] {
+  background: var(--bad);
+}
+.rw-true {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 2px;
+  background: var(--ink);
+}

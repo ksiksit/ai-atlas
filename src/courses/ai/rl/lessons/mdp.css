@@ -1,0 +1,5 @@
+/* 마르코프 결정 과정: grids you can click */
+
+.md-click canvas {
+  cursor: pointer;
+}

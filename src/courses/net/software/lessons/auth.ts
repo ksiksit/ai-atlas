@@ -93,6 +93,8 @@ export function stuffing(n: number, hasAccount: number, reuse: number, mfa: numb
 /* ───────── TOTP (RFC 6238 over RFC 4226 HOTP) ───────── */
 
 export const utf8 = (s: string) => new TextEncoder().encode(s);
+/** WebCrypto takes BufferSource; TypeScript's Uint8Array<ArrayBufferLike> needs this nudge. */
+const buf = (b: Uint8Array) => b as unknown as BufferSource;
 export const hex = (b: Uint8Array) => Array.from(b, (x) => x.toString(16).padStart(2, '0')).join('');
 
 /** The 8-byte big-endian counter for time step T = floor(t / 30). */
@@ -118,8 +120,8 @@ export interface TotpSteps {
 }
 
 export async function hmacSha1(key: Uint8Array, msg: Uint8Array): Promise<Uint8Array> {
-  const k = await crypto.subtle.importKey('raw', key, { name: 'HMAC', hash: 'SHA-1' }, false, ['sign']);
-  return new Uint8Array(await crypto.subtle.sign('HMAC', k, msg));
+  const k = await crypto.subtle.importKey('raw', buf(key), { name: 'HMAC', hash: 'SHA-1' }, false, ['sign']);
+  return new Uint8Array(await crypto.subtle.sign('HMAC', k, buf(msg)));
 }
 
 export async function totp(secret: Uint8Array, unixSeconds: number, digits = 6, period = 30): Promise<TotpSteps> {
@@ -167,13 +169,13 @@ export async function makeKeyPair(): Promise<CryptoKeyPair> {
 export async function sign(priv: CryptoKey, challenge: string, origin: string): Promise<Assertion> {
   const clientData: ClientData = { type: 'webauthn.get', challenge, origin };
   const clientDataJSON = JSON.stringify(clientData);
-  const sig = new Uint8Array(await crypto.subtle.sign({ name: 'ECDSA', hash: 'SHA-256' }, priv, utf8(clientDataJSON)));
+  const sig = new Uint8Array(await crypto.subtle.sign({ name: 'ECDSA', hash: 'SHA-256' }, priv, buf(utf8(clientDataJSON))));
   return { clientData, clientDataJSON, signature: sig };
 }
 
 /** The real site checks the signature, that the challenge is the one it issued, and that the origin is its own. */
 export async function verify(pub: CryptoKey, a: Assertion, expectedChallenge: string, expectedOrigin: string): Promise<Verdict> {
-  const signatureOk = await crypto.subtle.verify({ name: 'ECDSA', hash: 'SHA-256' }, pub, a.signature, utf8(a.clientDataJSON));
+  const signatureOk = await crypto.subtle.verify({ name: 'ECDSA', hash: 'SHA-256' }, pub, buf(a.signature), buf(utf8(a.clientDataJSON)));
   const challengeOk = a.clientData.challenge === expectedChallenge;
   const originOk = a.clientData.origin === expectedOrigin;
   return { signatureOk, challengeOk, originOk, accepted: signatureOk && challengeOk && originOk };

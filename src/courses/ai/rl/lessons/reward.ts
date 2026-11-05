@@ -20,6 +20,8 @@ export const OPEN_BEST = Math.abs(OPEN.goal[0] - OPEN.start[0]) + Math.abs(OPEN.
 export type Shaping = 'sparse' | 'potential' | 'progress';
 export const SHAPING_KO: Record<Shaping, string> = { sparse: '도착할 때만 +1', potential: '퍼텐셜 기반 다듬기', progress: '가까워지면 +0.2' };
 export const BONUS = 0.2;
+/** Scale of the potential Φ(s) = POT_SCALE · (1 − distance / 12). */
+export const POT_SCALE = 0.5;
 
 const dist = (p: Pos) => Math.abs(p[0] - OPEN.goal[0]) + Math.abs(p[1] - OPEN.goal[1]);
 
@@ -28,8 +30,9 @@ export function shapedReward(kind: Shaping, p: Pos, q: Pos): number {
   const goal = q[0] === OPEN.goal[0] && q[1] === OPEN.goal[1] ? 1 : 0;
   if (kind === 'sparse') return goal;
   if (kind === 'progress') return goal + (dist(q) < dist(p) ? BONUS : 0);
-  // F = γΦ(q) − Φ(p) with Φ = −BONUS · distance; the goal is terminal, so Φ(goal) counts as 0
-  const phi = (s: Pos) => -BONUS * dist(s);
+  // F = γΦ(q) − Φ(p) with Φ(s) = 0.5 · (1 − distance / 12), a rough guess of how close s is
+  // to the goal. The goal is terminal, so Φ(goal) counts as 0 (Ng, Harada & Russell 1999).
+  const phi = (s: Pos) => POT_SCALE * (1 - dist(s) / OPEN_BEST);
   return goal + OPEN.gamma * (goal ? 0 : phi(q)) - phi(p);
 }
 
@@ -135,11 +138,11 @@ export function summarizeOpen(kind: Shaping, episodes: number, seeds: number, se
 
 /**
  * A 3-row track. The boat starts at the left; any cell in the last column is the finish line
- * (ends the episode with FINISH points). The pad P gives 1 point when the boat lands on it and
+ * (ends the episode with FINISH points). The pad P gives 1 point when the boat moves onto it and
  * then switches off for PAD_OFF moves. The state includes the pad's timer, so the problem
  * stays Markov.
  */
-export const RACE = { w: 9, h: 3, start: [0, 1] as Pos, pad: [2, 0] as Pos, padOff: 3, gamma: 0.95, maxT: 40 };
+export const RACE = { w: 7, h: 3, start: [0, 1] as Pos, pad: [2, 0] as Pos, padOff: 3, gamma: 0.95, maxT: 40 };
 
 export interface RaceStep {
   p: Pos;
@@ -156,7 +159,8 @@ function raceStep(p: Pos, timer: number, a: number, finish: number): { p: Pos; t
   const p2 = move(p, a, RACE.w, RACE.h);
   let t2 = Math.max(0, timer - 1);
   let r = 0;
-  if (p2[0] === RACE.pad[0] && p2[1] === RACE.pad[1] && timer === 0) {
+  // the pad pays only when the boat arrives on it from another cell
+  if (p2[0] === RACE.pad[0] && p2[1] === RACE.pad[1] && !(p[0] === p2[0] && p[1] === p2[1]) && timer === 0) {
     r += 1;
     t2 = RACE.padOff;
   }
@@ -175,7 +179,7 @@ export interface RaceRun {
   finishRate: number;
 }
 
-export function trainRace(finish: number, episodes: number, seed: number, alpha = 0.3, eps = 0.1): RaceRun {
+export function trainRace(finish: number, episodes: number, seed: number, alpha = 0.3, eps = 0.2): RaceRun {
   const u = rng(seed);
   const q = new Float64Array(RACE.w * RACE.h * (RACE.padOff + 1) * 4);
   let finishes = 0;

@@ -1,0 +1,8 @@
+/* 강화학습 · 정책 경사: the figures are canvas, so only small layout rules live here. */
+
+.pg-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  align-items: center;
+}

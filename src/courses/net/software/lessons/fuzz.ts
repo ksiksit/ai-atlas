@@ -290,6 +290,8 @@ export interface FuzzState {
   history: [number, number][];
   /** Inputs that were rejected, accepted, crashed, hung. */
   counts: Record<Status, number>;
+  /** Inputs that read past the end without anything noticing (only when the sanitizer is off). */
+  silent: number;
   r: () => number;
   sanitizer: boolean;
 }
@@ -297,7 +299,7 @@ export interface FuzzState {
 export function newFuzzer(kind: FuzzerKind, seed: number, sanitizer = true): FuzzState {
   // each fuzzer gets its own stream so that their runs do not depend on one another
   const r = rng(seed * 7919 + FUZZERS.indexOf(kind) * 104729 + 1);
-  const st: FuzzState = { kind, execs: 0, covered: new Set(), corpus: kind === 'random' ? [] : SEEDS.map((s) => s.slice()), found: [], history: [[0, 0]], counts: { ok: 0, reject: 0, crash: 0, hang: 0 }, r, sanitizer };
+  const st: FuzzState = { kind, execs: 0, covered: new Set(), corpus: kind === 'random' ? [] : SEEDS.map((s) => s.slice()), found: [], history: [[0, 0]], counts: { ok: 0, reject: 0, crash: 0, hang: 0 }, silent: 0, r, sanitizer };
   // the coverage-guided fuzzer first runs its seeds to learn what they cover (not counted as fuzzing)
   if (kind !== 'random') for (const s of SEEDS) for (const id of parse(s, sanitizer).branches) st.covered.add(id);
   st.history = [[0, st.covered.size]];
@@ -320,6 +322,7 @@ export function fuzzSteps(st: FuzzState, k: number): FuzzState {
     const res = parse(input, st.sanitizer);
     st.execs++;
     st.counts[res.status]++;
+    if (res.silentOob) st.silent++;
     let grew = false;
     for (const id of res.branches)
       if (!st.covered.has(id)) {

@@ -36,7 +36,7 @@ export interface DfdElem {
   id: string;
   kind: ElemKind;
   name: string;
-  /** Box centre for entities/processes/stores, in a 100 × 60 diagram space. */
+  /** Centre for entities/processes/stores, in a 120 × 64 diagram space. */
   x?: number;
   y?: number;
   /** For flows: from and to element ids, and a label. */
@@ -47,23 +47,26 @@ export interface DfdElem {
   threats: Threat[];
 }
 
+/** The server zone: everything inside runs on the library's own servers. */
+export const ZONE = { x: 30, y: 3, w: 68, h: 58 };
+
 export const DFD: DfdElem[] = [
   {
-    id: 'member', kind: 'entity', name: '회원', x: 10, y: 18,
+    id: 'member', kind: 'entity', name: '회원', x: 12, y: 16,
     threats: [
       { cat: 'S', text: '남의 비밀번호를 알아낸 사람이 그 회원인 척 로그인합니다.', fix: '다중 인증, 패스키' },
       { cat: 'R', text: '회원이 "그 책은 내가 빌린 적 없다"고 우깁니다.', fix: '대출마다 시각과 계정을 남기는 기록' },
     ],
   },
   {
-    id: 'librarian', kind: 'entity', name: '사서', x: 10, y: 46,
+    id: 'librarian', kind: 'entity', name: '사서', x: 12, y: 48,
     threats: [
       { cat: 'S', text: '공격자가 사서 계정으로 로그인해 관리 화면을 씁니다.', fix: '관리자 계정은 보안 키로만 로그인' },
       { cat: 'R', text: '연체료를 지운 사서가 누가 지웠는지 밝혀지지 않습니다.', fix: '관리 작업마다 사서 이름이 남는 감사 로그' },
     ],
   },
   {
-    id: 'web', kind: 'process', name: '웹 서버', x: 48, y: 30,
+    id: 'web', kind: 'process', name: '웹 서버', x: 46, y: 32,
     threats: [
       { cat: 'S', text: '세션 쿠키를 훔친 사람이 그 회원으로 요청을 보냅니다.', fix: 'HttpOnly·Secure 쿠키, 짧은 세션' },
       { cat: 'T', text: '요청의 회원 번호를 고쳐 남의 대출을 연장합니다.', fix: '서버가 로그인한 회원 기준으로만 처리' },
@@ -74,7 +77,7 @@ export const DFD: DfdElem[] = [
     ],
   },
   {
-    id: 'notify', kind: 'process', name: '알림 발송', x: 48, y: 52,
+    id: 'notify', kind: 'process', name: '알림 발송', x: 72, y: 48,
     threats: [
       { cat: 'S', text: '아무나 알림 발송 기능을 불러 도서관 이름으로 메일을 보냅니다.', fix: '내부 서비스 사이에도 인증' },
       { cat: 'T', text: '반납 알림 메일의 링크를 피싱 주소로 바꿉니다.', fix: '메일 본문은 서버의 고정 틀로만 만들기' },
@@ -85,7 +88,7 @@ export const DFD: DfdElem[] = [
     ],
   },
   {
-    id: 'db', kind: 'store', name: '회원·대출 DB', x: 86, y: 18,
+    id: 'db', kind: 'store', name: '회원·대출 DB', x: 86, y: 14,
     threats: [
       { cat: 'T', text: 'SQL 삽입으로 연체 기록을 지웁니다.', fix: '매개변수 바인딩' },
       { cat: 'R', text: '데이터를 고친 흔적이 남지 않습니다.', fix: '변경 이력 테이블' },
@@ -94,7 +97,7 @@ export const DFD: DfdElem[] = [
     ],
   },
   {
-    id: 'mail', kind: 'entity', name: '외부 메일 서비스', x: 86, y: 52,
+    id: 'mail', kind: 'entity', name: '메일 서비스', x: 108, y: 48,
     threats: [
       { cat: 'S', text: '공격자가 도서관 도메인을 흉내 낸 메일을 보냅니다.', fix: 'SPF, DKIM, DMARC 설정' },
       { cat: 'R', text: '메일이 갔는지 안 갔는지 확인할 수 없습니다.', fix: '발송 결과 기록 보관' },
@@ -144,7 +147,7 @@ export const DFD: DfdElem[] = [
 
 export const findElem = (id: string) => DFD.find((e) => e.id === id)!;
 export const totalThreats = () => DFD.reduce((n, e) => n + e.threats.length, 0);
-/** Threats on the flows that cross a trust boundary, plus the elements those flows touch. */
+/** Threats on the flows that cross a trust boundary. */
 export const boundaryThreats = () => DFD.filter((e) => e.kind === 'flow' && e.crosses).reduce((n, e) => n + e.threats.length, 0);
 
 /* ───────── attack tree ───────── */

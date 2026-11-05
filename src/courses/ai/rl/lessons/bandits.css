@@ -1,0 +1,83 @@
+/* 멀티암드 밴딧: the machines and the pull-count bars */
+
+.bd-machines {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
+  gap: 8px;
+}
+.bd-machine {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+  border: 1px solid var(--line-strong);
+  border-top: 4px solid var(--c);
+  background: var(--surface);
+  min-width: 0;
+}
+.bd-machine[data-last] {
+  background: color-mix(in srgb, var(--c) 10%, var(--surface));
+}
+.bd-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: var(--fs-sm);
+}
+.bd-head .mono {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.bd-bar {
+  position: relative;
+  height: 10px;
+  background: var(--surface-2);
+}
+.bd-bar i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--c);
+}
+.bd-bar b {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 2px;
+  margin-left: -1px;
+  background: var(--ink);
+}
+.bd-est {
+  font-size: 0.75rem;
+  color: var(--ink-2);
+  min-height: 2.4em;
+  overflow-wrap: anywhere;
+}
+.bd-est span {
+  color: var(--ink-3);
+}
+.bd-machine .btn {
+  align-self: stretch;
+}
+
+.bd-counts {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: var(--fs-xs);
+}
+.bd-counts > div {
+  display: grid;
+  grid-template-columns: 1.2em minmax(0, 1fr) 4.5em;
+  align-items: center;
+  gap: 6px;
+}
+.bd-counts i {
+  display: block;
+  height: 8px;
+  min-width: 1px;
+  background: var(--c);
+}
+.bd-counts .mono {
+  text-align: right;
+  color: var(--ink-3);
+}

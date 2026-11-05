@@ -61,8 +61,7 @@ export function handlerProgram(escapeName: boolean, id: IdHandling, paramQuery: 
       : id === 'escape'
         ? { code: 'const id = escapeHtml(req.query.id);', ir: { op: 'clean', dst: 'id', uses: ['req.query.id'], fn: 'escapeHtml', cleans: ['html'] } }
         : { code: 'const id = req.query.id;', ir: { op: 'src', dst: 'id', from: 'req.query.id' } };
-  return [
-    { code: 'function showOrders(req, res) {', ir: { op: 'plain' } },
+  const body: Stmt[] = [
     { code: 'const name = req.query.name;', ir: { op: 'src', dst: 'name', from: 'req.query.name' } },
     idLine,
     escapeName
@@ -74,8 +73,8 @@ export function handlerProgram(escapeName: boolean, id: IdHandling, paramQuery: 
     { code: 'const file = "/reports/" + id + ".pdf";', ir: { op: 'assign', dst: 'file', uses: ['id'] } },
     { code: 'exec("print-pdf " + file);', ir: { op: 'sink', kind: 'shell', uses: ['file'], fn: 'exec' } },
     { code: 'res.send("<h1>" + hello + "</h1>");', ir: { op: 'sink', kind: 'html', uses: ['hello'], fn: 'res.send' } },
-    { code: '}', ir: { op: 'plain' } },
   ];
+  return [{ code: 'function showOrders(req, res) {', ir: { op: 'plain' } }, ...body.map((st) => ({ ...st, code: '  ' + st.code })), { code: '}', ir: { op: 'plain' } }];
 }
 
 /** Flow-sensitive, path-insensitive taint analysis, one frame per statement. */
