@@ -183,7 +183,7 @@ function LatticeFigure() {
           options={(Object.keys(GROUPS) as (keyof typeof GROUPS)[]).map((k) => ({ value: k, label: GROUP_KO[k] }))}
         />
       </div>
-      <div className="lg-lattice">
+      <div className="lg-lattice" role="region" aria-label="부분군 지도, 좁은 화면에서는 가로로 스크롤할 수 있습니다">
         <svg viewBox={`-34 0 ${W + 40} ${H}`} role="group" aria-label={`${G.name}의 부분군 ${subs.length}개. 크기는 ${subs.map((h) => h.length).join(', ')}.`}>
           {sizes.map((s, level) => (
             <text key={s} className="lg-level" x={-30} y={H - 10 - nodeH / 2 - level * rowH} dy="0.35em">
