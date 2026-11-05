@@ -89,6 +89,8 @@ function gcdN(a: number, b: number): number {
 
 /* ───────── Figure 3: Bolzano–Weierstrass by halving ───────── */
 
+export type Half = 'lower' | 'upper';
+
 export interface Halving {
   k: number;
   lo: number;
@@ -96,24 +98,26 @@ export interface Halving {
   /** The index chosen for the subsequence at this step (strictly increasing), and its term. */
   nk: number;
   term: number;
-  /** How many of the first `sample` terms fall in each half before choosing. */
+  /** How many of the first `sample` terms fell in each half of the previous interval. */
   lowerCount: number;
   upperCount: number;
-  chose: 'lower' | 'upper' | 'start';
+  chose: Half | null;
 }
 
+/** Up/down/up/down…: the kept intervals close in on 1/3. */
+export const DEFAULT_HALVES: Half[] = Array.from({ length: 12 }, (_, k) => (k % 2 ? 'lower' : 'upper'));
+
 /**
- * Start with [−1, 1], which holds every sin(n). At each step split the interval in half and keep a half
- * that holds infinitely many terms. We cannot see "infinitely many", so we keep the half holding more of
- * the first `sample` terms (for sin(n) both halves always hold infinitely many, so either is a correct
- * choice). Then pick the next index n_k > n_{k−1} whose term lies in the kept half.
+ * Start with [−1, 1], which holds every sin(n). At each step split the interval in half and keep a half that
+ * holds infinitely many terms. For sin(n) every subinterval does (its values are dense in [−1, 1]), so the
+ * reader may keep either half; the counts over the first `sample` terms show both halves keep filling up.
+ * Then take the next index n_k > n_{k−1} whose term lies in the kept half.
  */
-export function bolzano(steps = 12, sample = 20000, a: (n: number) => number = Math.sin): Halving[] {
+export function bolzano(choices: Half[], sample = 20000, a: (n: number) => number = Math.sin): Halving[] {
   let lo = -1, hi = 1;
-  const out: Halving[] = [];
   let nk = 1;
-  out.push({ k: 0, lo, hi, nk, term: a(nk), lowerCount: 0, upperCount: 0, chose: 'start' });
-  for (let k = 1; k <= steps; k++) {
+  const out: Halving[] = [{ k: 0, lo, hi, nk, term: a(nk), lowerCount: 0, upperCount: 0, chose: null }];
+  choices.forEach((chose, idx) => {
     const mid = (lo + hi) / 2;
     let lc = 0, uc = 0;
     for (let n = 1; n <= sample; n++) {
@@ -121,14 +125,13 @@ export function bolzano(steps = 12, sample = 20000, a: (n: number) => number = M
       if (v >= lo && v < mid) lc++;
       else if (v >= mid && v <= hi) uc++;
     }
-    const chose = uc >= lc ? 'upper' : 'lower';
     if (chose === 'upper') lo = mid;
     else hi = mid;
     let n = nk + 1;
     while (!(a(n) >= lo && a(n) <= hi)) n++;
     nk = n;
-    out.push({ k, lo, hi, nk, term: a(nk), lowerCount: lc, upperCount: uc, chose });
-  }
+    out.push({ k: idx + 1, lo, hi, nk, term: a(nk), lowerCount: lc, upperCount: uc, chose });
+  });
   return out;
 }
 
@@ -146,16 +149,17 @@ export interface CauchyInfo {
   limitNote: string;
 }
 
-const H = (n: number) => {
-  let s = 0;
-  for (let k = 1; k <= n; k++) s += 1 / k;
-  return s;
+/** Prefix sums, built once up to FAR so tails are cheap to read. */
+export const FAR = 100000;
+const prefix = (term: (k: number) => number) => {
+  const out = new Float64Array(FAR + 1);
+  for (let k = 1; k <= FAR; k++) out[k] = out[k - 1] + term(k);
+  return out;
 };
-const B = (n: number) => {
-  let s = 0;
-  for (let k = 1; k <= n; k++) s += 1 / (k * k);
-  return s;
-};
+let HP: Float64Array | null = null;
+let BP: Float64Array | null = null;
+const H = (n: number) => (HP ??= prefix((k) => 1 / k))[Math.min(n, FAR)];
+const B = (n: number) => (BP ??= prefix((k) => 1 / (k * k)))[Math.min(n, FAR)];
 /** √2 cut after n decimal places: 1, 1.4, 1.41, 1.414, … (n = 1 means no decimals). */
 const SQRT2_DIGITS = '14142135623730950488';
 const dec = (n: number) => {
