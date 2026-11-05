@@ -1,0 +1,29 @@
+/* 레이 트레이싱: the quadratic's coefficients */
+
+.rt-quad {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--line);
+  font-size: var(--fs-sm);
+}
+.rt-quad > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--line);
+}
+.rt-quad span {
+  color: var(--ink-3);
+}
+.rt-quad b {
+  font-weight: 600;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.rt-quad > div[data-bad] b {
+  color: var(--bad);
+}
+.rt-quad > div[data-good] b {
+  color: var(--good);
+}

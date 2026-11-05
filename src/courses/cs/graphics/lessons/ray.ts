@@ -202,7 +202,7 @@ function hit3(o: Vec3, d: Vec3): Hit3 {
     if (t > 1e-4 && t < 60 && (!best || t < best.t)) {
       const p = add(o, scale(d, t));
       const check = (Math.floor(p[0] * 1.25) + Math.floor(p[2] * 1.25)) & 1;
-      const color: RGB = check ? [0.82, 0.8, 0.74] : [0.32, 0.31, 0.3];
+      const color: RGB = check ? [0.8, 0.78, 0.72] : [0.58, 0.57, 0.55];
       best = { t, p, n: [0, 1, 0], color, refl: FLOOR_REFL, spec: 0 };
     }
   }
@@ -356,8 +356,11 @@ export interface BvhTrace {
   t: number;
   boxTests: number;
   discTests: number;
-  /** Boxes the ray was tested against, and whether it entered them. */
-  visited: { node: BvhNode; entered: boolean }[];
+  /**
+   * Boxes the ray was tested against: 'entered' (looked inside), 'missed' (the ray does not
+   * touch the box) or 'skipped' (touched, but a nearer hit was already known).
+   */
+  visited: { node: BvhNode; status: 'entered' | 'missed' | 'skipped' }[];
   tested: number[];
 }
 
@@ -377,8 +380,11 @@ export function traceBrute(o: P2, d: P2, discs: Disc[]): { hit: number | null; t
 /** Front-to-back BVH traversal with an early out once a nearer hit is known. */
 export function traceBvh(o: P2, d: P2, discs: Disc[], root: BvhNode): BvhTrace {
   const out: BvhTrace = { hit: null, t: Infinity, boxTests: 0, discTests: 0, visited: [], tested: [] };
+  const seen: { node: BvhNode; hit: boolean }[] = [];
+  const inside = new Set<BvhNode>();
   const visit = (n: BvhNode, tEnter: number) => {
     if (tEnter > out.t) return;
+    inside.add(n);
     if (n.kids.length === 0) {
       for (const i of n.items) {
         out.discTests++;
@@ -394,7 +400,7 @@ export function traceBvh(o: P2, d: P2, discs: Disc[], root: BvhNode): BvhTrace {
     const ent = n.kids.map((k) => {
       out.boxTests++;
       const t = rayBox(o, d, k.box, out.t);
-      out.visited.push({ node: k, entered: t !== null });
+      seen.push({ node: k, hit: t !== null });
       return { k, t };
     });
     ent.sort((a, b) => (a.t ?? Infinity) - (b.t ?? Infinity));
@@ -402,8 +408,9 @@ export function traceBvh(o: P2, d: P2, discs: Disc[], root: BvhNode): BvhTrace {
   };
   out.boxTests++;
   const t0 = rayBox(o, d, root.box);
-  out.visited.push({ node: root, entered: t0 !== null });
+  seen.push({ node: root, hit: t0 !== null });
   if (t0 !== null) visit(root, t0);
+  out.visited = seen.map((v) => ({ node: v.node, status: !v.hit ? 'missed' : inside.has(v.node) ? 'entered' : 'skipped' }));
   return out;
 }
 

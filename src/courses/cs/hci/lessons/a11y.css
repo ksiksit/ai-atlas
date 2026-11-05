@@ -1,0 +1,324 @@
+/* 접근성: widgets of the lesson. Prefix ay-. */
+
+/* ───── Figure 1: contrast ───── */
+.ay-presets .btn {
+  gap: 6px;
+}
+.ay-presets .btn[aria-pressed='true'] {
+  background: var(--surface-3);
+  border-width: 2px;
+}
+.ay-sw {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 11px;
+  border: 1px solid var(--line-strong);
+}
+.ay-contrast {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 720px) {
+  .ay-contrast {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.ay-preview {
+  border: 1px solid var(--line-strong);
+  padding: 18px 18px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ay-preview p {
+  margin: 0;
+  line-height: 1.5;
+}
+.ay-big {
+  font-size: 24px;
+  font-weight: 600;
+}
+.ay-normal {
+  font-size: 16px;
+}
+.ay-small-t {
+  font-size: 13px;
+}
+.ay-pickers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+}
+.ay-pickers label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--fs-sm);
+}
+.ay-pickers input[type='color'] {
+  width: 44px;
+  height: 32px;
+  padding: 2px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  cursor: pointer;
+}
+.ay-pickers code {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--ink-2);
+}
+.ay-table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: var(--fs-xs);
+}
+.ay-table th,
+.ay-table td {
+  text-align: left;
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+.ay-table th {
+  color: var(--ink-3);
+  font-weight: 600;
+}
+.ay-table tr td:last-child {
+  font-weight: 600;
+  color: var(--bad);
+}
+.ay-table tr[data-pass] td:last-child {
+  color: var(--good);
+}
+.ay-tree tr td:last-child {
+  font-weight: 400;
+  color: var(--ink-2);
+}
+.ay-tree tr[data-bad] td {
+  color: var(--bad);
+}
+.ay-pair {
+  display: inline-flex;
+  gap: 4px;
+  vertical-align: middle;
+}
+.ay-pair i {
+  width: 22px;
+  height: 22px;
+  display: inline-block;
+  border: 1px solid var(--line-strong);
+}
+
+/* ───── Figure 3: keyboard ───── */
+.ay-page {
+  position: relative;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  max-width: 520px;
+  font-size: var(--fs-sm);
+  overflow: hidden;
+}
+.ay-page a,
+.ay-page button,
+.ay-page input {
+  font: inherit;
+}
+.ay-page :focus-visible {
+  outline: 3px solid var(--hl);
+  outline-offset: 2px;
+}
+.ay-page-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+}
+.ay-page-bar a {
+  font-weight: 700;
+  color: var(--ink);
+  text-decoration: none;
+}
+.ay-page-bar input {
+  min-width: 0;
+  flex: 1 1 140px;
+  max-width: 220px;
+  padding: 5px 8px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink);
+}
+.ay-product {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 12px;
+}
+.ay-product > div:first-child {
+  display: flex;
+  flex-direction: column;
+}
+.ay-product span {
+  color: var(--ink-2);
+  font-size: var(--fs-xs);
+}
+.ay-fake {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 10px;
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+  user-select: none;
+}
+.ay-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-top: 1px solid var(--line);
+  font-size: var(--fs-xs);
+  color: var(--ink-2);
+}
+.ay-linkbtn {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--accent);
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: var(--fs-xs) !important;
+}
+.ay-modal-back {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--ink) 45%, transparent);
+  display: grid;
+  place-items: center;
+  padding: 12px;
+}
+.ay-modal {
+  background: var(--surface);
+  border: 1px solid var(--ink);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 320px;
+}
+.ay-modal p {
+  margin: 0;
+  font-size: var(--fs-xs);
+  color: var(--ink-2);
+}
+.ay-modal a {
+  color: var(--accent);
+  font-size: var(--fs-xs);
+}
+.ay-order {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--fs-xs);
+}
+.ay-order .lbl {
+  color: var(--ink-3);
+  margin-right: 4px;
+}
+.ay-chip {
+  padding: 2px 7px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  white-space: nowrap;
+}
+.ay-chip[data-on] {
+  background: var(--hl);
+  border-color: var(--hl);
+  color: var(--ink);
+  font-weight: 600;
+}
+.ay-chip[data-miss] {
+  border-style: dashed;
+  border-color: var(--bad);
+  color: var(--bad);
+}
+
+/* ───── Figure 4: screen reader ───── */
+.ay-sr {
+  display: grid;
+  grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 640px) {
+  .ay-sr {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.ay-form {
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: var(--fs-sm);
+}
+.ay-form h4 {
+  margin: 0;
+  font-size: var(--fs-base);
+}
+.ay-field {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+.ay-field input {
+  width: 100%;
+  margin-top: 4px;
+  padding: 6px 8px;
+  font: inherit;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink);
+}
+.ay-star {
+  color: var(--bad);
+  font-weight: 700;
+}
+.ay-check {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: var(--fs-xs);
+}
+.ay-icon {
+  align-self: flex-start;
+  min-width: 44px;
+}
+.ay-speech {
+  margin: 0;
+  padding-left: 22px;
+  font-size: var(--fs-xs);
+  color: var(--ink-2);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}

@@ -1,0 +1,5 @@
+/* 텍스처와 샘플링: the figures are canvases; nothing lesson-specific yet beyond the shared styles. */
+.tx-small {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}

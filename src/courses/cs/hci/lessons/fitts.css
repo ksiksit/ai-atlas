@@ -1,0 +1,89 @@
+/* 피츠의 법칙: the reciprocal tapping area */
+
+.ft-area {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  background: var(--surface-2);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  cursor: crosshair;
+}
+.ft-area:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.ft-area[data-flash='miss'] {
+  animation: ft-miss 0.25s ease-out;
+}
+.ft-area[data-flash='hit'] {
+  animation: ft-hit 0.15s ease-out;
+}
+@keyframes ft-miss {
+  from {
+    background: color-mix(in srgb, var(--bad) 18%, var(--surface-2));
+  }
+}
+@keyframes ft-hit {
+  from {
+    background: color-mix(in srgb, var(--good) 8%, var(--surface-2));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ft-area[data-flash] {
+    animation: none;
+  }
+}
+
+.ft-bar {
+  position: absolute;
+  top: 16px;
+  bottom: 30px;
+  background: color-mix(in srgb, var(--ink-3) 22%, transparent);
+  border: 1px solid var(--line-strong);
+  pointer-events: none;
+}
+.ft-bar[data-on] {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.ft-dist {
+  position: absolute;
+  bottom: 8px;
+  height: 14px;
+  border-left: 1px solid var(--ink-3);
+  border-right: 1px solid var(--ink-3);
+  pointer-events: none;
+}
+.ft-dist::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  border-top: 1px dashed var(--ink-3);
+}
+.ft-dist span {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 0 4px;
+  background: var(--surface-2);
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.ft-idle {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--ink-3);
+  font-size: var(--fs-sm);
+  pointer-events: none;
+}

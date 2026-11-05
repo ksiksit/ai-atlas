@@ -1,0 +1,7 @@
+/* 빛과 셰이딩 */
+
+.sh-checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}

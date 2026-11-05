@@ -124,3 +124,16 @@ export function renderTerm(fb: Framebuffer, mesh: Mesh, term: keyof Terms | 'all
 }
 
 export const sphereMesh = (seg: number) => sphere(seg);
+
+/** Lay out `n` square image panels in rows that fit `w` CSS px, each with a label strip below. */
+export function panelLayout(w: number, n: number, opts: { gap?: number; labelH?: number; minSize?: number; maxSize?: number } = {}) {
+  const { gap = 12, labelH = 22, minSize = 130, maxSize = 230 } = opts;
+  const cols = Math.max(1, Math.min(n, Math.floor((w + gap) / (minSize + gap))));
+  const size = Math.floor(Math.min(maxSize, (w - (cols - 1) * gap) / cols));
+  const rows = Math.ceil(n / cols);
+  const h = rows * (size + labelH) + (rows - 1) * gap;
+  const used = cols * size + (cols - 1) * gap;
+  const x0 = Math.floor((w - used) / 2);
+  const pos = (i: number) => ({ x: x0 + (i % cols) * (size + gap), y: Math.floor(i / cols) * (size + labelH + gap) });
+  return { cols, rows, size, h, labelH, pos };
+}

@@ -1,0 +1,75 @@
+/* 변환과 카메라 */
+
+.tf-tex-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 32px;
+  overflow-x: auto;
+  font-size: var(--fs-sm);
+}
+
+.tf-mats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px 20px;
+}
+.tf-matbox {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.tf-matname {
+  font-size: var(--fs-sm);
+}
+.tf-matname span {
+  color: var(--ink-3);
+  font-size: var(--fs-xs);
+  margin-left: 4px;
+}
+.tf-mat {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 2px 6px;
+  padding: 4px 8px;
+  border-left: 2px solid var(--ink-2);
+  border-right: 2px solid var(--ink-2);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.tf-mat span[data-zero] {
+  color: var(--ink-3);
+  opacity: 0.6;
+}
+
+.tf-journey {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+}
+.tf-journey th,
+.tf-journey td {
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+.tf-journey thead th {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  font-weight: 600;
+  border-bottom: 1px solid var(--line-strong);
+}
+.tf-journey tbody th {
+  font-weight: 600;
+  white-space: nowrap;
+}
+.tf-journey td.mono {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.tf-journey td:last-child {
+  color: var(--ink-2);
+}
