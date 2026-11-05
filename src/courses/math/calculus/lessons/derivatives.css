@@ -23,7 +23,7 @@
   text-align: left;
 }
 .dv-table tr[data-on] td {
-  background: color-mix(in srgb, var(--neg) 14%, transparent);
+  background: color-mix(in srgb, var(--bad) 14%, transparent);
   color: var(--ink);
 }
 

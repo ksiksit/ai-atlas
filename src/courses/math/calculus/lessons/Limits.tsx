@@ -139,7 +139,7 @@ function EpsDeltaFigure() {
       hole(p, A, LIM, P.ink, P.surface);
       if (!res.ok) {
         p.dot(res.worstX, SQ(res.worstX), 6, P.bad, P.surface, 2);
-        p.text(`x = ${res.worstX.toFixed(3)}`, res.worstX, SQ(res.worstX), P.bad, { dx: 10, dy: 0, font: `600 12px ${P.fontMono}`, bg: P.surface });
+        p.text(`x = ${res.worstX.toFixed(4)}`, res.worstX, SQ(res.worstX), P.bad, { dx: 10, dy: 0, font: `600 12px ${P.fontMono}`, bg: P.surface });
       }
       p.text('L + ε', p.xMin, LIM + eps, P.good, { dx: 6, dy: -9, font: `600 11px ${P.fontMono}` });
       p.text('L − ε', p.xMin, LIM - eps, P.good, { dx: 6, dy: 10, font: `600 11px ${P.fontMono}` });
@@ -166,7 +166,7 @@ function EpsDeltaFigure() {
 
   const verdict = res.ok
     ? `통과. x가 2에서 ${delta.toFixed(3)}보다 가까우면 x²은 4에서 많아야 ${res.maxDev.toFixed(4)}만큼 떨어져, ε = ${eps.toFixed(3)} 안에 있습니다.`
-    : `실패. x = ${res.worstX.toFixed(3)}에서 x² = ${SQ(res.worstX).toFixed(3)}이라 4에서 ${res.maxDev.toFixed(3)}만큼 떨어져 ε = ${eps.toFixed(3)}을 넘습니다. δ를 줄여 보세요.`;
+    : `실패. x = ${res.worstX.toFixed(4)}에서 x² = ${SQ(res.worstX).toFixed(4)}이라 4에서 ${res.maxDev.toFixed(4)}만큼 떨어져 ε = ${eps.toFixed(3)}을 넘습니다. δ를 줄여 보세요.`;
 
   return (
     <Figure
@@ -257,7 +257,7 @@ function FailFigure() {
       hint="네 가지 경우를 바꿔 보세요"
       caption={
         <>
-          빨간 곡선은 왼쪽(x &lt; a), 초록 곡선은 오른쪽(x &gt; a)입니다. 속이 빈 동그라미는 그래프가 다가가는 점, 속이 찬 동그라미는 실제 함수값 f(a)입니다. 표는 a에서 10<sup>−1</sup>부터 10<sup>−5</sup>까지 떨어진 곳의 값입니다.
+          파란 곡선은 왼쪽(x &lt; a), 주황 곡선은 오른쪽(x &gt; a)입니다. 속이 빈 동그라미는 그래프가 다가가는 점, 속이 찬 동그라미는 실제 함수값 f(a)입니다. 표는 a에서 10<sup>−1</sup>부터 10<sup>−5</sup>까지 떨어진 곳의 값입니다.
         </>
       }
     >

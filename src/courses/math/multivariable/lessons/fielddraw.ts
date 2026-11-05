@@ -191,13 +191,16 @@ export function clampIn(v: View, px: number, py: number, margin = 0.15): V2 {
 /** A tinted heat map of g over the view (positive → pos colour, negative → neg colour), on a coarse grid. */
 export function drawHeat(ctx: CanvasRenderingContext2D, v: View, g: (x: number, y: number) => number, P: Palette, scale: number, n = 48, strength = 0.38) {
   const c = v.size / n;
+  // cells snap to whole pixels so neighbours neither overlap (darker seams) nor leave gaps
+  const edge = (k: number, o: number) => Math.round(o + k * c);
   for (let i = 0; i < n; i++)
     for (let j = 0; j < n; j++) {
       const x = -v.R + ((i + 0.5) * 2 * v.R) / n, y = v.R - ((j + 0.5) * 2 * v.R) / n;
       const val = g(x, y) / scale;
       if (Math.abs(val) < 0.02) continue;
       ctx.fillStyle = alpha(val > 0 ? P.pos : P.neg, Math.min(1, Math.abs(val)) * strength);
-      ctx.fillRect(v.left + i * c, v.top + j * c, c + 0.6, c + 0.6);
+      const x0 = edge(i, v.left), y0 = edge(j, v.top);
+      ctx.fillRect(x0, y0, edge(i + 1, v.left) - x0, edge(j + 1, v.top) - y0);
     }
 }
 

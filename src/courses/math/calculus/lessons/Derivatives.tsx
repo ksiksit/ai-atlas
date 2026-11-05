@@ -37,7 +37,7 @@ function SecantFigure() {
       p.grid();
       p.fn(SQ, P.accent, 2.5);
       if (tangent) p.slopeLine(A, 1, 2, alpha(P.good, 0.9), 2, [6, 4]);
-      p.slopeLine(A, 1, q, P.neg, 2);
+      p.slopeLine(A, 1, q, P.bad, 2);
       // rise over run
       const x2 = A + h, y2 = SQ(x2);
       p.line(A, 1, x2, 1, alpha(P.ink3, 0.9), 1.5);
@@ -47,9 +47,9 @@ function SecantFigure() {
         p.text(`Δy = ${n6(y2 - 1)}`, x2, (1 + y2) / 2, P.ink2, { dx: h > 0 ? 8 : -8, align: h > 0 ? 'left' : 'right', font: `600 11px ${P.fontMono}`, bg: P.surface });
       }
       p.dot(A, 1, 6, P.ink, P.surface, 2);
-      p.dot(x2, y2, 8, P.neg, P.surface, 2.5);
+      p.dot(x2, y2, 8, P.bad, P.surface, 2.5);
       p.text('P', A, 1, P.ink, { dx: -10, dy: -10, align: 'right' });
-      p.text('Q', x2, y2, P.neg, { dx: 10, dy: -10 });
+      p.text('Q', x2, y2, P.bad, { dx: 10, dy: -10 });
     },
     [P, h, q, tangent],
     { aspect: 1.45, maxHeight: 400 },
@@ -95,10 +95,10 @@ function SecantFigure() {
               { value: -1, label: '왼쪽에서 (h < 0)' },
             ]}
           />
-          <Slider id="dv-h" label="|h| (오른쪽일수록 작게)" value={t} min={0} max={1} step={0.005} onChange={setT} format={() => n6(Math.abs(h))} color="var(--neg)" />
+          <Slider id="dv-h" label="|h| (오른쪽일수록 작게)" value={t} min={0} max={1} step={0.005} onChange={setT} format={() => n6(Math.abs(h))} color="var(--bad)" />
           <Check label="접선 보기" checked={tangent} onChange={setTangent} />
           <div className="readouts" style={{ gridTemplateColumns: '1fr 1fr' }}>
-            <Readout label="할선의 기울기" value={n6(q)} color="var(--neg)" />
+            <Readout label="할선의 기울기" value={n6(q)} color="var(--bad)" />
             <Readout label="2와의 차이" value={n6(q - 2)} />
           </div>
           <div className="tbl-wrap">
@@ -153,8 +153,7 @@ function FloatFigure() {
       ctx.stroke();
       ctx.restore();
       pts.forEach(([x, y], i) => p.dot(x, y, i + 1 === k ? 7 : 4, i + 1 === k ? P.hl : P.accent, P.surface, 1.5));
-      p.text('h (작을수록 오른쪽)', p.xMax, p.yMin, P.ink3, { dy: 26, align: 'right', font: `500 11px ${P.fontBody}` });
-      p.text('오차', p.xMin, p.yMax, P.ink3, { dx: 4, dy: 8, font: `500 11px ${P.fontBody}` });
+      p.text('← h가 작을수록 왼쪽', p.xMin, p.yMin, P.ink3, { dy: 26, font: `500 11px ${P.fontBody}` });
       p.text(`가장 작은 오차: h = 10^-${BEST.k}`, -BEST.k, lg(BEST.err), P.ink2, { dy: 16, align: 'center', font: `600 11px ${P.fontBody}`, bg: P.surface });
     },
     [P, k],
@@ -180,7 +179,7 @@ function FloatFigure() {
       </div>
       <div className="readouts">
         <Readout label="h" value={`10^-${k}`} />
-        <Readout label="(e^(1+h) − e) / h" value={String(row.q)} />
+        <Readout label="(e^(1+h) − e) / h" value={row.q.toPrecision(12)} />
         <Readout label="참값과의 오차" value={row.err.toExponential(2)} color={k === BEST.k ? 'var(--good)' : k > 12 ? 'var(--bad)' : undefined} />
       </div>
     </Figure>
@@ -218,16 +217,16 @@ function DerivativeFigure() {
   const { wrapRef, canvasRef } = useCanvas2D(
     (ctx, { w, h }) => {
       const half = h / 2;
-      const top = new Plot(ctx, w, half, P, { xMin: pre.xLo, xMax: pre.xHi, yMin: pre.yLo, yMax: pre.yHi, pad: { l: 40, r: 14, t: 18, b: 10 } });
+      const top = new Plot(ctx, w, half, P, { xMin: pre.xLo, xMax: pre.xHi, yMin: pre.yLo, yMax: pre.yHi, pad: { l: 40, r: 14, t: 18, b: 26 } });
       topRef.current = top;
       top.grid({ labels: true });
       top.fn(pre.f, P.accent, 2.5);
-      if (!corner && isFinite(slope)) top.slopeLine(x0, pre.f(x0), slope, P.neg, 2);
-      top.dot(x0, pre.f(x0), 7, P.neg, P.surface, 2.5);
+      if (!corner && isFinite(slope)) top.slopeLine(x0, pre.f(x0), slope, P.bad, 2);
+      top.dot(x0, pre.f(x0), 7, P.bad, P.surface, 2.5);
       top.text('f', pre.xLo, pre.yHi, P.accent, { dx: 6, dy: 4, font: `700 13px ${P.fontMono}` });
       ctx.save();
       ctx.translate(0, half);
-      const bot = new Plot(ctx, w, half, P, { xMin: pre.xLo, xMax: pre.xHi, yMin: dRange[0], yMax: dRange[1], pad: { l: 40, r: 14, t: 10, b: 24 } });
+      const bot = new Plot(ctx, w, half, P, { xMin: pre.xLo, xMax: pre.xHi, yMin: dRange[0], yMax: dRange[1], pad: { l: 40, r: 14, t: 18, b: 24 } });
       bot.grid();
       if (id === 'abs') {
         bot.fn(pre.df, P.good, 2.5, { to: -1e-9 });
@@ -235,8 +234,8 @@ function DerivativeFigure() {
       } else bot.fn(pre.df, P.good, 2.5);
       if (id === 'exp') bot.fn(pre.f, alpha(P.accent, 0.5), 5, { dash: [2, 6] });
       if (!corner && isFinite(slope)) {
-        bot.line(x0, 0, x0, slope, alpha(P.neg, 0.6), 1.5, [4, 3]);
-        bot.dot(x0, slope, 7, P.neg, P.surface, 2.5);
+        bot.line(x0, 0, x0, slope, alpha(P.bad, 0.6), 1.5, [4, 3]);
+        bot.dot(x0, slope, 7, P.bad, P.surface, 2.5);
       }
       bot.text("f′", pre.xLo, dRange[1], P.good, { dx: 6, dy: 6, font: `700 13px ${P.fontMono}` });
       ctx.restore();
@@ -246,7 +245,7 @@ function DerivativeFigure() {
       ctx.lineTo(w, half + 0.5);
       ctx.stroke();
       // the guide joining the two plots
-      ctx.strokeStyle = alpha(P.neg, 0.35);
+      ctx.strokeStyle = alpha(P.bad, 0.35);
       ctx.setLineDash([3, 4]);
       ctx.beginPath();
       ctx.moveTo(top.X(x0), top.Y(pre.f(x0)));
@@ -446,7 +445,7 @@ function RulesFigure() {
       caption={
         mode === 'product' ? (
           <>
-            넓이 u·v인 직사각형의 두 변이 Δu, Δv만큼 늘어나면 넓이는 세 조각만큼 늘어납니다. 빨강 v·Δu, 초록 u·Δv, 그리고 노란 귀퉁이 Δu·Δv입니다. Δ가 작아지면 귀퉁이는 Δ의 제곱으로 줄어서 나머지 둘에 비해 사라집니다.
+            넓이 u·v인 직사각형의 두 변이 Δu, Δv만큼 늘어나면 넓이는 세 조각만큼 늘어납니다. 오른쪽 띠 v·Δu, 위쪽 띠 u·Δv, 그리고 노란 귀퉁이 Δu·Δv입니다. Δ가 작아지면 귀퉁이는 Δ의 제곱으로 줄어서 나머지 둘에 비해 사라집니다.
           </>
         ) : (
           <>

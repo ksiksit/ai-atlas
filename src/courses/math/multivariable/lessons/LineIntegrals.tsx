@@ -58,15 +58,18 @@ function FieldFigure() {
     { aspect: 1, maxHeight: 460, minHeight: 200 },
   );
 
+  const pick = (x: number, y: number) => {
+    const v = viewRef.current;
+    if (!v || x < 0) return setHover(null);
+    const p: V2 = [v.ix(x), v.iy(y)];
+    setHover(Math.abs(p[0]) <= R && Math.abs(p[1]) <= R ? p : null);
+  };
   useDrag(canvasRef, {
     hit: () => null,
     onDrag: () => {},
-    onHover: (_, x, y) => {
-      const v = viewRef.current;
-      if (!v || x < 0) return setHover(null);
-      const p: V2 = [v.ix(x), v.iy(y)];
-      setHover(Math.abs(p[0]) <= R && Math.abs(p[1]) <= R ? p : null);
-    },
+    onHover: (_, x, y) => pick(x, y),
+    // on touch screens there is no hover: a tap picks the point instead
+    onEmpty: (x, y) => pick(x, y),
   });
 
   const val = hover ? f.F(hover[0], hover[1]) : null;
@@ -74,7 +77,7 @@ function FieldFigure() {
     <Figure
       no={1}
       title="점마다 화살표가 붙은 평면"
-      hint="벡터장을 바꾸고, 그림 위에 포인터를 올려 보세요"
+      hint="벡터장을 바꾸고, 그림 위에 포인터를 올리거나 눌러 보세요"
       caption={<>회색 화살표는 가로세로 15칸의 격자점에서 F의 방향과 상대적인 크기입니다. 파란 짧은 선은 흐름에 실려 가는 입자 220개로, 각 점에서 F를 속도 삼아 움직입니다. 포인터를 올린 점의 화살표(주황)는 실제 크기의 0.8배로 그렸습니다.</>}
     >
       <div className="controls row">
@@ -94,7 +97,7 @@ function FieldFigure() {
             <Readout label="그 점의 F" value={val ? vs(val) : '–'} color="var(--pos)" />
             <Readout label="크기 |F|" value={val ? nf(Math.hypot(val[0], val[1])) : '–'} />
           </div>
-          <p className="mv-small">입자의 길이 짧은 꼬리가 그 점의 속도입니다. 화살표가 빽빽하게 길수록 입자가 빨리 지나갑니다.</p>
+          <p className="mv-small">입자의 짧은 꼬리가 그 점의 속도입니다. 화살표가 빽빽하게 길수록 입자가 빨리 지나갑니다.</p>
         </div>
       </div>
     </Figure>
