@@ -1,0 +1,66 @@
+/* 강화학습 · 가치 반복과 정책 반복 */
+
+.dpg-pick {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--fs-xs);
+  color: var(--ink-2);
+}
+.dpg-pick select {
+  font: inherit;
+  font-family: var(--font-mono);
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  padding: 3px 6px;
+}
+.dpg-pick select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.dpg-backup,
+.dpg-compare {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-xs);
+}
+.dpg-backup th,
+.dpg-backup td,
+.dpg-compare th,
+.dpg-compare td {
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+.dpg-backup th,
+.dpg-compare th {
+  color: var(--ink-3);
+  font-weight: 600;
+}
+.dpg-backup td:nth-child(1) {
+  white-space: nowrap;
+}
+.dpg-backup td:nth-child(2) {
+  color: var(--ink-3);
+  font-size: 0.6875rem;
+}
+.dpg-term {
+  display: block;
+  white-space: nowrap;
+}
+.dpg-backup td:nth-child(3) {
+  text-align: right;
+  white-space: nowrap;
+}
+.dpg-backup tr[data-best] td {
+  background: color-mix(in srgb, var(--good) 14%, transparent);
+  color: var(--ink);
+  font-weight: 600;
+}
+.dpg-compare td.mono {
+  font-family: var(--font-mono);
+}

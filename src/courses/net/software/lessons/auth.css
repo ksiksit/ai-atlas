@@ -1,0 +1,269 @@
+/* 인증: 비밀번호 너머 */
+
+/* ───── guessing bars ───── */
+
+.au-secret {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 16px;
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+}
+.au-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.au-bar-row {
+  display: grid;
+  grid-template-columns: minmax(0, 13em) minmax(0, 1fr) 7.5em;
+  align-items: center;
+  gap: 4px 12px;
+}
+.au-bar-label {
+  display: flex;
+  flex-direction: column;
+  font-size: var(--fs-sm);
+  line-height: 1.35;
+}
+.au-bar-label span {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.au-bar-track {
+  height: 14px;
+  background: var(--surface-2);
+}
+.au-bar {
+  height: 100%;
+  background: var(--bad);
+}
+.au-bar[data-safe] {
+  background: var(--good);
+}
+.au-bar-time {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--bad);
+  text-align: right;
+}
+.au-bar-time[data-safe] {
+  color: var(--good);
+}
+@media (max-width: 560px) {
+  .au-bar-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .au-bar-label {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ───── TOTP steps ───── */
+
+.au-input {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  min-width: 0;
+  flex: 1 1 16em;
+}
+.au-input input {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  padding: 6px 8px;
+  min-width: 0;
+}
+.au-input input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+.au-steps {
+  margin: 0;
+  padding-left: 1.6em;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.au-steps li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  font-size: var(--fs-sm);
+}
+.au-steps li::marker {
+  font-family: var(--font-mono);
+  color: var(--ink-3);
+}
+.au-step-h {
+  flex-basis: 100%;
+  font-weight: 600;
+}
+.au-bytes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  font-size: 0.8125rem;
+}
+.au-bytes span {
+  padding: 1px 3px;
+  background: var(--surface-2);
+}
+.au-bytes span[data-pick] {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 700;
+}
+.au-bytes span[data-last] {
+  outline: 1.5px solid var(--hl);
+}
+.au-code {
+  font-size: 1.5rem;
+  letter-spacing: 0.08em;
+}
+.au-match {
+  font-size: var(--fs-xs);
+  color: var(--bad);
+}
+.au-match[data-ok] {
+  color: var(--good);
+}
+.au-countdown {
+  position: relative;
+  display: inline-block;
+  width: 9em;
+  height: 18px;
+  background: var(--surface-2);
+}
+.au-countdown span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: color-mix(in srgb, var(--accent) 30%, transparent);
+}
+.au-countdown em {
+  position: relative;
+  font-style: normal;
+  font-size: var(--fs-xs);
+  padding-left: 6px;
+}
+
+/* ───── relay sequence ───── */
+
+.au-seq {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px 0;
+  overflow-x: auto;
+}
+.au-lanes {
+  display: contents;
+}
+.au-lanes span {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  text-align: center;
+  padding: 6px 4px;
+  border-bottom: 2px solid var(--ink);
+  overflow-wrap: anywhere;
+}
+.au-lanes span[data-lane='fake'] {
+  color: var(--bad);
+  border-bottom-color: var(--bad);
+}
+.au-msg {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 6px;
+  font-size: var(--fs-xs);
+  line-height: 1.45;
+  text-align: center;
+  color: var(--ink-2);
+}
+.au-msg[data-now] {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--hl) 22%, transparent);
+}
+.au-msg[data-bad] {
+  color: var(--bad);
+  font-weight: 600;
+}
+.au-msg[data-good] {
+  color: var(--good);
+  font-weight: 600;
+}
+.au-arrow {
+  position: relative;
+  display: block;
+  width: calc(100% - 3em);
+  height: 2px;
+  background: currentColor;
+  margin-top: 4px;
+}
+.au-arrow::after {
+  content: '';
+  position: absolute;
+  right: -1px;
+  top: -4px;
+  border: 5px solid transparent;
+  border-left: 7px solid currentColor;
+  border-right: 0;
+}
+.au-arrow[data-rev]::after {
+  right: auto;
+  left: -1px;
+  border-left: 0;
+  border-right: 7px solid currentColor;
+}
+.au-arrow[data-self] {
+  width: 2.2em;
+  height: 10px;
+  background: none;
+  border: 2px solid currentColor;
+  border-left: 0;
+  border-radius: 0 6px 6px 0;
+}
+.au-arrow[data-self]::after {
+  display: none;
+}
+.au-proof {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  background: var(--surface-2);
+}
+.au-json {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  overflow-wrap: anywhere;
+  color: var(--ink);
+}
+.au-checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
+.au-checks span {
+  color: var(--bad);
+}
+.au-checks span::before {
+  content: '✕ ';
+}
+.au-checks span[data-ok] {
+  color: var(--good);
+}
+.au-checks span[data-ok]::before {
+  content: '✓ ';
+}

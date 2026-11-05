@@ -2,6 +2,7 @@ import aiSubject from './ai/subject';
 import aiBasics from './ai/basics/course';
 import aiDeepLearning from './ai/deep/course';
 import aiLlm from './ai/llm/course';
+import aiReinforcementLearning from './ai/rl/course';
 import statsSubject from './stats/subject';
 import statsBasics from './stats/basics/course';
 import csSubject from './cs/subject';
@@ -21,6 +22,7 @@ import csHci from './cs/hci/course';
 import netSubject from './net/subject';
 import netBasics from './net/basics/course';
 import netSecurity from './net/security/course';
+import netSoftwareSecurity from './net/software/course';
 import mathSubject from './math/subject';
 import mathDiscrete from './math/discrete/course';
 import mathLinearAlgebra from './math/linear/course';
@@ -35,7 +37,7 @@ export { MAJORS } from './majors';
 export const SUBJECTS: Subject[] = [aiSubject, statsSubject, mathSubject, csSubject, netSubject];
 
 /** Every course. Within a subject the library sorts them by level, then by this order. */
-export const COURSES: Course[] = [aiBasics, aiDeepLearning, aiLlm, statsBasics, mathDiscrete, mathLinearAlgebra, mathProbability, csProgramming, csAlgorithms, csAlgorithmDesign, csSystemAlgorithms, csArchitecture, csOperatingSystems, csDatabases, csComputation, csSoftwareDesign, csProgrammingLanguages, csParallelDistributed, csGraphics, csHci, netBasics, netSecurity];
+export const COURSES: Course[] = [aiBasics, aiDeepLearning, aiLlm, aiReinforcementLearning, statsBasics, mathDiscrete, mathLinearAlgebra, mathProbability, csProgramming, csAlgorithms, csAlgorithmDesign, csSystemAlgorithms, csArchitecture, csOperatingSystems, csDatabases, csComputation, csSoftwareDesign, csProgrammingLanguages, csParallelDistributed, csGraphics, csHci, netBasics, netSecurity, netSoftwareSecurity];
 
 export const LEVELS: Record<Level, { name: string; en: string }> = {
   1: { name: '기초', en: 'Basic' },

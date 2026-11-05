@@ -1,0 +1,46 @@
+/* 강화학습: figure styles shared by the lessons and the cover.
+   Lesson-specific styles live in their own files. */
+
+.rl-note {
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  min-height: 3.2em;
+  overflow-wrap: anywhere;
+}
+.rl-note[data-bad] {
+  color: var(--bad);
+}
+.rl-note[data-good] {
+  color: var(--good);
+}
+.rl-small {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  line-height: 1.6;
+}
+.rl-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+/* the cover's legend */
+.cover-key {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin-right: 8px;
+  font-size: 11px;
+  vertical-align: 1px;
+}
+.cover-key span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.cover-key i {
+  width: 8px;
+  height: 8px;
+  display: inline-block;
+}
