@@ -49,6 +49,8 @@ export const MAJORS: Major[] = [
       { course: 'stats-basics', role: 'elect' },
       { course: 'cs-databases', role: 'elect' },
       { course: 'cs-programming-languages', role: 'elect' },
+      { course: 'cs-graphics', role: 'elect' },
+      { course: 'cs-hci', role: 'elect' },
       { course: 'net-security', role: 'elect' },
       { course: 'cs-system-algorithms', role: 'elect' },
     ],

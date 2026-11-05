@@ -1,0 +1,38 @@
+/* 래스터화와 깊이 버퍼 */
+
+.rz-bary {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: var(--fs-sm);
+}
+.rz-bar {
+  display: grid;
+  grid-template-columns: 2.2em minmax(0, 1fr) 3.4em;
+  align-items: center;
+  gap: 8px;
+}
+.rz-bar > span:last-child {
+  text-align: right;
+}
+.rz-track {
+  height: 10px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+.rz-track i {
+  display: block;
+  height: 100%;
+  background: var(--c);
+}
+.rz-swatch {
+  display: inline-grid;
+  place-items: center;
+  width: 2.6em;
+  height: 1.4em;
+  border: 1px solid var(--line-strong);
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  vertical-align: middle;
+}
