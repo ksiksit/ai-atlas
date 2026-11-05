@@ -135,15 +135,20 @@ function LatticeFigure() {
   const nodeH = 34;
   const names = subs.map((h) => subName(G, h));
   const widthOf = (i: number) => Math.max(64, names[i].length * 7 + 16);
-  const pos = subs.map((h) => {
-    const level = sizes.indexOf(h.length);
-    const row = subs.filter((k) => k.length === h.length);
-    const i = row.indexOf(h);
-    const x = ((i + 0.5) / row.length) * W;
-    const y = H - 10 - nodeH / 2 - level * rowH;
-    return [x, y];
-  });
   const contains = (big: number[], small: number[]) => small.every((x) => big.includes(x));
+  // place levels from the top down; within a level, order boxes by the mean x of the boxes above
+  // that contain them, so lines cross as little as possible
+  const pos: [number, number][] = subs.map(() => [0, 0]);
+  for (let level = sizes.length - 1; level >= 0; level--) {
+    const row = subs.map((h, i) => i).filter((i) => subs[i].length === sizes[level]);
+    const above = subs.map((h, i) => i).filter((i) => subs[i].length > sizes[level]);
+    const key = (i: number) => {
+      const ps = above.filter((j) => contains(subs[j], subs[i]));
+      return ps.length ? ps.reduce((s, j) => s + pos[j][0], 0) / ps.length : 0;
+    };
+    row.sort((a, b) => key(a) - key(b) || a - b);
+    row.forEach((i, k) => (pos[i] = [((k + 0.5) / row.length) * W, H - 10 - nodeH / 2 - level * rowH]));
+  }
   // draw only covering edges: small ⊂ big with nothing strictly in between
   const edges: [number, number][] = [];
   subs.forEach((s, i) =>

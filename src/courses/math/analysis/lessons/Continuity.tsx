@@ -123,7 +123,9 @@ function IvtFigure() {
   const neg = useMemo(() => negativeIntervals(f, IVT.lo, IVT.hi), [f]);
   const s = useStepper(IVT_STEPS.length, 1, id);
   const k = s.i;
-  const fc = f(c);
+  // clean away a floating-point −0 so the readout shows 0.0000
+  const fcRaw = f(c);
+  const fc = Math.abs(fcRaw) < 5e-5 ? 0 : fcRaw;
   const ok = Math.abs(fc) < 1e-6;
   const lastText = ok ? `그래서 f(c) = 0입니다. 실제로 c ≈ ${c.toFixed(4)}에서 f(c) ≈ 0입니다.` : `f가 x = 1.6에서 끊겨 있어 왼쪽 극한과 f(c)가 다릅니다. c = ${c.toFixed(4)}이지만 f(c) = ${fc.toFixed(4)}로 0이 아니고, 0이 되는 점은 없습니다. 연속이라는 조건이 넷째 걸음에서 쓰였습니다.`;
 

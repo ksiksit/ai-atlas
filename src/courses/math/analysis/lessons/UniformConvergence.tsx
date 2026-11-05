@@ -19,6 +19,22 @@ function Proof({ title, children }: { title: string; children: ReactNode }) {
 const Qed = () => <span className="uc-qed">∎</span>;
 const n4 = (v: number) => (isFinite(v) ? String(+v.toFixed(4)) : '∞');
 
+/** Grid with separate label formats for the x and y axes (Plot.grid uses one format for both). */
+function gridXY(p: Plot, xStep: number, yStep: number, fx: (v: number) => string, fy: (v: number) => string) {
+  p.grid({ xStep, yStep, labels: false });
+  const c = p.ctx;
+  c.save();
+  c.fillStyle = p.p.ink3;
+  c.font = `11px ${p.p.fontMono}`;
+  c.textAlign = 'center';
+  c.textBaseline = 'top';
+  for (let x = Math.ceil(p.xMin / xStep - 1e-9) * xStep; x <= p.xMax + 1e-9; x += xStep) c.fillText(fx(x), p.X(x), p.pad.t + p.ph + 6);
+  c.textAlign = 'right';
+  c.textBaseline = 'middle';
+  for (let y = Math.ceil(p.yMin / yStep - 1e-9) * yStep; y <= p.yMax + 1e-9; y += yStep) c.fillText(fy(y), p.pad.l - 6, p.Y(y));
+  c.restore();
+}
+
 /* ─────────────── Figure 1: three sequences of functions and their limits ─────────────── */
 
 function FamiliesFigure() {
@@ -116,7 +132,7 @@ function BandFigure() {
       ctx.translate(0, top);
       const LMAX = 4;
       const q = new Plot(ctx, w, h - top, P, { xMin: 0, xMax: 1, yMin: 0, yMax: LMAX, pad: { l: 44, r: 14, t: 10, b: 24 } });
-      q.grid({ xStep: 0.25, yStep: 1, fmt: (v) => (Number.isInteger(v) ? String(Math.pow(10, v)) : '') });
+      gridXY(q, 0.25, 1, (v) => String(+v.toFixed(2)), (v) => String(Math.pow(10, Math.round(v))));
       q.fn((x) => (x <= r ? Math.log10(Math.min(powN(x, eps), 1e6)) : NaN), P.pos, 2, { samples: 800 });
       q.line(0, Math.log10(n), 1, Math.log10(n), P.accent, 1.5, [5, 4]);
       q.text(`지금 n = ${n}`, 1, Math.log10(n), P.accent, { align: 'right', dx: -4, dy: -9, font: `600 11px ${P.fontMono}`, bg: P.surface });

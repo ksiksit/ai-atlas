@@ -22,6 +22,22 @@ function Proof({ title, children }: { title: string; children: ReactNode }) {
 }
 const Qed = () => <span className="df-qed">∎</span>;
 
+/** Grid with separate label formats for the x and y axes (Plot.grid uses one format for both). */
+function gridXY(p: Plot, xStep: number, yStep: number, fx: (v: number) => string, fy: (v: number) => string) {
+  p.grid({ xStep, yStep, labels: false });
+  const c = p.ctx;
+  c.save();
+  c.fillStyle = p.p.ink3;
+  c.font = `11px ${p.p.fontMono}`;
+  c.textAlign = 'center';
+  c.textBaseline = 'top';
+  for (let x = Math.ceil(p.xMin / xStep - 1e-9) * xStep; x <= p.xMax + 1e-9; x += xStep) c.fillText(fx(x), p.X(x), p.pad.t + p.ph + 6);
+  c.textAlign = 'right';
+  c.textBaseline = 'middle';
+  for (let y = Math.ceil(p.yMin / yStep - 1e-9) * yStep; y <= p.yMax + 1e-9; y += yStep) c.fillText(fy(y), p.pad.l - 6, p.Y(y));
+  c.restore();
+}
+
 /* ─────────────── Figure 1: continuous at 0, but the derivative misbehaves ─────────────── */
 
 const KINK_NOTE: Record<Kink['id'], string> = {
@@ -342,7 +358,7 @@ function TaylorFigure() {
   const { wrapRef, canvasRef } = useCanvas2D(
     (ctx, { w, h }) => {
       const p = new Plot(ctx, w, h, P, { xMin: -3, xMax: 3, yMin: LO, yMax: HI, pad: { l: 50, r: 12, t: 12, b: 26 } });
-      p.grid({ xStep: 1, yStep: 2, fmt: (v) => (Number.isInteger(v) && Math.abs(v) <= 20 ? `1e${v}` : '') });
+      gridXY(p, 1, 2, (v) => String(Math.round(v)), (v) => `1e${Math.round(v)}`);
       p.fn((t) => lg(expBound(t, n)), P.bad, 2, { samples: 600, dash: [6, 4] });
       p.fn((t) => lg(expError(t, n)), P.accent, 2.5, { samples: 600 });
       p.line(x, LO, x, HI, alpha(P.ink3, 0.6), 1, [4, 4]);

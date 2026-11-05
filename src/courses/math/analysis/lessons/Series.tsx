@@ -145,7 +145,7 @@ function RatioFigure() {
       <div ref={wrapRef} className="canvas-box" role="img" aria-label={`n²/2ⁿ의 막대와 기하 상계. q = ${q}이면 N = ${b.N}이고, 합의 상계는 ${b.total.toFixed(4)}, 실제 합은 6입니다.`}>
         <canvas ref={canvasRef} />
       </div>
-      <div className="readouts" style={{ gridTemplateColumns: 'repeat(4, minmax(0, 1fr))' }}>
+      <div className="readouts" style={{ gridTemplateColumns: 'repeat(2, minmax(0, 1fr))' }}>
         <Readout label="N" value={String(b.N)} />
         <Readout label={<>앞부분 S<sub>N−1</sub></>} value={f4(b.head)} />
         <Readout label={<>꼬리 상계 a<sub>N</sub>/(1−q)</>} value={f4(b.tailBound)} color="var(--pos)" />
