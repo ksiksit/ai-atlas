@@ -103,8 +103,11 @@ function EpsHero() {
       ctx.textAlign = 'center';
       ctx.textBaseline = 'top';
       for (const n of [1, 10, 100]) ctx.fillText(String(n), X(n), h - pad.b + 6);
-      ctx.textAlign = 'right';
-      ctx.fillText('n (로그 눈금)', w - pad.r, h - pad.b + 6);
+      // the axis title only where it fits beside the tick labels
+      if (w > 480) {
+        ctx.textAlign = 'right';
+        ctx.fillText('n (로그 눈금)', w - pad.r, h - pad.b + 6);
+      }
     },
     [P, terms, eps, N],
     { aspect: 1.35, maxHeight: 420, minHeight: 40 },
