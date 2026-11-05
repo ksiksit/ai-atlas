@@ -200,9 +200,12 @@ export function drawGrid(ctx: CanvasRenderingContext2D, P: Palette, g: Grid, L: 
     const [gx, gy] = xy(g, s);
     const x = L.x + gx * c, y = L.y + gy * c;
     const kind = g.cells[s];
-    ctx.fillStyle = kind === 'wall' ? P.ink2 : P.surface;
+    ctx.fillStyle = kind === 'wall' ? P.lineStrong : P.surface;
     ctx.fillRect(x, y, c, c);
-    if (kind === 'wall') continue;
+    if (kind === 'wall') {
+      wallHatch(ctx, P, x, y, c);
+      continue;
+    }
     if (kind === 'goal' || (kind === 'pit' && !g.pitReset)) {
       ctx.fillStyle = alpha(kind === 'goal' ? P.good : P.bad, 0.85);
       ctx.fillRect(x + 1, y + 1, c - 2, c - 2);
@@ -372,4 +375,21 @@ export function solveOptimal(g: Grid, gamma: number, tol = 1e-9, maxIter = 10000
     policy[s] = arg;
   }
   return { V, policy, iters: iters + 1 };
+}
+
+/** Diagonal hatching that marks a wall the same way in light and dark themes. */
+export function wallHatch(ctx: CanvasRenderingContext2D, P: Palette, x: number, y: number, c: number) {
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(x, y, c, c);
+  ctx.clip();
+  ctx.strokeStyle = alpha(P.ink3, 0.7);
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  for (let k = -c; k < c; k += Math.max(5, c / 6)) {
+    ctx.moveTo(x + k, y + c);
+    ctx.lineTo(x + k + c, y);
+  }
+  ctx.stroke();
+  ctx.restore();
 }

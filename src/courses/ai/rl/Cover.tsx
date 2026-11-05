@@ -5,6 +5,7 @@ import { rng } from '../../../lib/math';
 import { alpha, usePalette } from '../../../lib/theme';
 import { courseHref, lessonHref } from '../../index';
 import course from './course';
+import { wallHatch } from './lessons/gridworld';
 import '../../../styles/cover.css';
 import './lessons/rl.css';
 
@@ -130,8 +131,9 @@ function MazeHero() {
         const x = ox + (s % W) * cs;
         const y = oy + Math.floor(s / W) * cs;
         if (WALL[s]) {
-          ctx.fillStyle = P.ink2;
+          ctx.fillStyle = P.lineStrong;
           ctx.fillRect(x, y, cs, cs);
+          wallHatch(ctx, P, x, y, cs);
           continue;
         }
         ctx.fillStyle = P.surface2;

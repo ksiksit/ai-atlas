@@ -108,33 +108,35 @@ function ValueIterationFigure() {
               ))}
             </select>
           </label>
-          <table className="dpg-backup" aria-label={`칸 ${cellName(g, sel)}에서 방향별 기댓값`}>
-            <thead>
-              <tr>
-                <th>방향</th>
-                <th>Σ p·(r + γ·V(s′))</th>
-                <th>값</th>
-              </tr>
-            </thead>
-            <tbody>
-              {terms.map((t) => (
-                <tr key={t.a} data-best={s.i > 0 && t === best ? '' : undefined}>
-                  <td>
-                    {ARROW[t.a]} {ACTION_KO[t.a]}
-                  </td>
-                  <td className="mono">
-                    {t.outcomes.map((o, k) => (
-                      <span key={k} className="dpg-term">
-                        {k ? '+ ' : ''}
-                        {o.p.toFixed(1)}·({o.r.toFixed(2).replace('-', '−')} + {gamma.toFixed(2)}·{o.v.toFixed(2).replace('-', '−')})
-                      </span>
-                    ))}
-                  </td>
-                  <td className="mono">{f2(t.q)}</td>
+          <div className="tbl-wrap">
+            <table className="dpg-backup" aria-label={`칸 ${cellName(g, sel)}에서 방향별 기댓값`}>
+              <thead>
+                <tr>
+                  <th>방향</th>
+                  <th>Σ p·(r + γ·V(s′))</th>
+                  <th>값</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {terms.map((t) => (
+                  <tr key={t.a} data-best={s.i > 0 && t === best ? '' : undefined}>
+                    <td>
+                      {ARROW[t.a]} {ACTION_KO[t.a]}
+                    </td>
+                    <td className="mono">
+                      {t.outcomes.map((o, k) => (
+                        <span key={k} className="dpg-term">
+                          {k ? '+ ' : ''}
+                          {o.p.toFixed(1)}·({o.r.toFixed(2).replace('-', '−')} + {gamma.toFixed(2)}·{o.v.toFixed(2).replace('-', '−')})
+                        </span>
+                      ))}
+                    </td>
+                    <td className="mono">{f2(t.q)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
           <div className="readouts" style={{ gridTemplateColumns: '1fr 1fr' }}>
             <Readout label="훑기" value={`${s.i} / ${frames.length - 1}`} />
             <Readout label="가장 큰 변화" value={s.i === 0 ? '−' : fr.delta < 0.001 ? fr.delta.toExponential(1) : f2(fr.delta)} />
