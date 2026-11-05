@@ -23,7 +23,7 @@ const TABLE_H = [1, 0.5, 0.1, 0.01, 0.001];
 
 function SecantFigure() {
   const P = usePalette();
-  const [t, setT] = useState(0.06);
+  const [t, setT] = useState(() => tOf(1));
   const [side, setSide] = useState<1 | -1>(1);
   const [tangent, setTangent] = useState(true);
   const plotRef = useRef<Plot | null>(null);
