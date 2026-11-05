@@ -164,7 +164,7 @@ function MatBox({ name, m, note }: { name: string; m: Mat4; note: string }) {
 
 function CameraFigure() {
   const P = usePalette();
-  const [s, setS] = useState<CamState>({ spin: 30, yaw: 35, pitch: 25, dist: 3.2, fov: 60, ortho: false });
+  const [s, setS] = useState<CamState>({ spin: -25, yaw: 35, pitch: 25, dist: 3.2, fov: 60, ortho: false });
   const set = (k: keyof CamState) => (v: number | boolean) => setS((o) => ({ ...o, [k]: v }));
   const m = useMemo(() => matrices(s), [s]);
   const fb = useMemo(() => renderCube(s, cssToRgb(P.accent), cssToRgb(P.surface2)), [s, P]);
@@ -508,7 +508,7 @@ export default function Transforms() {
       </ol>
       <CameraFigure />
       <p>
-        처음 설정에서 꼭짓점 p = (0.5, 0.5, 0.5)는 모델 행렬의 30° 회전으로 세계 좌표 (0.68, 0.50, 0.18)이 되고, 뷰 행렬을 지나 카메라 좌표 (0.46, 0.22, −2.50)이 됩니다. z가 음수인 것은 카메라 앞에 있다는 뜻이고, 2.50은 카메라에서 p까지의 깊이입니다. 투영 행렬을 곱한 클립 좌표는 (0.59, 0.39, 2.32, 2.50)인데, 넷째 값 w가 바로 그 깊이 2.50입니다. 앞의 세 값을 w로 나누면 (0.24, 0.16, 0.93)이 되고, 이것을 160×120 화면에 맞추면 (98.9, 50.7) 픽셀입니다.
+        처음 설정에서 꼭짓점 p = (0.5, 0.5, 0.5)는 모델 행렬의 −25° 회전으로 세계 좌표 (0.24, 0.50, 0.66)이 되고, 뷰 행렬을 지나 카메라 좌표 (−0.18, 0.16, −2.37)이 됩니다. z가 음수인 것은 카메라 앞에 있다는 뜻이고, 2.37은 카메라에서 p까지의 깊이입니다. 투영 행렬을 곱한 클립 좌표는 (−0.24, 0.28, 2.19, 2.37)인데, 넷째 값 w가 바로 그 깊이 2.37입니다. 앞의 세 값을 w로 나누면 (−0.10, 0.12, 0.93)이 되고, 이것을 160×120 화면에 맞추면 (72.0, 52.8) 픽셀입니다.
       </p>
       <Callout kind="note">
         행렬 P의 맨 아래 줄 (0, 0, −1, 0)을 보세요. 이 줄은 x, y는 버리고 카메라 좌표의 z에 −1을 곱해 w로 보냅니다. 투영 행렬이 하는 가장 중요한 일이 이것입니다. 실제 나눗셈은 행렬 곱셈으로 할 수 없으니, 깊이를 w에 넣어 두었다가 다음 단계에서 나눕니다.

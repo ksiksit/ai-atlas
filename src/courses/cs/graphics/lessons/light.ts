@@ -62,7 +62,7 @@ export function phongColor(p: Vec3, n: Vec3, L: LightParams, base: RGB): RGB {
 export type ShadeMode = 'flat' | 'gouraud' | 'phong';
 
 /** Camera used by every sphere figure in the lesson. */
-export const EYE: Vec3 = [0, 0, 3.2];
+export const EYE: Vec3 = [0, 0, 4];
 
 export interface RenderInfo {
   /** Strongest specular (highlight) intensity that reached any pixel, 0..ks. */

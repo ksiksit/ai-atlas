@@ -4,7 +4,7 @@ import { useCanvas2D, useDrag } from '../../../../lib/canvas';
 import { drawArrow } from '../../../../lib/plot';
 import { alpha, usePalette, type Palette } from '../../../../lib/theme';
 import { lessonHref } from '../../../index';
-import { cssToRgb, Framebuffer, present, type RGB } from './gfx';
+import { cssToRgb, Framebuffer, mix, present, type RGB } from './gfx';
 import { ALL_TERMS, EYE, lightAt, panelLayout, renderSphere, sphereMesh, type LightParams, type ShadeMode, type Terms } from './light';
 import './graphics.css';
 import './shading.css';
@@ -13,6 +13,9 @@ const KA = 0.12;
 const KD = 0.75;
 const KS = 0.6;
 const FB = 112; // framebuffer side for the sphere panels
+
+/** Surface colour of the spheres: the accent, lightened on light backgrounds so the shading reads. */
+const sphereBase = (P: Palette): RGB => (P.dark ? cssToRgb(P.accent) : mix(cssToRgb(P.accent), [1, 1, 1], 0.35));
 
 /** Canvas whose height follows its width through a panel layout. */
 function usePanelCanvas(n: number, draw: (ctx: CanvasRenderingContext2D, lay: ReturnType<typeof panelLayout>, w: number) => void, deps: unknown[], opts?: Parameters<typeof panelLayout>[2]) {
@@ -236,7 +239,7 @@ function PhongFigure() {
   const mesh = useMemo(() => sphereMesh(40), []);
 
   const images = useMemo(() => {
-    const base = cssToRgb(P.accent);
+    const base = sphereBase(P);
     const bg = cssToRgb(P.surface);
     const L: LightParams = { pos: lightAt(az, el), eye: EYE, ka: KA, kd: KD, ks: KS, shininess: blinn ? shine * 4 : shine, blinn, terms };
     const one = (t: Terms) => {
@@ -330,7 +333,7 @@ function ModesFigure() {
   const mesh = useMemo(() => sphereMesh(seg), [seg]);
 
   const images = useMemo(() => {
-    const base = cssToRgb(P.accent);
+    const base = sphereBase(P);
     const bg = cssToRgb(P.surface);
     const L: LightParams = { pos: lightAt(-40, 35), eye: EYE, ka: KA, kd: KD, ks: KS, shininess: shine, blinn: false, terms: ALL_TERMS };
     return MODES.map(({ mode }) => {
@@ -510,7 +513,7 @@ export default function Shading() {
       </ul>
       <ModesFigure />
       <p>
-        기본 설정(가로 조각 8개, 삼각형 48개)에서 플랫 셰이딩은 면이 하나하나 보이는 보석 같은 공이 됩니다. 구로 셰이딩은 면의 경계가 사라져 매끄럽지만 <strong>하이라이트가 아예 없습니다</strong>. 각 칸의 숫자로 보면 플랫이 0.35, 구로가 0.00, 퐁이 0.60입니다. 하이라이트는 광원 반사 방향 근처의 좁은 곳에만 생기는데, 마침 그 근처에 꼭짓점이 하나도 없으면 꼭짓점에서 계산한 정반사가 모두 0이고, 0끼리 섞으면 삼각형 안쪽도 0이기 때문입니다. 조각을 16개로 늘리면 구로의 하이라이트가 0.12로 희미하게 나타나고, 40개면 0.57로 퐁의 0.60에 가까워집니다. 반대로 퐁 셰이딩은 조각이 4개뿐이어도 하이라이트를 정확한 자리에 그립니다. 픽셀마다 법선을 다시 만들기 때문에 실제 삼각형보다 둥근 표면을 흉내 내는 것입니다. 다만 윤곽선은 여전히 각져 있다는 것을 보세요. 셰이딩은 밝기만 속일 뿐 모양을 바꾸지는 못합니다.
+        기본 설정(가로 조각 8개, 삼각형 48개)에서 플랫 셰이딩은 면이 하나하나 보이는 보석 같은 공이 됩니다. 구로 셰이딩은 면의 경계가 사라져 매끄럽지만 <strong>하이라이트가 아예 없습니다</strong>. 각 칸의 숫자로 보면 플랫이 0.42, 구로가 0.00, 퐁이 0.59입니다. 하이라이트는 광원 반사 방향 근처의 좁은 곳에만 생기는데, 마침 그 근처에 꼭짓점이 하나도 없으면 꼭짓점에서 계산한 정반사가 모두 0이고, 0끼리 섞으면 삼각형 안쪽도 0이기 때문입니다. 조각을 16개로 늘리면 구로의 하이라이트가 0.20으로 희미하게 나타나고, 40개면 0.57로 퐁의 0.60에 가까워집니다. 반대로 퐁 셰이딩은 조각이 4개뿐이어도 하이라이트를 정확한 자리에 그립니다. 픽셀마다 법선을 다시 만들기 때문에 실제 삼각형보다 둥근 표면을 흉내 내는 것입니다. 다만 윤곽선은 여전히 각져 있다는 것을 보세요. 셰이딩은 밝기만 속일 뿐 모양을 바꾸지는 못합니다.
       </p>
       <Callout kind="intuition">
         구로 셰이딩은 몇 군데에서만 온도를 재고 그 사이는 짐작하는 것과 같습니다. 온도가 고르게 변하는 곳에서는 잘 맞지만, 측정 지점 사이에 작은 난로(하이라이트)가 있으면 그 존재를 영영 모릅니다. 1990년대 하드웨어는 픽셀마다 계산할 여유가 없어 구로 셰이딩을 썼고, 지금의 GPU는 픽셀마다 작은 프로그램(<T en="fragment shader">프래그먼트 셰이더</T>)을 돌리므로 퐁 셰이딩이 기본입니다. 이 렌더러의 <code>drawMesh</code>가 픽셀마다 부르는 <code>shade</code> 함수가 바로 그 프래그먼트 셰이더 역할입니다.
