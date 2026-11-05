@@ -166,7 +166,7 @@ function ShapingFigure() {
       hint="보상 방식을 바꿔 보세요"
       caption={
         <>
-          7×7 격자의 왼쪽 아래에서 오른쪽 위까지 가는 문제입니다. 모두 같은 Q-러닝(학습률 0.5, ε = 0.1, γ = 0.95, 한 판 최대 100걸음)이고 보상만 다릅니다. 곡선은 씨앗 1~{SEEDS}의 평균, 격자 위의 선은 씨앗 1이 {EPISODES}판을 배운 뒤 가장 좋다고 믿는 행동만 따라간 경로(처음 40걸음)입니다. 퍼텐셜은 Φ(s) = 0.5 × (1 − 남은 거리 / 12)입니다.
+          7×7 격자의 왼쪽 아래에서 오른쪽 위까지 가는 문제입니다. 모두 같은 Q-러닝(학습률 0.5, ε = 0.1, γ = 0.95, 한 판 최대 100걸음)이고 보상만 다릅니다. 곡선은 씨앗 1~{SEEDS}의 평균, 격자 위의 선은 씨앗 1이 {EPISODES}판을 배운 뒤 가장 좋다고 믿는 행동만 따라간 경로(처음 40걸음)입니다. 퍼텐셜은 Φ(s) = 0.5 × (1 − 남은 거리 / 12)입니다. 배운 시점은 열 판씩 평균한 걸음 수가 최단 경로의 1.5배(18걸음) 안쪽에 계속 머물기 시작하는 판이고, 도착하는 씨앗은 배운 뒤 가장 좋다고 믿는 행동만 따라가 100걸음 안에 도착하는 씨앗의 수입니다.
         </>
       }
     >
@@ -178,9 +178,9 @@ function ShapingFigure() {
       </div>
       <Legend items={KINDS.map((k) => ({ color: KIND_CSS[k], label: SHAPING_KO[k], shape: 'ln' as const }))} />
       <div className="readouts">
-        <Readout label="배운 판 (평균이 18걸음 안쪽에 머무는 첫 판)" value={cur ? (cur.learnedAt >= 0 ? `${cur.learnedAt + 1}번째` : '끝내 못 배움') : '…'} color={KIND_CSS[kind]} />
-        <Readout label="배운 뒤 도착하는 씨앗" value={cur ? `${cur.arrive} / ${SEEDS}` : '…'} />
-        <Readout label="200번째 판 평균 걸음" value={cur ? cur.curve[EPISODES - 1].toFixed(1) : '…'} />
+        <Readout label="배운 시점" value={cur ? (cur.learnedAt >= 0 ? `${cur.learnedAt + 1}번째 판` : '못 배움') : '…'} color={KIND_CSS[kind]} />
+        <Readout label="도착하는 씨앗" value={cur ? `${cur.arrive} / ${SEEDS}` : '…'} />
+        <Readout label="마지막 판 걸음" value={cur ? cur.curve[EPISODES - 1].toFixed(1) : '…'} />
       </div>
     </Figure>
   );
@@ -278,7 +278,7 @@ function TrajCard({ t, onPick, label, disabled }: { t: Traj; onPick: () => void;
       const x0 = (w - cell * PREF.w) / 2;
       drawGrid(ctx, P, PREF.w, PREF.h, x0, 0, cell, (x, y) => {
         if (x === PREF.goal[0] && y === PREF.goal[1]) return alpha(P.good, 0.45);
-        if (PREF.puddles.some((d) => d[0] === x && d[1] === y)) return alpha(P.pos, 0.35);
+        if (PREF.puddles.some((d) => d[0] === x && d[1] === y)) return alpha(P.neg, 0.45);
         if (PREF.coins.some((c) => c[0] === x && c[1] === y)) return alpha(P.hl, 0.6);
         return null;
       });

@@ -12,17 +12,17 @@ const KIND_SHORT = { sql: 'SQL', shell: '셸', html: 'HTML' } as const;
 
 /* ─────────────── Figure 1: follow the taint through a handler ─────────────── */
 
-/** Where each node of the handler's data-flow graph sits, as fractions of the canvas. */
-const NODES: Record<string, { x: number; y: number; kind: 'src' | 'var' | 'sink'; label: string }> = {
-  'req.query.name': { x: 0.11, y: 0.2, kind: 'src', label: 'req.query.name' },
-  'req.query.id': { x: 0.11, y: 0.66, kind: 'src', label: 'req.query.id' },
-  name: { x: 0.36, y: 0.2, kind: 'var', label: 'name' },
-  id: { x: 0.36, y: 0.66, kind: 'var', label: 'id' },
-  hello: { x: 0.6, y: 0.2, kind: 'var', label: 'hello' },
-  file: { x: 0.6, y: 0.88, kind: 'var', label: 'file' },
-  'res.send': { x: 0.88, y: 0.2, kind: 'sink', label: 'res.send' },
-  'db.query': { x: 0.88, y: 0.5, kind: 'sink', label: 'db.query' },
-  exec: { x: 0.88, y: 0.88, kind: 'sink', label: 'exec' },
+/** Nodes of the handler's data-flow graph: column (0 sources … 3 sinks) and height as a fraction. */
+const NODES: Record<string, { col: number; y: number; kind: 'src' | 'var' | 'sink'; label: string }> = {
+  'req.query.name': { col: 0, y: 0.24, kind: 'src', label: 'req.query.name' },
+  'req.query.id': { col: 0, y: 0.66, kind: 'src', label: 'req.query.id' },
+  name: { col: 1, y: 0.24, kind: 'var', label: 'name' },
+  id: { col: 1, y: 0.66, kind: 'var', label: 'id' },
+  hello: { col: 2, y: 0.24, kind: 'var', label: 'hello' },
+  file: { col: 2, y: 0.9, kind: 'var', label: 'file' },
+  'res.send': { col: 3, y: 0.24, kind: 'sink', label: 'res.send' },
+  'db.query': { col: 3, y: 0.53, kind: 'sink', label: 'db.query' },
+  exec: { col: 3, y: 0.9, kind: 'sink', label: 'exec' },
 };
 
 interface Edge {
@@ -57,16 +57,26 @@ function FlowGraph({ frame, edges }: { frame: TaintFrame; edges: Edge[] }) {
 
   const { wrapRef, canvasRef } = useCanvas2D(
     (ctx, { w, h }) => {
-      const pad = 22;
-      const X = (f: number) => pad + f * (w - 2 * pad);
+      const pad = 4;
+      const fs = w < 520 ? 10 : 11;
       const Y = (f: number) => 14 + f * (h - 34);
-      ctx.font = `600 11px ${P.fontMono}`;
-      const boxW = (s: string) => ctx.measureText(s).width + 16;
+      ctx.font = `600 ${fs}px ${P.fontMono}`;
+      const boxW = (s: string) => ctx.measureText(s).width + (w < 520 ? 10 : 16);
+      // columns are placed from the measured box widths, with equal gaps between them
+      const colW = [0, 1, 2, 3].map((c) => Math.max(...Object.values(NODES).filter((n) => n.col === c).map((n) => boxW(n.label))));
+      const gap = (w - 2 * pad - colW.reduce((a, b) => a + b, 0)) / 3;
+      const colX: number[] = [];
+      let acc = pad;
+      for (const cw of colW) {
+        colX.push(acc + cw / 2);
+        acc += cw + gap;
+      }
+      const X = (c: number) => colX[c];
       // edges first, so nodes sit on top
       for (const e of shown) {
         const a = NODES[e.from], b = NODES[e.to];
-        const x1 = X(a.x) + boxW(a.label) / 2, y1 = Y(a.y);
-        const x2 = X(b.x) - boxW(b.label) / 2, y2 = Y(b.y);
+        const x1 = X(a.col) + boxW(a.label) / 2, y1 = Y(a.y);
+        const x2 = X(b.col) - boxW(b.label) / 2, y2 = Y(b.y);
         const bad = e.safe ? false : tainted(e.to);
         ctx.strokeStyle = e.safe ? P.ink3 : bad ? P.bad : P.good;
         ctx.lineWidth = bad ? 2.2 : 1.6;
@@ -84,8 +94,9 @@ function FlowGraph({ frame, edges }: { frame: TaintFrame; edges: Edge[] }) {
         ctx.fill();
         if (e.fn || e.safe) {
           const label = e.safe ? '? 자리표시자' : e.fn!;
-          const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
-          ctx.font = `600 10px ${P.fontMono}`;
+          // above the edge, clear of the node boxes
+          const mx = (x1 + x2) / 2, my = Math.min(y1, y2) - 24;
+          ctx.font = `600 ${fs - 1}px ${P.fontMono}`;
           const tw = ctx.measureText(label).width + 10;
           ctx.fillStyle = P.surface;
           ctx.strokeStyle = P.lineStrong;
@@ -96,13 +107,13 @@ function FlowGraph({ frame, edges }: { frame: TaintFrame; edges: Edge[] }) {
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
           ctx.fillText(label, mx, my + 0.5);
-          ctx.font = `600 11px ${P.fontMono}`;
+          ctx.font = `600 ${fs}px ${P.fontMono}`;
         }
       }
       for (const [id, n] of Object.entries(NODES)) {
         const on = reached.has(id);
         const bw = boxW(n.label);
-        const x = X(n.x) - bw / 2, y = Y(n.y) - 12;
+        const x = X(n.col) - bw / 2, y = Y(n.y) - 12;
         const bad = on && tainted(id);
         const color = !on ? P.line : n.kind === 'src' ? P.bad : bad ? P.bad : P.good;
         ctx.fillStyle = !on ? P.surface : n.kind === 'sink' ? alpha(color, 0.16) : n.kind === 'src' ? alpha(P.bad, 0.1) : bad ? alpha(P.bad, 0.12) : alpha(P.good, 0.12);
@@ -113,18 +124,18 @@ function FlowGraph({ frame, edges }: { frame: TaintFrame; edges: Edge[] }) {
         ctx.strokeRect(x + 0.5, y + 0.5, bw - 1, 23);
         ctx.setLineDash([]);
         ctx.fillStyle = on ? P.ink : P.ink3;
-        ctx.font = `600 11px ${P.fontMono}`;
+        ctx.font = `600 ${fs}px ${P.fontMono}`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(n.label, X(n.x), Y(n.y) + 0.5);
+        ctx.fillText(n.label, X(n.col), Y(n.y) + 0.5);
       }
       ctx.fillStyle = P.ink3;
       ctx.font = `500 10px ${P.fontBody}`;
       ctx.textBaseline = 'alphabetic';
       ctx.textAlign = 'center';
-      ctx.fillText('출발점', X(0.11), h - 4);
-      ctx.fillText('변수', X(0.48), h - 4);
-      ctx.fillText('도착점', X(0.88), h - 4);
+      ctx.fillText('출발점', X(0), h - 4);
+      ctx.fillText('변수', (X(1) + X(2)) / 2, h - 4);
+      ctx.fillText('도착점', X(3), h - 4);
     },
     [P, frame, shown],
     { height: 230, minHeight: 40 },

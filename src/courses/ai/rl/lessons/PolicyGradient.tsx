@@ -259,7 +259,7 @@ function CorridorFigure() {
       }
       // the latest episode as a zig-zag path under the corridor
       const py0 = y0 + ch + 48;
-      const stepH = Math.max(4, Math.min(12, (h - py0 - 70) / Math.max(1, ep.length)));
+      const stepH = Math.max(3, Math.min(10, (h - py0 - 70) / Math.max(1, ep.length + 1)));
       ctx.strokeStyle = P.ink;
       ctx.lineWidth = 2;
       ctx.beginPath();
@@ -274,6 +274,12 @@ function CorridorFigure() {
         else ctx.lineTo(x, y);
       });
       ctx.stroke();
+      ctx.fillStyle = P.ink;
+      cells.forEach((c, t) => {
+        ctx.beginPath();
+        ctx.arc(x0 + c * cw + cw / 2, py0 + t * stepH, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+      });
       ctx.fillStyle = P.ink3;
       ctx.font = `10px ${P.fontBody}`;
       ctx.textAlign = 'left';
@@ -314,7 +320,7 @@ function CorridorFigure() {
       ctx.fillText('최근 25판의 평균 보상 (점선: 가장 좋은 정책)', gx, gy - 2);
     },
     [P, right, ep, e, recent],
-    { height: 330, minHeight: 40 },
+    { height: 300, minHeight: 40 },
   );
 
   return (
