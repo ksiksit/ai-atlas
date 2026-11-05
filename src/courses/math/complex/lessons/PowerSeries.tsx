@@ -139,7 +139,7 @@ function LorentzFigure() {
       <div className="readouts">
         <Readout label="S_N(x)" value={sci(s)} color="var(--pos)" />
         <Readout label="1/(1+x²)" value={nf(truth)} />
-        <Readout label="오차" value={sci(Math.abs(s - truth))} color={Math.abs(x) < 1 ? 'var(--good)' : 'var(--bad)'} />
+        <Readout label="오차" value={sci(Math.abs(s - truth))} color={Math.abs(x) < 1 ? undefined : 'var(--bad)'} />
       </div>
     </Figure>
   );
