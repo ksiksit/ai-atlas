@@ -22,9 +22,9 @@ function ColumnsFigure() {
   const { wrapRef, canvasRef } = useCanvas2D(
     (ctx, { w, h }) => {
       // an oblique view: x to the right, y back and to the right, z up (squashed so 0..6 fits)
-      const KX = 0.55, KY = 0.45, KZ = 0.42, ZMAX = 6;
-      const s = Math.min((w - 56) / (2 + KX), (h - 44) / (KY + KZ * ZMAX));
-      const ox = 30, oy = h - 26;
+      const KX = 0.55, KY = 0.45, KZ = 0.32, ZMAX = 6;
+      const s = Math.min((w - 64) / (2 + KX), (h - 40) / (KY + KZ * ZMAX));
+      const ox = Math.max(30, (w - s * (2 + KX)) / 2), oy = h - 24;
       const X = (x: number, y: number) => ox + s * (x + KX * y);
       const Y = (y: number, z: number) => oy - s * (KY * y + KZ * z);
       const quad = (pts: [number, number, number][], fill: string, stroke: string) => {
@@ -74,7 +74,7 @@ function ColumnsFigure() {
         }
       if (mesh) {
         // the true surface as a wire mesh on top
-        ctx.strokeStyle = alpha(P.ink, 0.65);
+        ctx.strokeStyle = alpha(P.ink, 0.5);
         ctx.lineWidth = 1;
         ctx.beginPath();
         for (let a = 0; a <= 8; a++) {
@@ -97,7 +97,7 @@ function ColumnsFigure() {
       }
     },
     [P, n, rule, mesh],
-    { aspect: 1.45, maxHeight: 380 },
+    { aspect: 1.1, maxHeight: 420 },
   );
 
   const err = sum - VOL_EXACT;
@@ -117,14 +117,18 @@ function ColumnsFigure() {
         <Seg value={rule} onChange={setRule} options={(Object.keys(RULE_KO) as Rule[]).map((r) => ({ value: r, label: RULE_KO[r] }))} />
         <Check label="실제 곡면" checked={mesh} onChange={setMesh} />
       </div>
-      <div ref={wrapRef} className="canvas-box" role="img" aria-label={`밑면을 ${n}×${n}칸으로 나눠 ${RULE_KO[rule]}의 높이로 세운 기둥 ${n * n}개. 부피의 합은 ${sum.toFixed(4)}이고 실제 부피 ${VOL_EXACT.toFixed(4)}와 ${Math.abs(err).toFixed(4)} 차이 납니다.`}>
-        <canvas ref={canvasRef} />
+      <div className="fig-split">
+        <div ref={wrapRef} className="canvas-box" role="img" aria-label={`밑면을 ${n}×${n}칸으로 나눠 ${RULE_KO[rule]}의 높이로 세운 기둥 ${n * n}개. 부피의 합은 ${sum.toFixed(4)}이고 실제 부피 ${VOL_EXACT.toFixed(4)}와 ${Math.abs(err).toFixed(4)} 차이 납니다.`}>
+          <canvas ref={canvasRef} />
+        </div>
+        <div className="controls">
+          <div className="readouts" style={{ gridTemplateColumns: '1fr 1fr' }}>
+          <Readout label="기둥 수" value={`${n * n}개`} />
+          <Readout label="기둥 부피의 합" value={sum.toFixed(4)} color="var(--accent)" />
+          <Readout label="실제 부피 17/3" value={VOL_EXACT.toFixed(4)} />
+          <Readout label="오차" value={`${err >= 0 ? '+' : '−'}${Math.abs(err).toFixed(4)}`} color={Math.abs(err) < 0.01 ? 'var(--good)' : undefined} />
+        </div>
       </div>
-      <div className="readouts" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
-        <Readout label="기둥 수" value={`${n * n}개`} />
-        <Readout label="기둥 부피의 합" value={sum.toFixed(4)} color="var(--accent)" />
-        <Readout label="실제 부피 17/3" value={VOL_EXACT.toFixed(4)} />
-        <Readout label="오차" value={`${err >= 0 ? '+' : '−'}${Math.abs(err).toFixed(4)}`} color={Math.abs(err) < 0.01 ? 'var(--good)' : undefined} />
       </div>
     </Figure>
   );
@@ -154,7 +158,7 @@ function OrderFigure() {
           return [c0[0], c0[1], c0[2], 255];
         }
         const t = (TRI_F(x) - lo) / (hi - lo);
-        const cc = lerpColor(P.surface, P.neg, 0.12 + 0.5 * t);
+        const cc = lerpColor(P.surface, P.pos, 0.12 + 0.5 * t);
         return [cc[0], cc[1], cc[2], 255];
       }, 3);
       plot.grid({ labels: true, xStep: 0.5, yStep: 0.5 });
@@ -294,7 +298,7 @@ function PolarCellFigure() {
       pts.forEach(([x, y], i) => (i ? ctx.lineTo(plot.X(x), plot.Y(y)) : ctx.moveTo(plot.X(x), plot.Y(y))));
       ctx.closePath();
       ctx.setLineDash([4, 3]);
-      ctx.strokeStyle = P.neg;
+      ctx.strokeStyle = P.pos;
       ctx.lineWidth = 2;
       ctx.stroke();
       ctx.setLineDash([]);
@@ -329,7 +333,7 @@ function PolarCellFigure() {
           <MB>{'\\text{넓이} = \\tfrac12\\left((r+\\Delta r)^2 - r^2\\right)\\Delta\\theta = \\left(r + \\tfrac{\\Delta r}{2}\\right)\\Delta r\\,\\Delta\\theta'}</MB>
           <div className="readouts" style={{ gridTemplateColumns: '1fr 1fr' }}>
             <Readout label="실제 넓이" value={cell.exact.toFixed(4)} color="var(--accent)" />
-            <Readout label="r Δr Δθ" value={cell.approx.toFixed(4)} color="var(--neg)" />
+            <Readout label="r Δr Δθ" value={cell.approx.toFixed(4)} color="var(--pos)" />
             <Readout label="상대 오차" value={`${errPct.toFixed(1)}%`} />
             <Readout label="Δr / (2r + Δr)" value={`${((dr / (2 * r + dr)) * 100).toFixed(1)}%`} />
           </div>
@@ -361,7 +365,7 @@ function GaussFigure() {
       ctx.beginPath();
       ctx.arc(cx, cy, R * plot.sx, 0, Math.PI * 2);
       ctx.stroke();
-      ctx.strokeStyle = P.neg;
+      ctx.strokeStyle = P.pos;
       ctx.setLineDash([6, 4]);
       ctx.strokeRect(plot.X(-R), plot.Y(R), plot.X(R) - plot.X(-R), plot.Y(-R) - plot.Y(R));
       ctx.setLineDash([2, 4]);
@@ -398,7 +402,7 @@ function GaussFigure() {
           <div className="mi-sandwich" aria-hidden="true">
             {[
               ['원 R', disk, 'var(--good)'],
-              ['정사각형', sq, 'var(--neg)'],
+              ['정사각형', sq, 'var(--pos)'],
               ['원 √2R', outer, 'var(--ink-2)'],
             ].map(([lab, v, col]) => (
               <div key={lab as string}>
@@ -414,13 +418,13 @@ function GaussFigure() {
             </div>
           </div>
           <div className="readouts" style={{ gridTemplateColumns: '1fr 1fr' }}>
-            <Readout label="∫ e^(−x²) dx, −R부터 R" value={gauss1(R).toFixed(4)} color="var(--neg)" />
+            <Readout label="∫ e^(−x²) dx, −R부터 R" value={gauss1(R).toFixed(4)} color="var(--pos)" />
             <Readout label="√π" value={Math.sqrt(Math.PI).toFixed(4)} />
           </div>
           <Legend
             items={[
               { color: 'var(--good)', label: '원 R: π(1 − e^(−R²))', shape: 'ln' },
-              { color: 'var(--neg)', label: '정사각형: (∫ e^(−x²) dx)²', shape: 'ln' },
+              { color: 'var(--pos)', label: '정사각형: (∫ e^(−x²) dx)²', shape: 'ln' },
               { color: 'var(--ink-2)', label: '원 √2R', shape: 'ln' },
             ]}
           />
@@ -467,7 +471,15 @@ function MonteCarloFigure() {
       const lo = 3.2, hi = 5.2;
       const L = (n: number) => Math.log10(n);
       const plot = new Plot(ctx, w, h, P, { xMin: 0, xMax: L(N), yMin: lo, yMax: hi, pad: { l: 38, r: 10, t: 10, b: 24 } });
-      plot.grid({ labels: true, xStep: 1, yStep: 0.5, fmt: (v) => (Number.isInteger(v) && v >= 0 && v <= 5 && plot.xMax >= v ? String(10 ** v) : v.toFixed(1)) });
+      plot.grid({ labels: false, xStep: 1, yStep: 0.5 });
+      ctx.fillStyle = P.ink3;
+      ctx.font = `10px ${P.fontMono}`;
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+      for (let v = lo; v <= hi + 1e-9; v += 0.5) ctx.fillText(v.toFixed(1), plot.pad.l - 5, plot.Y(v));
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+      for (let e = 0; e <= L(N) + 1e-9; e++) ctx.fillText((10 ** e).toLocaleString('ko-KR'), plot.X(e), plot.Y(lo) + 5);
       plot.line(0, BALL, L(N), BALL, P.good, 1.5, [5, 4]);
       plot.clip();
       ctx.strokeStyle = P.accent;
@@ -491,7 +503,7 @@ function MonteCarloFigure() {
       hint="점 수를 바꾸고, 다른 씨앗으로 다시 뿌려 보세요"
       caption={
         <>
-          정육면체 <M>{'[-1, 1]^3'}</M>(부피 8) 안에 점을 고르게 뿌리고, 단위 공 <M>{'x^2 + y^2 + z^2 \\le 1'}</M> 안에 떨어진 비율에 8을 곱했습니다. 왼쪽은 점들을 위에서 내려다본 것으로, 공 안의 점(파랑)이 원 밖으로 조금 나가 보이는 것은 높이 z를 버렸기 때문입니다. 오른쪽은 점을 하나씩 더할 때마다의 추정값(가로축은 로그 눈금)입니다.
+          정육면체 <M>{'[-1, 1]^3'}</M>(부피 8) 안에 점을 고르게 뿌리고, 단위 공 <M>{'x^2 + y^2 + z^2 \\le 1'}</M> 안에 떨어진 비율에 8을 곱했습니다. 왼쪽은 점들을 위에서 내려다본 것으로, 원 안에 공 밖의 점(회색)이 섞여 보이는 것은 높이 z를 버렸기 때문입니다. 위나 아래로 공을 벗어난 점도 내려다보면 원 안에 찍힙니다. 오른쪽은 점을 하나씩 더할 때마다의 추정값(가로축은 로그 눈금)입니다.
         </>
       }
     >

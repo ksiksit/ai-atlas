@@ -22,7 +22,7 @@ export function boxPlot(ctx: CanvasRenderingContext2D, w: number, h: number, P: 
 }
 
 /**
- * Height shading plus contour lines: low values tinted with --pos, high with --neg, over the surface
+ * Height shading plus contour lines: low values tinted blue (--neg), high values orange-red (--pos), over the surface
  * colour, so it reads in both themes.
  */
 export function drawField(plot: Plot, P: Palette, f: (x: number, y: number) => number, lv: number[], opts: { res?: number; lines?: boolean } = {}) {
@@ -31,7 +31,7 @@ export function drawField(plot: Plot, P: Palette, f: (x: number, y: number) => n
   const half = (hi - lo) / 2 || 1;
   plot.heatmap((x, y) => {
     const t = Math.max(-1, Math.min(1, (f(x, y) - mid) / half));
-    const c = t < 0 ? lerpColor(P.surface, P.pos, -t * 0.55) : lerpColor(P.surface, P.neg, t * 0.55);
+    const c = t < 0 ? lerpColor(P.surface, P.neg, -t * 0.55) : lerpColor(P.surface, P.pos, t * 0.55);
     return [c[0], c[1], c[2], 255];
   }, opts.res ?? 4);
   if (opts.lines === false) return;
@@ -101,8 +101,8 @@ function marker(plot: Plot, P: Palette, c: Critical, selected: boolean) {
   ctx.restore();
 }
 
-const kindColor = (P: Palette, k: Kind) => (k === 'min' ? P.pos : k === 'max' ? P.neg : k === 'saddle' ? P.ink : P.ink3);
-const KIND_CSS: Record<Kind, string> = { min: 'var(--pos)', max: 'var(--neg)', saddle: 'var(--ink)', unknown: 'var(--ink-3)' };
+const kindColor = (P: Palette, k: Kind) => (k === 'min' ? P.neg : k === 'max' ? P.pos : k === 'saddle' ? P.ink : P.ink3);
+const KIND_CSS: Record<Kind, string> = { min: 'var(--neg)', max: 'var(--pos)', saddle: 'var(--ink)', unknown: 'var(--ink-3)' };
 const KIND_MARK: Record<Kind, string> = { min: '▼', max: '▲', saddle: '✕', unknown: '○' };
 const texSym = (h: [number, number, number]) => `\\begin{pmatrix} ${nf(h[0])} & ${nf(h[1])} \\\\ ${nf(h[1])} & ${nf(h[2])} \\end{pmatrix}`;
 
@@ -260,7 +260,7 @@ function SliceFigure() {
       const plot = boxPlot(ctx, w, hh, P, s.box);
       drawField(plot, P, s.f, lv);
       plot.grid({ labels: true });
-      for (const [v, col] of [[v1, P.pos], [v2, P.neg]] as const) plot.line(-3 * v[0], -3 * v[1], 3 * v[0], 3 * v[1], alpha(col, 0.8), 1.5, [5, 4]);
+      for (const [v, col] of [[v1, P.neg], [v2, P.pos]] as const) plot.line(-3 * v[0], -3 * v[1], 3 * v[0], 3 * v[1], alpha(col, 0.8), 1.5, [5, 4]);
       plot.line(-2.4 * u[0], -2.4 * u[1], 2.4 * u[0], 2.4 * u[1], P.accent, 3);
       plot.arrow(0, 0, 1.3 * u[0], 1.3 * u[1], P.accent, 3, 10);
       plot.dot(0, 0, 4, P.ink);
@@ -308,7 +308,7 @@ function SliceFigure() {
       </div>
       <div className="readouts" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
         <Readout label="방향 u" value={`(${nf(u[0])}, ${nf(u[1])})`} />
-        <Readout label="휘어짐 uᵀHu" value={nf(k)} color={k > 1e-9 ? 'var(--pos)' : k < -1e-9 ? 'var(--neg)' : undefined} />
+        <Readout label="휘어짐 uᵀHu" value={nf(k)} color={k > 1e-9 ? 'var(--neg)' : k < -1e-9 ? 'var(--pos)' : undefined} />
         <Readout label="단면 모양" value={k > 1e-9 ? '그릇 (극소)' : k < -1e-9 ? '언덕 (극대)' : '평평'} />
       </div>
     </Figure>
@@ -370,7 +370,15 @@ function DescentFigure() {
     (ctx, { w, h }) => {
       const vals = run.values.map((v) => Math.max(v, 1e-12));
       const plot = new Plot(ctx, w, h, P, { xMin: 0, xMax: MAX_STEPS, yMin: -12, yMax: 4, pad: { l: 40, r: 10, t: 8, b: 22 } });
-      plot.grid({ labels: true, xStep: 50, yStep: 4, fmt: (v) => (v === 0 ? '1' : `1e${Math.round(v)}`) });
+      plot.grid({ labels: false, xStep: 50, yStep: 4 });
+      ctx.fillStyle = P.ink3;
+      ctx.font = `10px ${P.fontMono}`;
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+      for (let e = -12; e <= 4; e += 4) ctx.fillText(e === 0 ? '1' : `1e${e}`, plot.pad.l - 5, plot.Y(e));
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+      for (let k = 0; k <= MAX_STEPS; k += 50) ctx.fillText(k ? `${k}걸음` : '0', plot.X(k), plot.Y(-12) + 5);
       plot.clip();
       ctx.strokeStyle = run.diverged ? P.bad : P.accent;
       ctx.lineWidth = 1.8;
@@ -448,7 +456,7 @@ function LagrangeFigure() {
       plot.grid({ labels: true });
       // the level curve through the current point
       plot.clip();
-      ctx.strokeStyle = alpha(P.neg, 0.9);
+      ctx.strokeStyle = alpha(P.pos, 0.9);
       ctx.lineWidth = 2;
       ctx.setLineDash([5, 4]);
       ctx.beginPath();
@@ -473,8 +481,8 @@ function LagrangeFigure() {
       const gf = pr.grad(p[0], p[1]), gg = pr.gradG(p[0], p[1]);
       const L = 0.16 * (pr.box.x1 - pr.box.x0);
       const nf_ = Math.hypot(gf[0], gf[1]) || 1, ng = Math.hypot(gg[0], gg[1]) || 1;
-      plot.arrow(p[0], p[1], p[0] + (gg[0] / ng) * L, p[1] + (gg[1] / ng) * L, P.pos, 3, 11);
-      plot.arrow(p[0], p[1], p[0] + (gf[0] / nf_) * L, p[1] + (gf[1] / nf_) * L, P.neg, 3, 11);
+      plot.arrow(p[0], p[1], p[0] + (gg[0] / ng) * L, p[1] + (gg[1] / ng) * L, P.neg, 3, 11);
+      plot.arrow(p[0], p[1], p[0] + (gf[0] / nf_) * L, p[1] + (gf[1] / nf_) * L, P.pos, 3, 11);
       plot.dot(p[0], p[1], 7, at ? P.good : P.hl, P.ink, 1.5);
       plot.frame();
     },
