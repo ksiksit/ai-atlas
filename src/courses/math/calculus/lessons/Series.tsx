@@ -403,7 +403,7 @@ function SinFigure() {
         }
         ctx.stroke();
       };
-      curve((v) => Math.abs(sinPoly(v, d) - Math.sin(v)), alpha(P.neg, 0.9), 1.8);
+      curve((v) => Math.abs(sinPoly(v, d) - Math.sin(v)), alpha(P.bad, 0.9), 1.8);
       curve((v) => librarySin(v, d).error, P.accent, 1.8);
       ctx.strokeStyle = alpha(P.ink3, 0.6);
       ctx.setLineDash([2, 3]);
@@ -442,7 +442,7 @@ function SinFigure() {
       </div>
       <Legend
         items={[
-          { color: 'var(--neg)', label: '테일러 다항식 그대로', shape: 'ln' },
+          { color: 'var(--bad)', label: '테일러 다항식 그대로', shape: 'ln' },
           { color: 'var(--accent)', label: '범위를 줄인 뒤 다항식', shape: 'ln' },
         ]}
       />
@@ -461,7 +461,7 @@ function SinFigure() {
         <Readout label="줄인 뒤 다항식" value={tr.value.toFixed(12)} color="var(--accent)" />
         <Readout label="Math.sin(x)" value={tr.exact.toFixed(12)} />
         <Readout label="오차 (줄인 뒤)" value={tr.error.toExponential(2)} color="var(--accent)" />
-        <Readout label="오차 (그대로)" value={plainErr.toExponential(2)} color="var(--neg)" />
+        <Readout label="오차 (그대로)" value={plainErr.toExponential(2)} color="var(--bad)" />
       </div>
     </Figure>
   );

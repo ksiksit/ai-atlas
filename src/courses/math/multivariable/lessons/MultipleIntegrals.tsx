@@ -4,7 +4,7 @@ import { useCanvas2D } from '../../../../lib/canvas';
 import { Plot } from '../../../../lib/plot';
 import { alpha, lerpColor, rgbStr, usePalette } from '../../../../lib/theme';
 import { lessonHref } from '../../../index';
-import { BALL, TRI_EXACT, TRI_F, VOL_BOX, VOL_EXACT, VOL_F, VOL_TEX, columnHeight, gauss1, gaussDisk, gaussSquare, monteCarloBall, polarCell, riemann2, runningEstimate, simpson, sphericalSum, stripsHorizontal, stripsVertical, type Rule } from './integrate2';
+import { BALL, TRI_EXACT, TRI_F, VOL_EXACT, VOL_F, VOL_TEX, columnHeight, gauss1, gaussDisk, gaussSquare, monteCarloBall, polarCell, riemann2, runningEstimate, simpson, sphericalSum, stripsHorizontal, stripsVertical, type Rule } from './integrate2';
 import './multivariable.css';
 import './integrals2.css';
 
