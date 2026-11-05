@@ -191,13 +191,25 @@ export function adaptiveSimpson(f: F, a: number, b: number, tol: number, maxDept
   return { value, evals, intervals };
 }
 
-/** The fewest evaluations uniform Simpson needs (doubling panels) to match an error target. */
+/**
+ * The fewest evaluations uniform Simpson needs to reach an error target: double the panel count until the
+ * target is met, then binary-search the even panel counts in between (the error shrinks steadily once the
+ * panels resolve the peak, so the search is reliable there).
+ */
 export function uniformSimpsonFor(fn: Integrand, target: number): { panels: number; evals: number; error: number } {
-  for (let p = 2; p <= 1 << 20; p *= 2) {
-    const e = Math.abs(simpson(fn.f, fn.a, fn.b, p) - fn.exact);
-    if (e <= target) return { panels: p, evals: p + 1, error: e };
+  const err = (p: number) => Math.abs(simpson(fn.f, fn.a, fn.b, p) - fn.exact);
+  let hi = 2;
+  while (hi <= 1 << 20 && err(hi) > target) hi *= 2;
+  if (hi > 1 << 20) return { panels: NaN, evals: NaN, error: NaN };
+  let lo = hi / 2; // err(lo) > target (or lo = 1)
+  while (hi - lo > 2) {
+    let mid = Math.floor((lo + hi) / 2);
+    if (mid % 2) mid++;
+    if (mid >= hi) break;
+    if (err(mid) <= target) hi = mid;
+    else lo = mid;
   }
-  return { panels: NaN, evals: NaN, error: NaN };
+  return { panels: hi, evals: hi + 1, error: err(hi) };
 }
 
 /* ───────── many dimensions: grid vs Monte Carlo ───────── */

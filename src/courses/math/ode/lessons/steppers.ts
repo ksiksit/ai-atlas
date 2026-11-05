@@ -130,8 +130,9 @@ export function orbit(m: OrbitMethod, h: number, periods: number): { x: number[]
 
 /* ───────── adaptive RK45 (Dormand–Prince) ───────── */
 
-/** A problem with a narrow kick: y′ = −y + 20·exp(−((t − 4)/0.2)²), y(0) = 1. */
-export const pulseF = (t: number, y: number) => -y + 20 * Math.exp(-(((t - 4) / 0.2) ** 2));
+/** A problem with a narrow kick: y′ = −y + 40·exp(−((t − 3)/0.05)²), y(0) = 1, on [0, 8]. */
+export const PULSE_T = 8;
+export const pulseF = (t: number, y: number) => -y + 40 * Math.exp(-(((t - 3) / 0.05) ** 2));
 
 const A = [
   [],

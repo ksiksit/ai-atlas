@@ -1,0 +1,67 @@
+/* 미분방정식 · 연립 선형 방정식과 위상 평면 (prefix ls-) */
+
+/* a proof set apart from the prose, closed with ∎ */
+.ls-proof {
+  margin: 1.2em 0;
+  padding: 14px 18px;
+  border-left: 3px solid var(--c-math-2);
+  background: var(--surface-2);
+  font-size: var(--fs-sm);
+  line-height: 1.75;
+}
+.ls-proof > .ls-proof-head {
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--ink);
+}
+.ls-proof p {
+  margin: 0 0 8px;
+}
+.ls-proof p:last-child {
+  margin-bottom: 0;
+}
+.ls-proof .ls-qed {
+  float: right;
+  color: var(--ink-2);
+  margin-left: 12px;
+}
+
+/* the 2×2 matrix shown beside its sliders */
+.ls-matrix {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 14px;
+}
+.ls-kind {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--c-math-2) 16%, transparent);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.ls-err {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-xs);
+  font-variant-numeric: tabular-nums;
+}
+.ls-err th,
+.ls-err td {
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--line);
+  text-align: right;
+  white-space: nowrap;
+}
+.ls-err th:first-child,
+.ls-err td:first-child {
+  text-align: left;
+}
+.ls-err th {
+  color: var(--ink-3);
+  font-weight: 600;
+}
+.ls-err tr[data-on] td {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}

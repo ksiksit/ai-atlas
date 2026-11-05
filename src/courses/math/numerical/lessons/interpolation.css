@@ -1,0 +1,39 @@
+/* 수치해석 · 보간과 근사 */
+
+.ip-poly {
+  font-size: var(--fs-sm);
+  overflow-x: auto;
+  padding-block: 2px;
+}
+
+/* the divided-difference table */
+table.ip-dd {
+  border-collapse: collapse;
+  font-size: var(--fs-xs);
+  min-width: 100%;
+  border-top: 2px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+table.ip-dd th,
+table.ip-dd td {
+  padding: 5px 9px;
+  border-bottom: 1px solid var(--line);
+  text-align: right;
+  white-space: nowrap;
+}
+table.ip-dd th {
+  color: var(--ink-3);
+  font-weight: 600;
+}
+table.ip-dd td.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+table.ip-dd td[data-top] {
+  font-weight: 700;
+  color: var(--ink);
+}
+table.ip-dd td[data-fresh] {
+  background: color-mix(in srgb, var(--hl) 55%, transparent);
+  color: var(--ink);
+}

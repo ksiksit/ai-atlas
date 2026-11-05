@@ -114,7 +114,9 @@ export function stepStats(p: Poles, T = 20, n = 4000): StepStats {
       if (i === 0) settle = 0;
     }
   }
-  return { stable, overshoot: stable ? Math.max(0, peak - 1) : 0, settle, peakTime: stable && peak > 1 ? peakTime : null };
+  // an overshoot under 0.1% is numerical noise around a monotone approach, not a peak
+  const real = stable && peak > 1.001;
+  return { stable, overshoot: real ? peak - 1 : 0, settle, peakTime: real ? peakTime : null };
 }
 
 /* ───────── convolution ───────── */

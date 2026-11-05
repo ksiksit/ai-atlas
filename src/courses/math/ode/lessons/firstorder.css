@@ -1,0 +1,44 @@
+/* 미분방정식 · 1계 미분방정식 */
+
+.fo-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  counter-reset: fo;
+}
+.fo-steps li {
+  counter-increment: fo;
+  display: grid;
+  grid-template-columns: 1.6em minmax(0, 1fr);
+  column-gap: 6px;
+  align-items: baseline;
+  padding: 2px 8px;
+  border-left: 3px solid transparent;
+  min-width: 0;
+}
+.fo-steps li::before {
+  content: counter(fo);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.fo-steps li > .de-small {
+  grid-column: 2;
+}
+.fo-steps li .tex-block {
+  margin: 0;
+  padding: 4px 0;
+  border: 0;
+  background: none;
+  overflow-x: auto;
+}
+.fo-steps li[data-s='later'] {
+  opacity: 0.32;
+}
+.fo-steps li[data-s='now'] {
+  border-left-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}

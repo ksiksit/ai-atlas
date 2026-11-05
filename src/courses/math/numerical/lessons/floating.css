@@ -1,0 +1,86 @@
+/* 수치해석 · 부동소수점과 오차 (prefix fp-) */
+
+.fp-steps {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-xs);
+  font-variant-numeric: tabular-nums;
+}
+.fp-steps th,
+.fp-steps td {
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--line);
+  text-align: right;
+  white-space: nowrap;
+}
+.fp-steps th {
+  color: var(--ink-3);
+  font-weight: 600;
+}
+.fp-steps td:first-child,
+.fp-steps th:first-child {
+  text-align: left;
+}
+.fp-steps tr[data-now] td {
+  background: color-mix(in srgb, var(--hl) 35%, transparent);
+}
+.fp-steps tr[data-same] td:last-child {
+  color: var(--bad);
+  font-weight: 600;
+}
+.fp-steps .mono {
+  font-family: var(--font-mono);
+}
+
+.fp-cmp {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: 10px;
+}
+.fp-cmp > div {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  padding: 10px 12px;
+  min-width: 0;
+}
+.fp-cmp .lbl {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  display: block;
+  margin-bottom: 4px;
+}
+.fp-cmp .val {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  overflow-wrap: anywhere;
+}
+.fp-cmp .bad {
+  color: var(--bad);
+}
+.fp-cmp .good {
+  color: var(--good);
+}
+
+.fp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+  font-variant-numeric: tabular-nums;
+}
+.fp-table th,
+.fp-table td {
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+.fp-table th {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  font-weight: 600;
+}
+.fp-table td.num {
+  font-family: var(--font-mono);
+  text-align: right;
+  white-space: nowrap;
+}

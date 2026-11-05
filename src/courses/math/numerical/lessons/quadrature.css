@@ -1,0 +1,29 @@
+/* 수치해석 · 수치 적분 */
+
+table.qd-romberg {
+  border-collapse: collapse;
+  font-size: var(--fs-xs);
+  min-width: 100%;
+  border-top: 2px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+table.qd-romberg th,
+table.qd-romberg td {
+  padding: 6px 9px;
+  border-bottom: 1px solid var(--line);
+  text-align: right;
+  white-space: nowrap;
+}
+table.qd-romberg th {
+  color: var(--ink-3);
+  font-weight: 600;
+}
+table.qd-romberg td.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+/* the more correct digits, the stronger the green tint */
+table.qd-romberg td[style] {
+  background: color-mix(in srgb, var(--good) var(--d), transparent);
+  color: var(--ink);
+}
