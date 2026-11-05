@@ -90,7 +90,7 @@ export function eigvec2(h: Sym2, lam: number): V2 {
 export type Kind = 'min' | 'max' | 'saddle' | 'unknown';
 export const KIND_KO: Record<Kind, string> = { min: '극소', max: '극대', saddle: '안장점', unknown: '판정 불가' };
 
-export function classify(h: Sym2, eps = 1e-9): Kind {
+export function classify(h: Sym2, eps = 1e-6): Kind {
   const D = det2(h);
   if (Math.abs(D) < eps) return 'unknown';
   if (D < 0) return 'saddle';
@@ -139,7 +139,10 @@ export function criticalPoints(s: Surface, seeds = 13): Critical[] {
         ok = Math.hypot(g[0], g[1]) < 1e-6;
       }
       if (!ok || x < x0 || x > x1 || y < y0 || y > y1) continue;
-      if (out.some((c) => Math.hypot(c.p[0] - x, c.p[1] - y) < 1e-4)) continue;
+      // Newton crawls along flat directions (x⁴ at 0), so snap tiny coordinates and merge near neighbours
+      if (Math.abs(x) < 1e-4) x = 0;
+      if (Math.abs(y) < 1e-4) y = 0;
+      if (out.some((c) => Math.hypot(c.p[0] - x, c.p[1] - y) < 1e-3)) continue;
       const h = s.hess(x, y);
       out.push({ p: [x, y], value: s.f(x, y), h, kind: classify(h) });
     }
