@@ -95,7 +95,7 @@ export function components(g: Uint8Array): { label: Int16Array; sizes: number[] 
 
 /* ───────── Figure 2: the image of a connected set ───────── */
 
-export const f2 = (x: number) => 0.2 + 0.6 * x + 0.15 * Math.sin(7 * x);
+export const f2 = (x: number) => 0.15 + 0.7 * x + 0.07 * Math.sin(13 * x);
 
 export type DomainId = 'whole' | 'split';
 /** The domain as a list of closed intervals. */

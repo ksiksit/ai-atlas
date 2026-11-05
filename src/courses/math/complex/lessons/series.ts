@@ -1,5 +1,6 @@
 /*
- * 복소해석 · 멱급수와 로랑 급수: complex arithmetic, domain colouring, and the series in the lesson.
+ * 복소해석 · 멱급수와 로랑 급수: complex arithmetic and the series in the lesson.
+ * Domain colouring comes from cplx.ts so the whole course shares one colour scheme.
  * No imports, so node can run it directly.
  */
 
@@ -30,30 +31,6 @@ export function cpowInt(a: C, n: number): C {
   return out;
 }
 export const fromPolar = (r: number, t: number): C => [r * Math.cos(t), r * Math.sin(t)];
-
-/* ───────── domain colouring ───────── */
-
-function hsl(h: number, s: number, l: number): [number, number, number] {
-  const k = (n: number) => (n + h * 12) % 12;
-  const a = s * Math.min(l, 1 - l);
-  const f = (n: number) => l - a * Math.max(-1, Math.min(k(n) - 3, 9 - k(n), 1));
-  return [Math.round(f(0) * 255), Math.round(f(8) * 255), Math.round(f(4) * 255)];
-}
-
-/**
- * Colour of a complex value: the hue is its argument (positive real = red, then green at 120°, blue at 240°),
- * brightness rises from black at 0 to white at ∞, and faint rings mark each doubling of |w|.
- */
-export function domainRGB(w: C): [number, number, number, number] {
-  const m = cabs(w);
-  if (!isFinite(m) || isNaN(m)) return [255, 255, 255, 255];
-  if (m === 0) return [0, 0, 0, 255];
-  const h = ((carg(w) / (2 * Math.PI)) % 1 + 1) % 1;
-  const l = (2 / Math.PI) * Math.atan(m); // 0 at 0, 0.5 at |w| = 1, → 1 at ∞
-  const ring = Math.log2(m) - Math.floor(Math.log2(m)); // 0..1 within each doubling
-  const lum = 0.08 + 0.84 * l - 0.07 * (1 - ring);
-  return [...hsl(h, 0.85, Math.max(0.02, Math.min(0.98, lum))), 255] as [number, number, number, number];
-}
 
 /* ───────── Figure 1: 1/(1 + x²) and its Taylor series ───────── */
 

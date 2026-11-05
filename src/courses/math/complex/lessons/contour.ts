@@ -52,11 +52,28 @@ export function winding(path: Path, a: C): number {
     if (d < -Math.PI) d += 2 * Math.PI;
     total += d;
   }
-  return Math.round(total / (2 * Math.PI));
+  return Math.round(total / (2 * Math.PI)) || 0; // || 0 turns −0 into 0
+}
+
+/**
+ * ∮ f(z) dz on the circle |z − c| = r with z = c + r e^{iθ}, dz = i (z − c) dθ, by the trapezoid rule in θ.
+ * For a smooth periodic integrand this is accurate to rounding error with a few hundred points.
+ */
+export function circleIntegral(f: (z: C) => C, c: C, r: number, M = 400): { value: C; running: C[] } {
+  let s: C = [0, 0];
+  const running: C[] = [s];
+  const dt = (2 * Math.PI) / M;
+  for (let j = 0; j < M; j++) {
+    const u = fromPolar(r, j * dt);
+    const z = add(c, u);
+    s = add(s, scale(mul(f(z), [-u[1], u[0]]), dt)); // i·u = (−u_y, u_x)
+    running.push(s);
+  }
+  return { value: s, running };
 }
 
 /** ∮_{|z| = r} z^n dz on a circle around 0, M points. */
-export const powerOnCircle = (n: number, r: number, M = 400) => contourIntegral((z) => cpowInt(z, n), circle([0, 0], r, M));
+export const powerOnCircle = (n: number, r: number, M = 400) => circleIntegral((z) => cpowInt(z, n), [0, 0], r, M);
 
 /* ───────── functions used in the lesson ───────── */
 
@@ -79,8 +96,7 @@ export const CAUCHY_FNS: Record<CauchyId, { name: string; tex: string; f: (z: C)
 
 /** (1/2πi) ∮ f(z) / (z − z0)^{k+1} dz on the circle |z| = r, times k!: the formula for f^{(k)}(z0). */
 export function cauchyFormula(f: (z: C) => C, z0: C, r: number, k: 0 | 1, M = 400): C {
-  const path = circle([0, 0], r, M);
-  const { value } = contourIntegral((z) => div(f(z), cpowInt(sub(z, z0), k + 1)), path);
+  const { value } = circleIntegral((z) => div(f(z), cpowInt(sub(z, z0), k + 1)), [0, 0], r, M);
   // divide by 2πi
   return div(value, [0, 2 * Math.PI]);
 }
