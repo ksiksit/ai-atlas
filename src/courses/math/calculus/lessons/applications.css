@@ -1,0 +1,46 @@
+/* 미적분학 · 미분의 응용 */
+
+.ap-pts,
+.ap-iter {
+  font-size: var(--fs-xs);
+}
+.ap-pts th,
+.ap-pts td,
+.ap-iter th,
+.ap-iter td {
+  padding: 4px 8px;
+}
+.ap-pts td.mono,
+.ap-iter td.mono {
+  text-align: right;
+  white-space: nowrap;
+}
+.ap-pts tr[data-kind='max'] td:first-child {
+  color: var(--neg);
+  font-weight: 600;
+}
+.ap-pts tr[data-kind='min'] td:first-child {
+  color: var(--pos);
+  font-weight: 600;
+}
+.ap-pts tr[data-kind='inflection'] td:first-child {
+  color: var(--ink-2);
+}
+.ap-iter tr[data-on] td {
+  background: color-mix(in srgb, var(--neg) 12%, transparent);
+  font-weight: 600;
+}
+.ap-iter tr[data-dim] td {
+  color: var(--ink-3);
+}
+.ap-formula {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 18px;
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+}
+.ap-formula .tex-block {
+  margin: 0;
+}

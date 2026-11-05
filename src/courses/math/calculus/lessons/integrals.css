@@ -1,0 +1,19 @@
+/* 미적분학 · 적분과 미적분의 기본 정리 */
+
+.ig-err {
+  font-size: var(--fs-xs);
+}
+.ig-err th,
+.ig-err td {
+  padding: 4px 8px;
+}
+.ig-err td.mono {
+  text-align: right;
+  white-space: nowrap;
+}
+.ig-anti {
+  max-width: 30rem;
+}
+.ig-anti td {
+  padding-block: 6px;
+}

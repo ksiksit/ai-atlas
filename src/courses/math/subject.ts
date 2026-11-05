@@ -6,7 +6,7 @@ const subject: Subject = {
   name: '수학',
   en: 'Mathematics',
   color: 'var(--c-math-1)',
-  blurb: '컴퓨터과학과 인공지능이 기대는 수학. 논리와 증명, 세기, 선형대수, 확률.',
+  blurb: '수와 공간과 변화를 다루는 학문. 증명, 미적분, 선형대수, 확률에서 해석학과 대수까지.',
 };
 
 export default subject;

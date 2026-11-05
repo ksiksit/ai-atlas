@@ -1,0 +1,72 @@
+/* 다변수 미적분 · 극값과 라그랑주 승수 */
+
+.op-tex {
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  overflow-x: auto;
+}
+.op-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.op-chip {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  padding: 3px 7px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.op-chip span {
+  color: var(--c);
+}
+.op-chip[aria-pressed='true'] {
+  border-color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--ink);
+  background: color-mix(in srgb, var(--hl) 22%, var(--surface));
+}
+.op-hess {
+  overflow-x: auto;
+}
+.op-hess .tex-block {
+  margin: 0;
+}
+.op-pair {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: 12px;
+}
+.op-pair > * {
+  min-width: 0;
+}
+.op-fence {
+  width: min(100%, 220px);
+  aspect-ratio: 1;
+  border: 1px dashed var(--line-strong);
+  display: flex;
+  align-items: flex-end;
+  padding: 4px;
+}
+.op-fence > div {
+  background: color-mix(in srgb, var(--good) 22%, transparent);
+  border: 2px solid var(--good);
+  display: grid;
+  place-items: center;
+  min-width: 2px;
+  min-height: 2px;
+  transition: width 0.08s, height 0.08s;
+}
+.op-fence span {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ink);
+  white-space: nowrap;
+}
+@media (prefers-reduced-motion: reduce) {
+  .op-fence > div {
+    transition: none;
+  }
+}

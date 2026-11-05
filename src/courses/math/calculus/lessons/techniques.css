@@ -1,0 +1,63 @@
+/* 미적분학 · 적분의 기법과 응용: figure styles that are plain HTML rather than canvas */
+
+.tq-strips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+.tq-strips span {
+  padding: 2px 5px;
+  border: 1px solid var(--c);
+  background: color-mix(in srgb, var(--c) 16%, transparent);
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.tq-strips span[data-neg] {
+  border-style: dashed;
+  color: var(--bad);
+}
+
+.tq-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.tq-kind {
+  align-self: flex-start;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--c-math-1);
+  border: 1px solid currentColor;
+  padding: 1px 6px;
+}
+.tq-steps ol {
+  margin: 0;
+  padding-left: 1.6em;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.tq-steps li {
+  padding: 2px 0 6px 6px;
+  border-left: 3px solid transparent;
+  min-width: 0;
+}
+.tq-steps li[data-now] {
+  border-left-color: var(--hl);
+}
+.tq-steps li::marker {
+  font-family: var(--font-mono);
+  color: var(--ink-3);
+}
+.tq-steps li .tex-block {
+  margin: 0;
+  overflow-x: auto;
+}
+.tq-steps li p {
+  margin: 4px 0 0;
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+}

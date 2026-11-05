@@ -82,4 +82,23 @@ export const MAJORS: Major[] = [
       { course: 'cs-parallel-distributed', role: 'elect' },
     ],
   },
+  {
+    id: 'math',
+    name: '수학 전공',
+    en: 'Mathematics',
+    subject: 'math',
+    blurb: '증명을 읽고 쓰는 법에서 시작해, 미적분과 선형대수로 변화와 공간을 계산하고, 해석학과 대수로 그 계산이 왜 옳은지 증명하는 과정입니다. 전공선택에서는 확률, 계산, 복소수와 위상의 세계로 넓혀 갑니다.',
+    tagline: '증명과 미적분에서 해석학과 대수까지',
+    field: '자연과학',
+    courses: [
+      { course: 'cs-programming', role: 'base' },
+      { course: 'math-discrete', role: 'core' },
+      { course: 'math-linear-algebra', role: 'core' },
+      { course: 'math-calculus', role: 'core' },
+      { course: 'math-multivariable', role: 'core' },
+      { course: 'stats-basics', role: 'elect' },
+      { course: 'math-probability', role: 'elect' },
+      { course: 'cs-computation', role: 'elect' },
+    ],
+  },
 ];
