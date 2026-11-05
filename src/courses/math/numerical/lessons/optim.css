@@ -1,0 +1,43 @@
+/* 수치해석 · 최적화 (prefix opt-) */
+
+.opt-two {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+@media (max-width: 640px) {
+  .opt-two {
+    grid-template-columns: 1fr;
+  }
+}
+.opt-two > * {
+  min-width: 0;
+}
+.opt-panel-title {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  margin-bottom: 4px;
+}
+.opt-tries {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+.opt-tries span {
+  padding: 2px 5px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  font-variant-numeric: tabular-nums;
+}
+.opt-tries span[data-ok] {
+  border-color: var(--good);
+  background: color-mix(in srgb, var(--good) 18%, transparent);
+  color: var(--ink);
+  font-weight: 600;
+}
+.opt-tries span[data-no] {
+  color: var(--ink-3);
+  text-decoration: line-through;
+}

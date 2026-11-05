@@ -1,0 +1,103 @@
+/* 수치해석 · 연립방정식과 조건수 (prefix lu-) */
+
+.lu-mats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
+.lu-mat {
+  display: grid;
+  gap: 2px;
+  padding: 4px 6px;
+  border-left: 2px solid var(--ink-3);
+  border-right: 2px solid var(--ink-3);
+}
+.lu-mat span {
+  min-width: 2.2em;
+  padding: 3px 4px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.lu-mat span[data-mult] {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+  color: var(--ink);
+  font-weight: 600;
+}
+.lu-mat span[data-zero] {
+  color: var(--ink-3);
+}
+.lu-mat-label {
+  display: block;
+  font-family: var(--font-body);
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  text-align: center;
+  margin-top: 2px;
+}
+.lu-op {
+  font-size: 1.1rem;
+  color: var(--ink-3);
+}
+
+.lu-timing {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+@media (max-width: 560px) {
+  .lu-timing {
+    grid-template-columns: 1fr;
+  }
+}
+.lu-way {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.lu-way strong {
+  font-size: var(--fs-sm);
+}
+.lu-way .lu-big {
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-variant-numeric: tabular-nums;
+}
+.lu-way .lu-sub {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+
+.lu-solve {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+}
+.lu-solve th,
+.lu-solve td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+.lu-solve td.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.lu-solve tr[data-bad] td.num {
+  color: var(--bad);
+}
+.lu-solve tr[data-good] td.num {
+  color: var(--good);
+}
+.lu-solve th {
+  color: var(--ink-3);
+  font-weight: 600;
+  font-size: var(--fs-xs);
+}

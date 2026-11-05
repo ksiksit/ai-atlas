@@ -1,0 +1,52 @@
+/* 미분방정식 · 비선형계와 혼돈 (prefix ch-) */
+
+/* a proof set apart from the prose, closed with ∎ */
+.ch-proof {
+  margin: 1.2em 0;
+  padding: 14px 18px;
+  border-left: 3px solid var(--c-math-2);
+  background: var(--surface-2);
+  font-size: var(--fs-sm);
+  line-height: 1.75;
+}
+.ch-proof > .ch-proof-head {
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--ink);
+}
+.ch-proof p {
+  margin: 0 0 8px;
+}
+.ch-proof p:last-child {
+  margin-bottom: 0;
+}
+.ch-proof .ch-qed {
+  float: right;
+  color: var(--ink-2);
+  margin-left: 12px;
+}
+
+.ch-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-xs);
+  font-variant-numeric: tabular-nums;
+}
+.ch-table th,
+.ch-table td {
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--line);
+  text-align: right;
+  white-space: nowrap;
+}
+.ch-table th:first-child,
+.ch-table td:first-child {
+  text-align: left;
+}
+.ch-table th {
+  color: var(--ink-3);
+  font-weight: 600;
+}
+.ch-table tr[data-on] td {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}

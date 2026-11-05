@@ -1,0 +1,63 @@
+/* 수치해석 · 방정식의 근 (prefix rt2-) */
+
+.rt2-race {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-xs);
+  font-variant-numeric: tabular-nums;
+  min-width: 560px;
+}
+.rt2-race th,
+.rt2-race td {
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--line);
+  text-align: right;
+  white-space: nowrap;
+}
+.rt2-race th {
+  color: var(--ink-3);
+  font-weight: 600;
+}
+.rt2-race td:first-child,
+.rt2-race th:first-child {
+  text-align: left;
+}
+.rt2-race tr[data-now] td {
+  background: color-mix(in srgb, var(--hl) 30%, transparent);
+}
+.rt2-race .x {
+  font-family: var(--font-mono);
+}
+.rt2-race .dig {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 6px;
+  color: var(--ink-3);
+}
+.rt2-race .bar {
+  display: inline-block;
+  height: 6px;
+  background: var(--c, var(--accent));
+  border-radius: 1px;
+}
+.rt2-race .na {
+  color: var(--ink-3);
+}
+.rt2-keys {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.rt2-keys span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.rt2-keys i {
+  width: 14px;
+  height: 3px;
+  display: inline-block;
+}
