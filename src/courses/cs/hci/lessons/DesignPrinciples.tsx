@@ -848,7 +848,7 @@ export default function DesignPrinciples() {
 
       <h2>열 가지 휴리스틱</h2>
       <p>
-        1994년 제이콥 닐슨(Jakob Nielsen)은 사용성 문제들을 분석해 인터페이스를 점검할 때 쓸 열 가지 <T en="usability heuristics">휴리스틱</T>으로 정리했습니다. 이 장에서 본 원칙들이 대부분 들어 있습니다.
+        제이콥 닐슨(Jakob Nielsen)은 1990년 롤프 몰리히(Rolf Molich)와 함께 인터페이스를 점검하는 원칙들을 처음 내놓았고, 1994년 사용성 문제 249개를 분석해 지금의 열 가지 <T en="usability heuristics">휴리스틱</T>으로 다듬었습니다. 이 장에서 본 원칙들이 대부분 들어 있습니다.
       </p>
       <ol>
         <li>시스템 상태 보여 주기: 무엇이 일어나고 있는지 적절한 시간 안에 알린다 (그림 3).</li>

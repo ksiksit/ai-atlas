@@ -475,7 +475,7 @@ export default function Fitts() {
       </p>
       <FittsTask count={trials.length} onTrials={(t) => setTrials((prev) => (t.length === 0 ? [] : [...prev, ...t]))} />
       <p>
-        조건마다 시간이 꽤 다르게 나왔을 것입니다. 가까운 넓은 막대는 거의 생각 없이 오갈 수 있지만, 먼 좁은 막대는 손이 끝에서 속도를 줄이고 조금씩 맞춰 가야 합니다. 피츠는 움직임의 어려움을 거리 D와 너비 W의 비율로 재는 <T en="index of difficulty">난이도 지수</T>를 정의했습니다. 지금 널리 쓰는 형태는 1992년 매켄지(Scott MacKenzie)가 다듬은 것입니다.
+        조건마다 시간이 꽤 다르게 나왔을 것입니다. 가까운 넓은 막대는 거의 생각 없이 오갈 수 있지만, 먼 좁은 막대는 손이 끝에서 속도를 줄이고 조금씩 맞춰 가야 합니다. 피츠는 움직임의 어려움을 거리 D와 너비 W의 비율로 재는 <T en="index of difficulty">난이도 지수</T>를 정의했습니다. 지금 널리 쓰는 형태는 1989년 매켄지(Scott MacKenzie)가 제안한 것으로, 인간-컴퓨터 상호작용 연구와 국제 표준 ISO 9241이 이 형태를 씁니다.
       </p>
       <MB note="D는 목표 중심까지의 거리, W는 움직이는 방향으로 잰 목표의 너비. 단위가 같으면 비율만 남으므로 픽셀이든 센티미터든 상관없습니다.">{`\\text{ID} = \\log_2\\!\\left(\\frac{D}{W} + 1\\right) \\qquad \\text{MT} = a + b \\cdot \\text{ID}`}</MB>
       <p>
