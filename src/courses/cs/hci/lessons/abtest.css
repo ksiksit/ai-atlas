@@ -1,0 +1,67 @@
+/* 사람과 컴퓨터의 상호작용 · A/B 테스트 */
+
+/* Figure 1: the two arms */
+.ab-arms {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ab-arm {
+  display: grid;
+  grid-template-columns: 1.4em minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  font-size: var(--fs-sm);
+}
+.ab-arm-name {
+  font: 700 0.9375rem var(--font-mono);
+  color: var(--c);
+}
+.ab-arm-bar {
+  position: relative;
+  height: 16px;
+  background: var(--surface-2);
+}
+.ab-arm-bar i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--c);
+}
+.ab-arm-val {
+  font-size: var(--fs-xs);
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+
+/* Figure 4: twenty metrics */
+.ab-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 6px;
+}
+.ab-metric {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 8px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-size: var(--fs-xs);
+  color: var(--ink-2);
+}
+.ab-metric .mono {
+  color: var(--ink-3);
+}
+.ab-metric[data-sig] {
+  border-color: var(--bad);
+  background: color-mix(in srgb, var(--bad) 14%, var(--surface));
+  color: var(--ink);
+}
+.ab-metric[data-sig] .mono {
+  color: var(--bad);
+  font-weight: 600;
+}
+.ab-metric[data-near] {
+  border-style: dashed;
+  border-color: var(--line-strong);
+}
