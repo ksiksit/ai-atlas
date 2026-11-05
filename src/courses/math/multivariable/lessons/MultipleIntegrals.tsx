@@ -123,12 +123,17 @@ function ColumnsFigure() {
         </div>
         <div className="controls">
           <div className="readouts" style={{ gridTemplateColumns: '1fr 1fr' }}>
-          <Readout label="기둥 수" value={`${n * n}개`} />
-          <Readout label="기둥 부피의 합" value={sum.toFixed(4)} color="var(--accent)" />
-          <Readout label="실제 부피 17/3" value={VOL_EXACT.toFixed(4)} />
-          <Readout label="오차" value={`${err >= 0 ? '+' : '−'}${Math.abs(err).toFixed(4)}`} color={Math.abs(err) < 0.01 ? 'var(--good)' : undefined} />
+            <Readout label="기둥 수" value={`${n * n}개`} />
+            <Readout label="기둥 부피의 합" value={sum.toFixed(4)} color="var(--accent)" />
+            <Readout label="실제 부피 17/3" value={VOL_EXACT.toFixed(4)} />
+            <Readout label="오차" value={`${err >= 0 ? '+' : '−'}${Math.abs(err).toFixed(4)}`} color={Math.abs(err) < 0.01 ? 'var(--good)' : undefined} />
+          </div>
+          <div className="mv-note" aria-live="polite">
+            {rule === 'mid'
+              ? `가운데 값은 칸 안에서 넘치는 쪽과 모자라는 쪽이 거의 상쇄되어, 기둥 ${n * n}개로 오차가 ${Math.abs(err).toFixed(4)}입니다.`
+              : `${RULE_KO[rule]}의 값은 칸마다 한쪽으로만 틀립니다. 칸을 늘리면 오차가 칸 폭에 비례해 줄어듭니다.`}
+          </div>
         </div>
-      </div>
       </div>
     </Figure>
   );
