@@ -1,0 +1,196 @@
+/* 트랜잭션 경계: every class starts with tx- */
+
+.tx-split {
+  grid-template-columns: minmax(0, 1fr) 280px;
+}
+.tx-checks .check {
+  flex: 1 1 240px;
+}
+
+/* the call and transaction log */
+.tx-log {
+  list-style: none;
+  margin: 0;
+  padding: 6px 0;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  max-height: 440px;
+  overflow-y: auto;
+  min-width: 0;
+}
+.tx-log li {
+  display: grid;
+  grid-template-columns: 2.4em minmax(0, 1fr);
+  gap: 6px;
+  padding: 2px 8px;
+  border-left: 4px solid var(--ink-3);
+  color: var(--ink-2);
+}
+.tx-tag {
+  font-weight: 700;
+}
+.tx-text {
+  overflow-wrap: anywhere;
+}
+.tx-log li[data-kind='call'] .tx-text {
+  color: var(--ink);
+  font-weight: 600;
+}
+.tx-log li[data-kind='begin'] .tx-text,
+.tx-log li[data-kind='commit'] .tx-text {
+  color: var(--good);
+  font-weight: 600;
+}
+.tx-log li[data-kind='rollback'] .tx-text,
+.tx-log li[data-kind='mark'] .tx-text,
+.tx-log li[data-kind='throw'] .tx-text {
+  color: var(--bad);
+  font-weight: 600;
+}
+.tx-log li[data-kind='join'] .tx-text,
+.tx-log li[data-kind='suspend'] .tx-text,
+.tx-log li[data-kind='resume'] .tx-text,
+.tx-log li[data-kind='skip'] .tx-text {
+  color: var(--ink-3);
+}
+.tx-log li[data-kind='http'] .tx-text {
+  color: var(--accent);
+}
+.tx-log li[data-kind='catch'] .tx-text {
+  color: var(--c-se-3);
+}
+
+/* final state */
+.tx-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.tx-card {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px;
+  border: 1px dashed var(--line-strong);
+  background: var(--surface);
+  color: var(--ink-3);
+  min-width: 0;
+}
+.tx-card strong {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  overflow-wrap: anywhere;
+}
+.tx-card[data-on] {
+  border-style: solid;
+  border-color: var(--c-se-1);
+  background: color-mix(in srgb, var(--c-se-1) 12%, var(--surface));
+  color: var(--ink);
+}
+.tx-card[data-side] {
+  opacity: 0.85;
+}
+.tx-response {
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+}
+.tx-response code {
+  color: var(--bad);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.tx-response[data-ok] code {
+  color: var(--good);
+}
+.tx-problems {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--ink);
+}
+.tx-note {
+  color: var(--ink-3);
+  font-size: var(--fs-xs);
+}
+
+/* figure 2: the call path */
+.tx-hops {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 0;
+}
+.tx-hop-wrap {
+  display: flex;
+  align-items: center;
+}
+.tx-arrow {
+  padding: 0 8px;
+  color: var(--ink-3);
+  font-size: 1.1rem;
+}
+.tx-arrow[data-self] {
+  color: var(--bad);
+  font-weight: 700;
+}
+.tx-hop {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 10px;
+  border: 1.5px solid var(--ink-2);
+  background: var(--surface);
+}
+.tx-hop code {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--ink);
+}
+.tx-hop small {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.tx-hop[data-kind='proxy'] {
+  border-color: var(--c-se-1);
+  background: color-mix(in srgb, var(--c-se-1) 12%, var(--surface));
+}
+.tx-hop[data-kind='proxy'] small {
+  color: var(--c-se-1);
+  font-weight: 600;
+}
+.tx-hop[data-kind='proxy-off'] {
+  border-style: dashed;
+  border-color: var(--ink-3);
+}
+.tx-hop[data-kind='self'] {
+  border-color: var(--bad);
+}
+.tx-hop[data-kind='self'] small {
+  color: var(--bad);
+  font-weight: 600;
+}
+@media (max-width: 760px) {
+  .tx-split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* beat the lesson's own list spacing */
+.lesson ol.tx-log {
+  padding: 6px 0;
+  margin: 0;
+}
+.lesson .tx-log li {
+  margin-bottom: 0;
+}
+.lesson ul.tx-problems {
+  margin: 0;
+}
+.tx-preset {
+  font-family: var(--font-body);
+}
+.tx-nowrap {
+  white-space: nowrap;
+}

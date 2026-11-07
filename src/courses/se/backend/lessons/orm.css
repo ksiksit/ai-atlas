@@ -1,0 +1,206 @@
+/* ORM과 N+1 문제: every class starts with om- */
+
+/* figure 1: calls and the SQL they sent */
+.om-steps {
+  list-style: none;
+  counter-reset: om;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  max-height: 460px;
+  overflow-y: auto;
+}
+.om-step {
+  counter-increment: om;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 8px 10px 8px 34px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  min-width: 0;
+}
+.om-step::before {
+  content: counter(om);
+  position: absolute;
+  left: 10px;
+  top: 8px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.om-call {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+.om-sql {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--c-se-3);
+  padding-left: 8px;
+  border-left: 2px solid var(--c-se-3);
+  overflow-wrap: anywhere;
+}
+.om-sql[data-kind='write'] {
+  color: var(--c-se-2);
+  border-left-color: var(--c-se-2);
+}
+.om-nosql {
+  font-size: var(--fs-xs);
+  color: var(--good);
+  font-weight: 600;
+}
+.om-res {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ink-2);
+}
+.om-res small {
+  display: block;
+  font-family: var(--font-body);
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+
+/* the persistence context */
+.om-ctx {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 4px;
+  font-size: 0.8125rem;
+}
+.om-ctx th,
+.om-ctx td {
+  text-align: left;
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--line);
+}
+.om-ctx th {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.om-ctx td:nth-child(2) {
+  font-family: var(--font-mono);
+  color: var(--ink-3);
+}
+.om-ctx tr[data-proxy] td,
+.om-ctx tr[data-proxy] th {
+  color: var(--ink-3);
+  font-style: italic;
+}
+
+/* figure 2 */
+.om-ghost {
+  flex: 1 1 180px;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  align-self: center;
+}
+.om-chart {
+  display: block;
+  width: 100%;
+  max-width: 760px;
+  min-width: 500px;
+  height: auto;
+}
+.om-grid {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+.om-now {
+  stroke: var(--ink-3);
+  stroke-dasharray: 3 3;
+}
+.om-tick {
+  font-size: 12px;
+  fill: var(--ink-3);
+  font-family: var(--font-mono);
+}
+.om-warn code {
+  overflow-wrap: anywhere;
+}
+.om-log {
+  list-style: none;
+  margin: 0;
+  padding: 6px 8px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  max-height: 300px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.om-log li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 2px 8px;
+  align-items: baseline;
+}
+.om-log code {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+.om-log small {
+  grid-column: 2;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.om-phase {
+  font-size: 0.6875rem;
+  padding: 0 5px;
+  border: 1px solid var(--c-se-1);
+  color: var(--c-se-1);
+  white-space: nowrap;
+}
+.om-phase[data-phase='render'] {
+  border-color: var(--bad);
+  color: var(--bad);
+}
+.om-page {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+.om-page td {
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink-2);
+}
+.om-page td:nth-child(2) {
+  color: var(--ink);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.om-small {
+  margin: 0;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+
+/* beat the lesson's own list spacing */
+.lesson ol.om-steps {
+  padding: 0;
+  margin: 0;
+}
+.lesson ol.om-log {
+  padding: 6px 8px;
+  margin: 0;
+}
+.lesson .om-steps li,
+.lesson .om-log li {
+  margin-bottom: 0;
+}
+.om-chip {
+  font-family: var(--font-body);
+}
