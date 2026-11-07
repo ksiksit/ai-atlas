@@ -1,0 +1,235 @@
+/* HTTP API 설계: figure styles. Every class starts with ha- (shared se- classes live in basics.css) */
+
+.ha-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+.ha-grid > * {
+  min-width: 0;
+}
+.ha-scroll {
+  overflow-x: auto;
+  min-width: 0;
+}
+.ha-chip b {
+  font-weight: 700;
+  color: var(--c-se-2);
+}
+.ha-body {
+  resize: vertical;
+  min-height: 64px;
+  line-height: 1.45;
+}
+.ha-body:disabled {
+  opacity: 0.5;
+}
+.ha-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* response */
+.ha-status {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--good);
+  background: var(--surface);
+  font-weight: 600;
+}
+.ha-status[data-k='client'] {
+  border-left-color: var(--bad);
+}
+.ha-code {
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+  color: var(--good);
+}
+.ha-status[data-k='client'] .ha-code {
+  color: var(--bad);
+}
+.ha-pre {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--ink-2);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 300px;
+  overflow-y: auto;
+}
+.ha-why {
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+}
+
+/* store table and method table */
+.ha-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+}
+.ha-table th,
+.ha-table td {
+  text-align: left;
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+.ha-table th {
+  font-weight: 600;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.ha-table td:first-child,
+.ha-table td:nth-child(3),
+.ha-table td:nth-child(4) {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+.ha-table tr[data-hot] td {
+  background: color-mix(in srgb, var(--c-se-2) 16%, var(--surface));
+}
+.ha-table tr[data-gone] td {
+  text-decoration: line-through;
+  color: var(--ink-3);
+}
+.ha-methods {
+  margin: 0 0 1.2em;
+  min-width: 480px;
+}
+.ha-methods td:nth-child(2) {
+  font-family: inherit;
+  white-space: normal;
+}
+.ha-methods td:nth-child(3) {
+  font-family: var(--font-mono);
+}
+.ha-methods td:nth-child(4),
+.ha-methods td:nth-child(5) {
+  font-family: inherit;
+}
+
+/* request log */
+.ha-log {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+.ha-log li {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 5px 8px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink-2);
+}
+.ha-log-req {
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.ha-log-st {
+  font-weight: 700;
+  color: var(--good);
+}
+.ha-log-st[data-k='client'] {
+  color: var(--bad);
+}
+.ha-log li.ha-empty {
+  color: var(--ink-3);
+  font-family: inherit;
+}
+
+/* retry attempts */
+.ha-attempts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ha-attempts li {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--ink-3);
+  background: var(--surface);
+  font-size: var(--fs-sm);
+}
+.ha-attempts li[data-ok] {
+  border-left-color: var(--good);
+}
+.ha-att-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  align-items: baseline;
+}
+.ha-att-no {
+  font-weight: 700;
+}
+.ha-att-head code {
+  font-size: 0.75rem;
+  overflow-wrap: anywhere;
+}
+.ha-att-flow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  color: var(--ink);
+}
+.ha-att-flow [data-off] {
+  color: var(--bad);
+}
+.ha-att-why {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.ha-final {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: var(--fs-sm);
+}
+.ha-final li {
+  padding: 4px 8px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink-2);
+}
+.ha-final li span {
+  font-family: var(--font-mono);
+  color: var(--ink-3);
+  margin-right: 2px;
+}
+.ha-final li[data-new] {
+  border-color: var(--good);
+  color: var(--ink);
+}
+.ha-final li[data-dup] {
+  border-color: var(--bad);
+  background: color-mix(in srgb, var(--bad) 12%, var(--surface));
+}
