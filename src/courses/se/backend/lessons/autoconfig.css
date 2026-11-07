@@ -1,0 +1,204 @@
+/* 자동 구성: every class starts with ac- */
+
+/* build.gradle and application.yml side by side */
+.ac-files {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+}
+.ac-file {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.ac-file pre {
+  margin: 0;
+  font-size: 0.75rem;
+  overflow-x: auto;
+  height: 100%;
+}
+
+/* candidate cards */
+.ac-cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 8px;
+}
+.ac-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--line-strong);
+  background: var(--surface);
+  min-width: 0;
+  opacity: 0.85;
+}
+.ac-card[data-matched] {
+  border-left-color: var(--good);
+  background: color-mix(in srgb, var(--good) 6%, var(--surface));
+  opacity: 1;
+}
+.ac-card-head {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+}
+.ac-card-no {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.ac-card-name {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+.ac-card-tag {
+  flex: none;
+  font-size: var(--fs-xs);
+  padding: 0 6px;
+  border: 1px solid var(--line-strong);
+  color: var(--ink-3);
+}
+.ac-card[data-matched] .ac-card-tag {
+  border-color: var(--good);
+  color: var(--good);
+  font-weight: 600;
+}
+.ac-conds {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.ac-cond {
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+  font-size: var(--fs-xs);
+  color: var(--ink-2);
+}
+.ac-cond-mark {
+  flex: none;
+  width: 1em;
+  text-align: center;
+  font-weight: 700;
+}
+.ac-cond[data-state='ok'] .ac-cond-mark {
+  color: var(--good);
+}
+.ac-cond[data-state='bad'] .ac-cond-mark,
+.ac-cond[data-state='bad'] .ac-cond-body > span {
+  color: var(--bad);
+}
+.ac-cond[data-state='skip'] {
+  opacity: 0.5;
+}
+.ac-cond-body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.ac-cond-body code {
+  font-size: 0.6875rem;
+  overflow-wrap: anywhere;
+  background: none;
+  padding: 0;
+  color: var(--ink);
+}
+.ac-card-beans {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.ac-bean {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  padding: 1px 6px;
+  border: 1px dashed var(--line-strong);
+  color: var(--ink-3);
+  overflow-wrap: anywhere;
+}
+.ac-bean[data-on] {
+  border-style: solid;
+  border-color: var(--c-se-1);
+  color: var(--c-se-1);
+  font-weight: 600;
+}
+
+/* DataSource table */
+.ac-ds {
+  width: 100%;
+  min-width: 520px;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+.ac-ds th,
+.ac-ds td {
+  text-align: left;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--line);
+}
+.ac-ds th {
+  font-weight: 500;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.ac-ds td {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ink-2);
+}
+.ac-ds tr[data-user] td:first-child {
+  color: var(--c-se-1);
+  font-weight: 600;
+}
+.ac-ds-used {
+  color: var(--good) !important;
+  font-family: var(--font-body) !important;
+  white-space: nowrap;
+}
+
+/* condition evaluation report */
+.ac-report {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+  max-height: 340px;
+  overflow: auto;
+  white-space: pre;
+}
+.ac-report:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+.ac-report span[data-kind='pos'] {
+  color: var(--good);
+  font-weight: 600;
+}
+.ac-report span[data-kind='neg'] {
+  color: var(--ink);
+  font-weight: 600;
+}
+.ac-report span[data-kind='bad'] {
+  color: var(--bad);
+}
