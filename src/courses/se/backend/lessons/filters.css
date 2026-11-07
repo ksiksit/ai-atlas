@@ -1,0 +1,289 @@
+/* 필터와 미들웨어 체인: every class starts with fl- */
+
+/* the request picked */
+.fl-req {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.fl-req code {
+  font-size: 0.8125rem;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* reorderable list of filters */
+.fl-order {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  counter-reset: fl;
+}
+.fl-order li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 2px 4px 2px 8px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+.fl-order li[data-off] {
+  border-style: dashed;
+  opacity: 0.6;
+}
+.fl-order code {
+  font-size: 0.8125rem;
+}
+.fl-move {
+  display: inline-flex;
+  gap: 4px;
+  flex: none;
+}
+.fl-move .btn.small {
+  min-width: 32px;
+  padding: 0 6px;
+}
+
+/* the onion */
+.fl-onion {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.fl-client {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.fl-layer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px 0 6px 8px;
+  border: 1px solid var(--line-strong);
+  border-right: 0;
+  background: color-mix(in srgb, var(--c-se-2) 4%, var(--surface));
+  min-width: 0;
+}
+.fl-layer .fl-layer {
+  margin-left: 2px;
+}
+.fl-layer[data-ctl] {
+  border-color: var(--c-se-2);
+  border-right: 1px solid var(--c-se-2);
+  background: color-mix(in srgb, var(--c-se-2) 14%, var(--surface));
+  padding-right: 8px;
+}
+.fl-layer[data-skipped] {
+  border: 1px dashed var(--line-strong);
+  background: transparent;
+  padding-right: 8px;
+  opacity: 0.75;
+}
+.fl-name {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--ink);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 8px;
+}
+.fl-name small {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 0.72rem;
+  color: var(--ink-3);
+}
+.fl-layer[data-skipped] .fl-name {
+  color: var(--ink-3);
+  font-family: var(--font-body);
+  font-weight: 500;
+}
+.fl-skipped {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ink-3);
+  overflow-wrap: anywhere;
+}
+.fl-line {
+  display: grid;
+  grid-template-columns: 22px 14px minmax(0, 1fr);
+  align-items: baseline;
+  gap: 2px;
+  padding-right: 8px;
+  font-size: var(--fs-xs);
+  line-height: 1.45;
+  color: var(--ink-2);
+  overflow-wrap: anywhere;
+}
+.fl-step {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--ink-3);
+  text-align: right;
+  padding-right: 4px;
+}
+.fl-arrow {
+  font-size: 0.75rem;
+  color: var(--ink-3);
+}
+.fl-line[data-tone='out'] {
+  color: var(--good);
+}
+.fl-line[data-tone='out'] .fl-arrow,
+.fl-line[data-tone='catch'] .fl-arrow {
+  color: var(--good);
+}
+.fl-line[data-tone='stop'] {
+  color: var(--ink);
+  font-weight: 600;
+}
+.fl-line[data-tone='stop'] .fl-arrow {
+  color: var(--c-se-2);
+}
+.fl-line[data-tone='catch'] {
+  color: var(--good);
+  font-weight: 600;
+}
+.fl-line[data-tone='skip'],
+.fl-line[data-tone='throw'],
+.fl-line[data-tone='skip'] .fl-arrow,
+.fl-line[data-tone='throw'] .fl-arrow {
+  color: var(--bad);
+}
+.fl-line[data-tone='throw'] {
+  font-weight: 600;
+}
+
+/* response, log and the browser's view */
+.fl-out {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+.fl-resp {
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--good);
+  background: var(--surface-2);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.55;
+  color: var(--ink-3);
+  overflow-wrap: anywhere;
+}
+.fl-resp[data-tone='bad'] {
+  border-left-color: var(--bad);
+}
+.fl-resp-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  font-weight: 700;
+  color: var(--good);
+}
+.fl-resp[data-tone='bad'] .fl-resp-line {
+  color: var(--bad);
+}
+.fl-tag {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.6875rem;
+  padding: 0 6px;
+  border: 1px solid var(--bad);
+  color: var(--bad);
+}
+.fl-resp-body {
+  margin-top: 6px;
+  color: var(--ink);
+}
+.fl-log {
+  list-style: none;
+  margin: 0;
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: var(--ink-2);
+  overflow-wrap: anywhere;
+}
+.fl-log li[data-empty] {
+  color: var(--ink-3);
+}
+
+/* figure 2: placement table */
+.fl-table {
+  width: 100%;
+  min-width: 640px;
+  border-collapse: collapse;
+  font-size: var(--fs-xs);
+}
+.fl-table th {
+  text-align: left;
+  font-weight: 500;
+  color: var(--ink-3);
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--line-strong);
+  white-space: nowrap;
+}
+.fl-table td {
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.fl-table td[data-tone='bad'] {
+  color: var(--bad);
+}
+.fl-table td[data-tone='good'] {
+  color: var(--good);
+}
+.fl-table tr[data-pick] td {
+  background: color-mix(in srgb, var(--c-se-2) 12%, var(--surface));
+}
+.fl-table tr[data-pick] td:first-child {
+  box-shadow: inset 3px 0 0 var(--c-se-2);
+}
+.fl-mono {
+  font-family: var(--font-mono);
+}
+.fl-rowbtn {
+  font: inherit;
+  font-weight: 600;
+  min-height: 30px;
+  padding: 0 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+}
+.fl-rowbtn[aria-pressed='true'] {
+  border-color: var(--c-se-2);
+  color: var(--c-se-2);
+}
+.fl-rowbtn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+@media (max-width: 640px) {
+  .fl-out {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
