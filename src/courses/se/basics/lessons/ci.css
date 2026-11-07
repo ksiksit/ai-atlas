@@ -1,0 +1,164 @@
+/* 지속적 통합: figure styles. Every class starts with ci- (shared se- classes live in basics.css) */
+
+/* pipeline timeline */
+.ci-gantt {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+.ci-row {
+  display: grid;
+  grid-template-columns: 78px minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+}
+.ci-job {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ink-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ci-row[data-crit] .ci-job {
+  color: var(--ink);
+  font-weight: 700;
+}
+.ci-track {
+  position: relative;
+  height: 24px;
+  background: repeating-linear-gradient(to right, transparent 0, transparent calc(var(--tick) - 1px), var(--line) calc(var(--tick) - 1px), var(--line) var(--tick));
+}
+.ci-bar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  overflow: hidden;
+}
+.ci-row[data-crit] .ci-bar {
+  border: 2px solid var(--c-se-3);
+}
+.ci-seg {
+  height: 100%;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 0.625rem;
+  line-height: 22px;
+  padding: 0 2px;
+  color: var(--ink-2);
+  border-right: 1px solid color-mix(in srgb, var(--surface) 70%, transparent);
+}
+.ci-seg:last-child {
+  border-right: none;
+}
+.ci-seg[data-k='setup'] {
+  background: color-mix(in srgb, var(--ink-3) 20%, var(--surface));
+}
+.ci-seg[data-k='cache'] {
+  background: color-mix(in srgb, var(--c-se-1) 32%, var(--surface));
+  color: var(--ink);
+}
+.ci-seg[data-k='work'] {
+  background: color-mix(in srgb, var(--c-se-2) 32%, var(--surface));
+  color: var(--ink);
+}
+.ci-axis {
+  position: relative;
+  height: 16px;
+  font-size: 0.6875rem;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.ci-axis span {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+.ci-axis span:first-child {
+  transform: none;
+}
+.ci-end {
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  width: 0;
+  border-left: 2px dashed var(--c-se-3);
+}
+
+/* flaky commits grid */
+.ci-commits {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14px, 1fr));
+  gap: 3px;
+}
+.ci-commit {
+  aspect-ratio: 1;
+  border: 1px solid transparent;
+  background: color-mix(in srgb, var(--good) 30%, var(--surface));
+}
+.ci-commit[data-o='retried'] {
+  background: color-mix(in srgb, var(--c-se-3) 45%, var(--surface));
+}
+.ci-commit[data-o='false-red'] {
+  background: color-mix(in srgb, var(--bad) 14%, var(--surface));
+  border: 2px solid var(--bad);
+}
+.ci-commit[data-o='caught'] {
+  background: var(--bad);
+}
+.ci-commit[data-o='missed'] {
+  background: var(--c-se-2);
+  border-radius: 50%;
+}
+.ci-saved {
+  list-style: none;
+  margin: 0;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-size: var(--fs-xs);
+  color: var(--ink-2);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.ci-saved li {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+.ci-saved li[data-bug] {
+  color: var(--bad);
+  font-weight: 600;
+}
+.ci-saved .n {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+.ci-saved-title {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.ci-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  font-size: var(--fs-xs);
+  color: var(--ink-2);
+}
+.ci-legend > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.ci-legend .ci-commit {
+  width: 12px;
+  height: 12px;
+  box-sizing: border-box;
+}
