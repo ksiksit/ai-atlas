@@ -87,7 +87,7 @@ export const MAJORS: Major[] = [
     name: '소프트웨어공학 전공',
     en: 'Software Engineering',
     subject: 'se',
-    blurb: '프로그래밍과 데이터베이스, 네트워크를 바탕으로, 짠 코드가 실제 서비스가 되기까지의 길을 따라갑니다. 패키지와 빌드, HTTP API, 배포와 운영의 원리를 먼저 익히고, 그 위에서 실제로 쓰이는 프레임워크로 넓혀 갑니다.',
+    blurb: '프로그래밍과 데이터베이스, 네트워크를 바탕으로, 짠 코드가 실제 서비스가 되기까지의 길을 따라갑니다. 패키지와 빌드, HTTP API, 배포와 운영의 원리를 먼저 익히고, 그 위에서 의존성 주입, ORM, 트랜잭션처럼 Spring Boot 같은 프레임워크가 하는 일을 직접 만들어 보며 배웁니다.',
     tagline: '내 컴퓨터의 코드에서 사람들이 쓰는 서비스까지',
     field: '공학',
     courses: [
@@ -97,6 +97,7 @@ export const MAJORS: Major[] = [
       { course: 'cs-databases', role: 'base' },
       { course: 'cs-software-design', role: 'base' },
       { course: 'se-basics', role: 'core' },
+      { course: 'se-backend', role: 'core' },
       { course: 'net-security', role: 'elect' },
       { course: 'net-software-security', role: 'elect' },
       { course: 'cs-hci', role: 'elect' },
