@@ -107,7 +107,7 @@ function ymlText(props: Record<string, string>) {
   return out.join('\n');
 }
 
-/** A generated config file. Not <Code>, which would dim everything after the // in a JDBC url. */
+/** A generated config file, shown as plain text. */
 function FileView({ name, text }: { name: string; text: string }) {
   return (
     <div className="ac-file">

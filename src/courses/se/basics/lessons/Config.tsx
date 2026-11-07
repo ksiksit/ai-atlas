@@ -5,7 +5,7 @@ import { APP_YML, ARGS_DEFAULT, ENV_DEFAULT, HISTORY, PROFILES, PROFILE_YML, SOU
 import './basics.css';
 import './config.css';
 
-/** A listing like <Code>, but a comment (# or //) must start a line or follow a space, so jdbc:postgresql://… stays undimmed. */
+/** A listing like <Code> that also dims # comments (YAML, shell) when they start a line or follow a space. */
 function Src({ children, label }: { children: string; label?: string }) {
   const lines = children.replace(/^\n+|\s+$/g, '').split('\n');
   return (
