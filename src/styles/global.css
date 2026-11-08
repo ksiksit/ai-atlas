@@ -34,6 +34,9 @@
   --c-net-2: #5b4ca8;
   --c-net-3: #a2492a;
   --c-net-4: #3d6b1f;
+  --c-se-1: #22684f; /* software engineering */
+  --c-se-2: #7d3f8c;
+  --c-se-3: #99501a;
   --c-math-1: #a3325a; /* mathematics */
   --c-math-2: #3f5f7a;
   --c-math-3: #7a5c12;
@@ -97,6 +100,9 @@
     --c-net-2: #b3a8ef;
     --c-net-3: #ec9b7c;
     --c-net-4: #a6d389;
+    --c-se-1: #84d0ad;
+    --c-se-2: #d7a6e6;
+    --c-se-3: #eba878;
     --c-math-1: #f08cab;
     --c-math-2: #9fbfdc;
     --c-math-3: #e0c070;
@@ -140,6 +146,9 @@
   --c-net-2: #b3a8ef;
   --c-net-3: #ec9b7c;
   --c-net-4: #a6d389;
+  --c-se-1: #84d0ad;
+  --c-se-2: #d7a6e6;
+  --c-se-3: #eba878;
   --c-math-1: #f08cab;
   --c-math-2: #9fbfdc;
   --c-math-3: #e0c070;

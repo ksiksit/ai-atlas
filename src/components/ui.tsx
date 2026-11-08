@@ -29,7 +29,9 @@ export function Code({ children, label }: { children: string; label?: string }) 
     <pre className="code" aria-label={label}>
       <code>
         {lines.map((line, i) => {
-          const c = line.indexOf('//');
+          // a comment starts a line or follows a space, so URLs like jdbc:mysql://host stay undimmed
+          const m = /(^|\s)\/\//.exec(line);
+          const c = m ? m.index + m[1].length : -1;
           return (
             <span key={i}>
               {c >= 0 ? (

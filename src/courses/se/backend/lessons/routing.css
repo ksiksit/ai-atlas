@@ -1,0 +1,184 @@
+/* 요청과 라우팅: every class starts with rt- */
+
+.rt-inputs {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+}
+.rt-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.rt-body {
+  resize: vertical;
+  min-height: 36px;
+  font-size: 0.875rem;
+}
+
+/* the handler-mapping table */
+.rt-table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+}
+.rt-table th {
+  text-align: left;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--line-strong);
+}
+.rt-table td {
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.rt-table tr[data-tone='dim'] td {
+  color: var(--ink-3);
+}
+.rt-table tr[data-tone='warn'] td {
+  color: var(--ink);
+}
+.rt-table tr[data-tone='warn'] td.rt-res {
+  color: var(--bad);
+}
+.rt-table tr[data-tone='pick'] td {
+  color: var(--ink);
+  font-weight: 600;
+  background: color-mix(in srgb, var(--c-se-2) 14%, var(--surface));
+}
+.rt-table tr[data-tone='pick'] td:first-child {
+  box-shadow: inset 3px 0 0 var(--c-se-2);
+}
+.rt-rank {
+  min-width: 420px;
+}
+
+/* dispatcher steps, bindings and the response */
+.rt-two {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+.rt-steps {
+  margin: 0;
+  padding: 8px 10px 8px 30px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-size: var(--fs-xs);
+  line-height: 1.6;
+  color: var(--ink-2);
+  overflow-wrap: anywhere;
+}
+.rt-steps li + li {
+  margin-top: 3px;
+}
+.rt-steps li[data-tone='good'] {
+  color: var(--good);
+}
+.rt-steps li[data-tone='bad'] {
+  color: var(--bad);
+  font-weight: 600;
+}
+.rt-steps li[data-tone='dim'] {
+  color: var(--ink-3);
+}
+.rt-binds {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.rt-bind {
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--good);
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.rt-bind[data-tone='bad'] {
+  border-left-color: var(--bad);
+}
+.rt-bind-p {
+  color: var(--ink);
+  font-weight: 600;
+}
+.rt-bind-src {
+  color: var(--ink-3);
+}
+.rt-bind-v {
+  color: var(--good);
+}
+.rt-bind[data-tone='bad'] .rt-bind-v {
+  color: var(--bad);
+}
+.rt-none {
+  font-size: var(--fs-sm);
+  color: var(--ink-3);
+}
+.rt-resp {
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--good);
+  background: var(--surface-2);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+  color: var(--ink-2);
+}
+.rt-resp[data-tone='bad'] {
+  border-left-color: var(--bad);
+}
+.rt-resp-line {
+  font-weight: 700;
+  color: var(--good);
+}
+.rt-resp[data-tone='bad'] .rt-resp-line {
+  color: var(--bad);
+}
+.rt-resp-h {
+  color: var(--ink-3);
+}
+.rt-resp-body {
+  margin-top: 6px;
+  color: var(--ink);
+}
+.rt-resp-ex {
+  margin-top: 6px;
+  font-family: var(--font-body);
+  color: var(--ink-3);
+}
+
+/* figure 2 */
+.rt-pat {
+  display: inline-flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+.rt-pat small {
+  font-size: 0.72rem;
+  color: var(--ink-3);
+}
+.be-verdict code.rt-plain {
+  color: var(--ink);
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 640px) {
+  .rt-inputs,
+  .rt-two {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

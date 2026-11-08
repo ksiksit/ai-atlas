@@ -1,0 +1,309 @@
+/* 배포와 롤백: every class starts with dp- (shared se- classes live in basics.css) */
+
+.dp-scroll {
+  overflow-x: auto;
+  min-width: 0;
+}
+
+/* rollout timeline */
+.dp-chart {
+  display: block;
+  width: 100%;
+  min-width: 480px;
+  height: auto;
+}
+.dp-grid {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+.dp-ax {
+  font-size: 11px;
+  fill: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.dp-ax-title {
+  font-size: 11.5px;
+  fill: var(--ink-2);
+}
+.dp-th-label {
+  fill: var(--bad);
+  paint-order: stroke;
+  stroke: var(--surface);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+.dp-share {
+  fill: color-mix(in srgb, var(--c-se-1) 28%, transparent);
+  stroke: var(--c-se-1);
+  stroke-width: 1.4;
+}
+.dp-threshold {
+  stroke: var(--bad);
+  stroke-width: 1.2;
+  stroke-dasharray: 5 4;
+}
+.dp-all {
+  fill: none;
+  stroke: var(--ink-3);
+  stroke-width: 1;
+  opacity: 0.7;
+}
+.dp-watched {
+  fill: none;
+  stroke: var(--c-se-2);
+  stroke-width: 2.2;
+  stroke-linejoin: round;
+}
+.dp-mark {
+  stroke-width: 1.6;
+  stroke-dasharray: 4 3;
+}
+.dp-mark.alert {
+  stroke: var(--bad);
+}
+.dp-mark.start {
+  stroke: var(--ink-3);
+}
+.dp-mark.done {
+  stroke: var(--good);
+  stroke-dasharray: none;
+}
+.dp-readouts {
+  margin-top: 14px;
+}
+.dp-readouts > .readout {
+  flex: 1 1 140px;
+}
+
+/* tables */
+.dp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+  margin-top: 12px;
+  min-width: 520px;
+}
+.dp-table th {
+  text-align: left;
+  font-weight: 500;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  border-bottom: 1px solid var(--line-strong);
+  padding: 4px 8px 4px 0;
+}
+.dp-table td {
+  border-bottom: 1px solid var(--line);
+  padding: 4px 8px 4px 0;
+  color: var(--ink-2);
+  vertical-align: middle;
+}
+.dp-table tbody tr {
+  cursor: pointer;
+}
+.dp-table tbody tr[data-on] td {
+  background: color-mix(in srgb, var(--c-se-1) 10%, var(--surface));
+  color: var(--ink);
+}
+.dp-num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.dp-table:not(.dp-data) th:nth-child(n + 4) {
+  text-align: right;
+}
+.dp-rowbtn {
+  font: inherit;
+  border: 0;
+  background: none;
+  color: inherit;
+  padding: 4px 0;
+  min-height: 28px;
+  cursor: pointer;
+  text-align: left;
+  white-space: nowrap;
+}
+.dp-rowbtn[aria-pressed='true'] {
+  font-weight: 600;
+  color: var(--c-se-1);
+}
+.dp-rowbtn:focus-visible,
+.dp-step:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* migration steps */
+.lesson ol.dp-steps,
+.dp-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+  gap: 6px;
+}
+.lesson .dp-steps li {
+  margin: 0;
+}
+.dp-plan {
+  align-self: flex-start;
+  max-width: 100%;
+}
+.dp-step {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  text-align: left;
+  font: inherit;
+  font-size: var(--fs-sm);
+  padding: 6px 8px;
+  min-height: 44px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink-2);
+  cursor: pointer;
+}
+.dp-step-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: left;
+}
+.dp-step small {
+  display: block;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.dp-step[data-past] {
+  border-color: color-mix(in srgb, var(--c-se-1) 40%, var(--line));
+}
+.dp-step[data-on] {
+  border-color: var(--c-se-1);
+  outline: 1.5px solid var(--c-se-1);
+  outline-offset: -1px;
+  color: var(--ink);
+  font-weight: 600;
+}
+.dp-step-no {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  min-width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  flex: none;
+}
+.dp-sql {
+  margin: 0;
+  padding: 8px 10px;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.dp-mig {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+@media (max-width: 760px) {
+  .dp-mig {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.dp-data {
+  min-width: 300px;
+  margin-top: 4px;
+}
+.dp-data tbody tr {
+  cursor: default;
+}
+.dp-mono {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
+.dp-mono[data-null] {
+  color: var(--bad);
+  opacity: 0.8;
+}
+.dp-apps {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.dp-app {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--good);
+  background: var(--surface);
+  font-size: var(--fs-sm);
+}
+.dp-app[data-tone='bad'] {
+  border-left-color: var(--bad);
+}
+.dp-app[data-tone='warn'] {
+  border-left-color: var(--c-se-3);
+}
+.dp-app[data-tone='note'] {
+  border-left-color: color-mix(in srgb, var(--good) 50%, var(--c-se-3));
+}
+.dp-app[data-run] {
+  border-color: var(--ink-2);
+}
+.dp-app-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+}
+.dp-badge {
+  font-size: var(--fs-xs);
+  padding: 0 6px;
+  border: 1px solid var(--ink-2);
+  color: var(--ink);
+}
+.dp-app-desc {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.dp-app-res {
+  color: var(--good);
+}
+.dp-app[data-tone='bad'] .dp-app-res {
+  color: var(--bad);
+}
+.dp-app[data-tone='warn'] .dp-app-res,
+.dp-app[data-tone='note'] .dp-app-res {
+  color: var(--c-se-3);
+}
+.dp-app-res code {
+  font-size: 0.8125rem;
+  overflow-wrap: anywhere;
+}
+.dp-verdict {
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--good);
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+}
+.dp-verdict[data-tone='bad'] {
+  border-left-color: var(--bad);
+}
+.dp-verdict code {
+  color: var(--bad);
+  overflow-wrap: anywhere;
+}

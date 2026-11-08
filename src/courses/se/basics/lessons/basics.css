@@ -1,0 +1,193 @@
+/* 기초 소프트웨어공학: figure styles that are plain HTML rather than canvas. Every class starts with se- */
+
+.se-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+.se-label {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.se-input {
+  width: 100%;
+  font-family: var(--font-mono);
+  font-size: 0.9375rem;
+  padding: 6px 8px;
+  min-height: 36px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink);
+}
+.se-input:focus-visible,
+.se-chip:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+.se-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.se-chip {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  padding: 3px 8px;
+  min-height: 32px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink-2);
+  cursor: pointer;
+}
+.se-chip[data-on] {
+  border-color: var(--c-se-1);
+  color: var(--c-se-1);
+  font-weight: 600;
+}
+
+/* published versions */
+.se-vers {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+  gap: 6px;
+}
+.se-ver {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  text-align: center;
+  padding: 6px 0;
+  border: 1px solid var(--line);
+  color: var(--ink-3);
+  background: var(--surface);
+}
+.se-ver[data-ok] {
+  background: color-mix(in srgb, var(--c-se-1) 16%, var(--surface));
+  border-color: color-mix(in srgb, var(--c-se-1) 50%, var(--line));
+  color: var(--ink);
+}
+.se-ver[data-pick] {
+  outline: 2.5px solid var(--c-se-1);
+  outline-offset: -1px;
+  font-weight: 700;
+}
+
+/* release timeline */
+.se-timeline {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  gap: 6px;
+}
+.se-tl-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 0;
+  border: 1px dashed var(--line);
+  color: var(--ink-3);
+  opacity: 0.55;
+}
+.se-tl-item[data-out] {
+  border-style: solid;
+  opacity: 1;
+}
+.se-tl-item[data-out][data-ok] {
+  background: color-mix(in srgb, var(--c-se-1) 12%, var(--surface));
+  color: var(--ink);
+}
+.se-tl-item[data-out][data-broken] {
+  border-color: var(--bad);
+  color: var(--bad);
+}
+.se-tl-ver {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
+.se-tl-day {
+  font-size: var(--fs-xs);
+}
+.se-machines {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+.se-machine {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--good);
+  background: var(--surface);
+}
+.se-machine[data-tone='bad'] {
+  border-left-color: var(--bad);
+}
+.se-machine-day {
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+}
+.se-machine-ver {
+  font-family: var(--font-mono);
+  font-weight: 600;
+}
+.se-machine-result {
+  font-size: var(--fs-sm);
+  color: var(--good);
+}
+.se-machine[data-tone='bad'] .se-machine-result {
+  color: var(--bad);
+}
+
+/* cover: pipeline runs */
+.se-pipe {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) repeat(5, minmax(0, 1fr));
+  gap: 4px;
+  font-size: var(--fs-xs);
+}
+.se-pipe-head {
+  color: var(--ink-3);
+  text-align: center;
+  padding-bottom: 2px;
+}
+.se-pipe-head:first-child {
+  text-align: left;
+}
+.se-pipe-commit {
+  font-family: var(--font-mono);
+  color: var(--ink-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  align-self: center;
+}
+.se-pipe-cell {
+  height: 26px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-3);
+}
+.se-pipe-cell[data-s='run'] {
+  border-color: var(--c-se-2);
+  background: color-mix(in srgb, var(--c-se-2) 18%, var(--surface));
+  color: var(--ink);
+}
+.se-pipe-cell[data-s='ok'] {
+  background: color-mix(in srgb, var(--good) 22%, var(--surface));
+  border-color: color-mix(in srgb, var(--good) 55%, var(--line));
+  color: var(--good);
+}
+.se-pipe-cell[data-s='fail'] {
+  background: color-mix(in srgb, var(--bad) 20%, var(--surface));
+  border-color: var(--bad);
+  color: var(--bad);
+}
+.se-pipe-cell[data-s='skip'] {
+  border-style: dashed;
+  opacity: 0.6;
+}

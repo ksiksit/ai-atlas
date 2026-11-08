@@ -1,0 +1,311 @@
+/* 설정과 환경: figure styles. Every class starts with cf- (shared se- classes live in basics.css) */
+
+.cf-scroll {
+  overflow-x: auto;
+  min-width: 0;
+}
+
+/* resolution matrix */
+.cf-table {
+  width: 100%;
+  min-width: 700px;
+  border-collapse: separate;
+  border-spacing: 3px;
+  font-size: 0.75rem;
+}
+.cf-table th {
+  font-weight: 600;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+  text-align: left;
+  padding: 2px 6px;
+  vertical-align: bottom;
+  overflow-wrap: anywhere;
+}
+.cf-table th[data-off] {
+  opacity: 0.45;
+  text-decoration: line-through;
+}
+.cf-table td {
+  font-family: var(--font-mono);
+  padding: 5px 6px;
+  border: 1px solid transparent;
+  color: var(--ink-2);
+  vertical-align: top;
+  overflow-wrap: anywhere;
+  max-width: 180px;
+}
+.cf-table td small {
+  display: block;
+  font-size: 0.625rem;
+  color: var(--ink-3);
+}
+.cf-table td.cf-key {
+  color: var(--ink);
+  white-space: nowrap;
+  max-width: none;
+}
+.cf-table td[data-off] {
+  opacity: 0.35;
+}
+.cf-table td[data-lose] {
+  text-decoration: line-through;
+  color: var(--ink-3);
+  border-color: var(--line);
+}
+.cf-table td[data-win] {
+  border: 2px solid var(--c-se-2);
+  background: color-mix(in srgb, var(--c-se-2) 14%, var(--surface));
+  color: var(--ink);
+  font-weight: 600;
+}
+.cf-table td.cf-final {
+  color: var(--ink);
+  font-weight: 700;
+  border-left: 3px solid var(--line-strong);
+}
+.cf-table td.cf-final[data-missing] {
+  color: var(--ink-3);
+  font-weight: 400;
+}
+.cf-none {
+  color: var(--ink-3);
+}
+
+/* startup verdict */
+.cf-boot {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--good);
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ink-2);
+  overflow-wrap: anywhere;
+}
+.cf-boot[data-tone='bad'] {
+  border-left-color: var(--bad);
+  color: var(--bad);
+}
+.cf-boot-head {
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--good);
+}
+.cf-boot[data-tone='bad'] .cf-boot-head {
+  color: var(--bad);
+}
+.cf-skip {
+  color: var(--ink-3);
+}
+.cf-files {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 10px;
+}
+.cf-files > * {
+  min-width: 0;
+}
+.cf-files [data-off] {
+  opacity: 0.4;
+}
+.cf-files .code {
+  margin: 0;
+  font-size: 0.75rem;
+}
+.cf-text {
+  resize: vertical;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+.cf-in:disabled {
+  opacity: 0.5;
+}
+
+/* commit history */
+.cf-commits {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.cf-commit {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  width: 100%;
+  text-align: left;
+  padding: 6px 10px;
+  min-height: 36px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink-2);
+  font: inherit;
+  font-size: var(--fs-sm);
+  cursor: pointer;
+}
+.cf-commit[data-on] {
+  border-color: var(--c-se-2);
+  box-shadow: inset 3px 0 0 var(--c-se-2);
+  color: var(--ink);
+}
+.cf-commit:focus-visible,
+.cf-findings button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+.cf-hash {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--c-se-2);
+  display: inline-flex;
+  gap: 6px;
+}
+.cf-hash s {
+  color: var(--ink-3);
+}
+.cf-msg {
+  flex: 1 1 140px;
+  min-width: 0;
+}
+.cf-badge,
+.cf-head {
+  font-size: var(--fs-xs);
+  padding: 0 6px;
+  border: 1px solid var(--bad);
+  color: var(--bad);
+}
+.cf-head {
+  border-color: var(--line-strong);
+  color: var(--ink-3);
+}
+
+/* diff of one commit */
+.cf-diff {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 0;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  line-height: 1.55;
+  overflow-x: auto;
+}
+.cf-diff-file {
+  padding: 0 10px 2px;
+  color: var(--ink-3);
+  font-weight: 600;
+}
+.cf-line {
+  display: flex;
+  gap: 8px;
+  padding: 0 10px;
+  color: var(--ink-3);
+  white-space: pre;
+  width: max-content;
+  min-width: 100%;
+}
+.cf-line[data-k='add'] {
+  background: color-mix(in srgb, var(--good) 13%, transparent);
+  color: var(--ink);
+}
+.cf-line[data-k='del'] {
+  background: color-mix(in srgb, var(--ink-3) 12%, transparent);
+  color: var(--ink-3);
+  text-decoration: line-through;
+}
+.cf-line[data-hit] {
+  background: color-mix(in srgb, var(--bad) 20%, transparent);
+  box-shadow: inset 3px 0 0 var(--bad);
+}
+.cf-sign {
+  width: 1ch;
+  flex: none;
+}
+.cf-rule {
+  font-family: var(--font-body);
+  color: var(--bad);
+  font-weight: 600;
+}
+
+/* findings list */
+.cf-findings {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: var(--fs-xs);
+}
+.cf-findings li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 8px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--bad);
+  color: var(--ink-2);
+  overflow-wrap: anywhere;
+}
+.cf-findings button {
+  text-align: left;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--c-se-2);
+  font-family: var(--font-mono);
+  font-size: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.cf-findings em {
+  font-style: normal;
+  color: var(--good);
+  font-weight: 600;
+}
+
+/* figure 1 controls above the matrix */
+.cf-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 12px 20px;
+  align-items: start;
+}
+.cf-controls > * {
+  min-width: 0;
+}
+.cf-src {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* figure 2 verdict */
+.cf-status {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--bad);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--bad);
+}
+.cf-status[data-tone='good'] {
+  border-left-color: var(--good);
+  color: var(--good);
+}
+.cf-status .se-label {
+  font-weight: 400;
+}

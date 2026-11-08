@@ -1,0 +1,184 @@
+/* 웹 백엔드 개발: figure styles that are plain HTML or SVG. Every class starts with be- (shared se- classes live in basics.css) */
+
+.se-scroll {
+  overflow-x: auto;
+  min-width: 0;
+}
+
+/* bean graph */
+.be-graph {
+  display: block;
+  width: 100%;
+  min-width: 460px;
+  height: auto;
+}
+.be-edge {
+  stroke: var(--ink-3);
+  stroke-width: 1.4;
+}
+.be-edge.bad {
+  stroke: var(--bad);
+  stroke-width: 2;
+}
+.be-head.ok {
+  fill: var(--ink-3);
+}
+.be-head.bad {
+  fill: var(--bad);
+}
+.be-node rect {
+  fill: var(--surface);
+  stroke: var(--ink-2);
+  stroke-width: 1.3;
+}
+.be-node.made rect {
+  stroke: var(--good);
+  fill: color-mix(in srgb, var(--good) 10%, var(--surface));
+}
+.be-node.pending rect {
+  stroke-dasharray: 2 3;
+}
+.be-node.bad rect {
+  stroke: var(--bad);
+  fill: color-mix(in srgb, var(--bad) 10%, var(--surface));
+}
+.be-node.ghost rect {
+  stroke: var(--bad);
+  stroke-dasharray: 5 4;
+  fill: none;
+}
+.be-node text {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  fill: var(--ink);
+}
+.be-node.ghost text {
+  fill: var(--bad);
+}
+.be-node text.be-order {
+  font-family: var(--font-body);
+  font-size: 10px;
+  fill: var(--ink-3);
+}
+
+/* verdict and trace */
+.be-verdict {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--good);
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+}
+.be-verdict[data-tone='bad'] {
+  border-left-color: var(--bad);
+}
+.be-verdict code {
+  color: var(--bad);
+  font-weight: 600;
+}
+.be-trace {
+  list-style: none;
+  margin: 0;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.7;
+  max-height: 260px;
+  overflow-y: auto;
+  color: var(--ink-2);
+}
+.be-trace li[data-kind='create'] {
+  color: var(--good);
+}
+.be-trace li[data-kind='reuse'] {
+  color: var(--ink-3);
+}
+.be-trace li[data-kind='fail'] {
+  color: var(--bad);
+  font-weight: 600;
+}
+
+/* cover: a request going down the layers and back */
+.be-stack {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+  gap: 16px;
+  align-items: start;
+}
+.be-layers {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.be-layer {
+  position: relative;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-size: var(--fs-sm);
+  color: var(--ink-3);
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.be-layer small {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--ink-3);
+}
+.be-layer[data-on] {
+  border-color: var(--c-se-2);
+  background: color-mix(in srgb, var(--c-se-2) 16%, var(--surface));
+  color: var(--ink);
+}
+.be-layer[data-stop] {
+  border-color: var(--bad);
+  background: color-mix(in srgb, var(--bad) 14%, var(--surface));
+}
+.be-layer-dir {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.875rem;
+}
+.be-log {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+.be-log li {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 8px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink-2);
+}
+.be-log li[data-now] {
+  border-color: var(--c-se-2);
+}
+.be-log .st {
+  font-weight: 700;
+}
+.be-log .st[data-ok] {
+  color: var(--good);
+}
+.be-log .st[data-bad] {
+  color: var(--bad);
+}
+@media (max-width: 520px) {
+  .be-stack {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

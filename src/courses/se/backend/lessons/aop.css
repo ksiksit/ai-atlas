@@ -1,0 +1,275 @@
+/* 프록시와 AOP: every class starts with ap- */
+
+:root {
+  --ap-caller: var(--ink-3);
+  --ap-proxy: var(--accent);
+  --ap-log: var(--c-se-1);
+  --ap-time: var(--c-se-3);
+  --ap-tx: var(--c-se-2);
+  --ap-target: var(--ink);
+  --ap-db: var(--good);
+}
+
+/* call stack */
+.ap-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 236px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  min-width: 0;
+}
+.ap-frame {
+  --c: var(--ap-caller);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  padding: 5px 8px;
+  border: 1px solid color-mix(in srgb, var(--c) 55%, var(--line));
+  border-left: 4px solid var(--c);
+  background: color-mix(in srgb, var(--c) 7%, var(--surface));
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ink-2);
+  min-width: 0;
+}
+.ap-frame span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+.ap-frame small {
+  flex: none;
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  color: var(--ink-3);
+}
+.ap-frame[data-top] {
+  background: color-mix(in srgb, var(--c) 18%, var(--surface));
+  color: var(--ink);
+  font-weight: 600;
+}
+.ap-frame-empty {
+  font-size: var(--fs-sm);
+  color: var(--ink-3);
+}
+:is(.ap-frame, .ap-now, .ap-log li)[data-who='caller'] {
+  --c: var(--ap-caller);
+}
+:is(.ap-frame, .ap-now, .ap-log li)[data-who='proxy'] {
+  --c: var(--ap-proxy);
+}
+:is(.ap-frame, .ap-now, .ap-log li)[data-who='log'] {
+  --c: var(--ap-log);
+}
+:is(.ap-frame, .ap-now, .ap-log li)[data-who='time'] {
+  --c: var(--ap-time);
+}
+:is(.ap-frame, .ap-now, .ap-log li)[data-who='tx'] {
+  --c: var(--ap-tx);
+}
+:is(.ap-frame, .ap-now, .ap-log li)[data-who='target'] {
+  --c: var(--ap-target);
+}
+:is(.ap-frame, .ap-now, .ap-log li)[data-who='db'] {
+  --c: var(--ap-db);
+}
+
+/* the current event */
+.ap-now {
+  --c: var(--ap-caller);
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--c);
+  font-size: var(--fs-sm);
+  color: var(--ink);
+  min-height: 42px;
+}
+.ap-now-step {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+
+/* event log */
+.ap-log {
+  list-style: none;
+  margin: 0;
+  padding: 6px 0;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.55;
+  max-height: 240px;
+  overflow-y: auto;
+  position: relative;
+  color: var(--ink-2);
+}
+.ap-log li {
+  --c: var(--ap-caller);
+  padding: 1px 8px;
+  border-left: 3px solid transparent;
+  overflow-wrap: anywhere;
+}
+.ap-log li[data-who='log'],
+.ap-log li[data-who='time'],
+.ap-log li[data-who='tx'],
+.ap-log li[data-who='proxy'],
+.ap-log li[data-who='db'] {
+  color: color-mix(in srgb, var(--c) 80%, var(--ink));
+}
+.ap-log li[data-kind='skip'] {
+  color: var(--bad);
+}
+.ap-log li[data-kind='throw'] {
+  color: var(--bad);
+}
+.ap-log li[data-now] {
+  border-left-color: var(--c);
+  background: color-mix(in srgb, var(--c) 12%, var(--surface));
+  color: var(--ink);
+}
+.ap-log li[data-future] {
+  opacity: 0.32;
+}
+
+/* rows of the todo table */
+.ap-rows {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  margin-top: 4px;
+}
+.ap-rows th,
+.ap-rows td {
+  text-align: left;
+  padding: 3px 6px;
+  border-bottom: 1px solid var(--line);
+}
+.ap-rows th {
+  font-weight: 500;
+  color: var(--ink-3);
+}
+.ap-rows tr[data-pending] td {
+  color: var(--ap-tx);
+  font-style: italic;
+}
+.ap-rows-note {
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  white-space: nowrap;
+}
+
+/* join point table */
+.ap-jp {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+.ap-jp th,
+.ap-jp td {
+  text-align: left;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--line);
+}
+.ap-jp th {
+  font-weight: 500;
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.ap-sig,
+.ap-anno {
+  overflow-wrap: anywhere;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ink-3);
+}
+.ap-mark {
+  width: 3em;
+  text-align: center;
+  font-weight: 700;
+  color: var(--c-se-1);
+}
+.ap-jp tr[data-hit] td {
+  background: color-mix(in srgb, var(--c-se-1) 13%, var(--surface));
+}
+.ap-jp tr[data-hit] .ap-sig {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* self-invocation lanes */
+.ap-lanes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 12px;
+}
+.ap-lane {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--good);
+  min-width: 0;
+}
+.ap-lane[data-tone='bad'] {
+  border-top-color: var(--bad);
+}
+.ap-lane-head {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+}
+.ap-lane-head strong {
+  color: var(--ink);
+}
+.ap-lane-head code {
+  font-size: 0.75rem;
+  overflow-wrap: anywhere;
+}
+.ap-lane-head span {
+  font-size: var(--fs-xs);
+  color: var(--ink-3);
+}
+.ap-lane-log {
+  font-size: 0.6875rem;
+  max-height: 280px;
+  min-height: 180px;
+}
+.ap-lane-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 12px;
+}
+.ap-lane-out {
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+}
+.ap-lane-out code {
+  color: var(--bad);
+  overflow-wrap: anywhere;
+}
+.ap-stepbar {
+  display: grid;
+  grid-template-columns: auto minmax(140px, 1fr) auto;
+  align-items: center;
+  gap: 8px 16px;
+}
+@media (max-width: 560px) {
+  .ap-stepbar {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
