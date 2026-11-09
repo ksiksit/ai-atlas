@@ -87,13 +87,15 @@ src/
 
 ## 몰입형 3D 장 만들기
 
-글 옆에 그림을 두는 대신 독자가 3D 공간 안에 들어가 직접 걸어 다니며 배우는 장은 `src/lib/world3d.tsx`의 `World3D`로 만듭니다. 예: 기초 인공지능의 [안개 속 손실 지형 걷기](../src/courses/ai/basics/lessons/LossWalk.tsx), 선형대수의 [행렬로 방 비틀기](../src/courses/math/linear/lessons/Room.tsx), 컴퓨터 그래픽스의 [카메라 안으로 들어가기](../src/courses/cs/graphics/lessons/CameraWalk.tsx).
+글 옆에 그림을 두는 대신 독자가 3D 공간 안에 들어가 직접 걸어 다니며 배우는 장은 `src/lib/world3d.tsx`의 `World3D`로 만듭니다. 예: 기초 인공지능의 [안개 속 손실 지형 걷기](../src/courses/ai/basics/lessons/LossWalk.tsx), 선형대수의 [행렬로 방 비틀기](../src/courses/math/linear/lessons/Room.tsx), 컴퓨터 그래픽스의 [카메라 안으로 들어가기](../src/courses/cs/graphics/lessons/CameraWalk.tsx), 기초 알고리즘의 [미로 안에서 길 찾기](../src/courses/cs/algorithms/lessons/MazeWalk.tsx), 위상수학의 [평평한 우주 걷기](../src/courses/math/topology/lessons/FlatWorlds.tsx), 미분방정식의 [로렌츠 끌개 안에 서기](../src/courses/math/ode/lessons/LorenzWalk.tsx).
 
 - **땅과 걷는 사람**: `ground(x, z)`가 땅의 높이이고, 독자는 그 위 `eye` 높이에서 봅니다. 그림에 초점이 있을 때 W·A·S·D와 화살표 키로 걷고, 끌어서 둘러보며, 휴대폰에서는 화면의 조이스틱으로 걷습니다. F 키나 오른쪽 위 단추로 전체 화면을 켭니다.
-- **시점**: `view`가 `'walk'`이면 1인칭, `'sky'`이면 걷는 사람 뒤 위쪽에서 내려다보는 시점이고, 하늘 시점에서는 걷는 사람이 작은 말로 보입니다. `fog`로 1인칭 시점에서 보이는 거리를 정합니다.
+- **시점**: `view`가 `'walk'`이면 1인칭, `'sky'`이면 걷는 사람 뒤 위쪽에서 내려다보는 시점이고, 하늘 시점에서는 걷는 사람이 작은 말로 보입니다. 장이 걷는 사람을 직접 그릴 때(예: 평평한 우주의 장갑 낀 사람)는 `pawn={false}`로 기본 말을 숨깁니다. 미로처럼 전체를 한눈에 봐야 하면 `skyCamera`로 하늘 시점 카메라를 한 자리에 고정합니다. `fog`로 1인칭 시점에서 보이는 거리를 정합니다.
+- **벽**: `constrain(x0, z0, x1, z1)`은 키보드와 조이스틱으로 걸을 때 한 번 움직이기 전후의 위치를 받아 실제로 갈 수 있는 위치를 돌려줍니다. 미로의 벽에 막히거나 울타리 안에 머물게 할 때 씁니다. `glideTo`로 옮길 때는 적용되지 않습니다.
 - **장면**: `setup`에서 장면을 만들고 `update`에서 매 프레임 갱신합니다. `ThreeView`와 같은 방식입니다. `walker`로 걷는 사람의 현재 위치를 읽습니다.
 - **장이 걷는 사람을 옮길 때**: `api`로 받은 `glideTo(x, z)`(부드럽게 이동), `place()`(바로 옮기기)를 씁니다. 화면 움직임 줄이기 설정(`prefers-reduced-motion`)이 켜져 있으면 `glideTo`는 바로 옮깁니다.
 - **겹쳐 보이는 정보**: `children`에 함수를 주면 전체 화면 여부를 받습니다. 전체 화면에서는 그림 옆의 조작 막대가 보이지 않으므로 꼭 필요한 단추는 `.w3-hud-bar`에 다시 둡니다. 읽을 값은 `.w3-hud`에 짧게 씁니다.
 - **키**: `onKey`로 장마다 키를 더할 수 있습니다(예: Space 한 걸음, V 시점 바꾸기). 그림 캡션에 키 목록을 적어 둡니다.
 - **시선**: 독자 눈의 세로 시야각은 `fov`(기본 62°)로 바꿀 수 있습니다(예: 카메라 안에 들어가 그 카메라와 같은 화면 보기). 위아래를 보는 범위는 `pitchRange`로 정합니다. 바로 위나 아래를 봐야 하는 장(예: 시선으로 고유벡터 찾기)은 넓혀 둡니다. PgUp·PgDn 키로도 위아래를 봅니다.
+- **계산 모듈 이름**: 장의 계산을 DOM 없는 모듈로 따로 둘 때는 장 파일과 대소문자만 다른 이름(`MazeWalk.tsx`와 `mazewalk.ts`)을 피합니다. 대소문자를 가리지 않는 파일 시스템에서 import가 장 파일로 잘못 이어집니다. 예: `maze3d.ts`, `lorenz3d.ts`.
 - **원칙**: 긴 글은 3D 안에 넣지 않고 본문에 둡니다. 3D 공간은 공간이 꼭 필요한 개념에만 쓰고, 계산은 다른 그림과 마찬가지로 그 자리에서 실제로 합니다.

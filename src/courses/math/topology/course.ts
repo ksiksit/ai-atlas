@@ -61,6 +61,15 @@ const lessons: Lesson[] = [
     learn: ['호모토피와 고리 줄이기', '기본군과 감김 수', '원의 기본군과 브라우어 고정점 정리'],
     Component: lazy(() => import('./lessons/FundamentalGroup')),
   },
+  {
+    id: 'flat-worlds',
+    part: 'shape',
+    title: '평평한 우주 걷기',
+    en: 'Walking in Flat Universes',
+    lede: '변을 붙인 정사각형 방 안에 들어가면 같은 방과 나 자신이 끝없이 이어져 보입니다. 클라인 병에서는 변을 넘는 순간 거울상이 되고, 출발점의 복사본에 꽂은 깃발로 고리를 세어 걷는 순서가 결과를 바꾼다는 것을 확인합니다.',
+    learn: ['변을 붙인 공간과 평면 덮기', '토러스의 기본군 ℤ × ℤ', '클라인 병의 관계식 βαβ⁻¹ = α⁻¹'],
+    Component: lazy(() => import('./lessons/FlatWorlds')),
+  },
 ];
 
 const course: Course = {

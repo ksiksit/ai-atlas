@@ -54,6 +54,15 @@ const lessons: Lesson[] = [
     learn: ['그래프와 인접 리스트', 'BFS와 DFS: 큐와 스택', '다익스트라와 A*'],
     Component: lazy(() => import('./lessons/GraphSearch')),
   },
+  {
+    id: 'maze-walk',
+    part: 'graph',
+    title: '미로 안에서 길 찾기',
+    en: 'Inside the Maze',
+    lede: '미로 안에 직접 들어가, 벽 너머가 보이지 않는 자리에서 BFS가 물결처럼 번지고 DFS가 한 갈래를 파고드는 것을 지켜봅니다. 그다음 실타래를 풀며 직접 출구를 찾아, 그 실이 DFS의 스택임을 확인합니다.',
+    learn: ['BFS의 거리 층과 최단 경로', 'DFS의 되돌아가기와 스택', '아리아드네의 실: 사람이 걷는 DFS'],
+    Component: lazy(() => import('./lessons/MazeWalk')),
+  },
 ];
 
 const course: Course = {
