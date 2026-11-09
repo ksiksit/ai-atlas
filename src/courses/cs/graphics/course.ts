@@ -27,6 +27,15 @@ const lessons: Lesson[] = [
     Component: lazy(() => import('./lessons/Transforms')),
   },
   {
+    id: 'inside-camera',
+    part: 'draw',
+    title: '카메라 안으로 들어가기',
+    en: 'Stepping Inside the Camera',
+    lede: '장면 속을 걸어 다니며 카메라를 직접 세우고, 시야 사각뿔과 그 카메라가 찍은 사진을 함께 봅니다. 세상 전체가 카메라 앞으로 옮겨지는 뷰 변환과, 사각뿔이 정육면체로 눌리는 투영을 장면 안에서 지켜봅니다.',
+    learn: ['시야 사각뿔과 near, far', '뷰 변환은 세상을 옮긴다', '투영 뒤의 NDC 상자와 깊이 분포'],
+    Component: lazy(() => import('./lessons/CameraWalk')),
+  },
+  {
     id: 'shading',
     part: 'surface',
     title: '빛과 셰이딩',

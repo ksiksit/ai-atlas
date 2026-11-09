@@ -66,6 +66,8 @@ interface Props {
   skyDistance?: number;
   /** Lowest and highest look angle in radians. */
   pitchRange?: [number, number];
+  /** Vertical field of view of the reader's eye, in degrees. */
+  fov?: number;
   height?: number;
   api?: MutableRefObject<WorldApi | null>;
   /** Called (throttled) whenever the walker moves. */
@@ -107,7 +109,7 @@ const MOVE_KEYS: Record<string, [number, number, number, number]> = {
   pagedown: [0, 0, 0, -1],
 };
 
-export function World3D({ setup, deps = [], ground, bounds, start, view = 'walk', fog = Infinity, eye = 0.1, speed = 0.5, skyDistance = 2.4, pitchRange = [-1.25, 0.9], height = 480, api, onMove, onKey, label, children }: Props) {
+export function World3D({ setup, deps = [], ground, bounds, start, view = 'walk', fog = Infinity, eye = 0.1, speed = 0.5, skyDistance = 2.4, pitchRange = [-1.25, 0.9], fov = 62, height = 480, api, onMove, onKey, label, children }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const palette = usePalette();
   const [ok] = useState(webglAvailable);
@@ -130,6 +132,8 @@ export function World3D({ setup, deps = [], ground, bounds, start, view = 'walk'
   fogRef.current = fog;
   const boundsRef = useRef(bounds);
   boundsRef.current = bounds;
+  const fovRef = useRef(fov);
+  fovRef.current = fov;
   const pitchRef = useRef(pitchRange);
   pitchRef.current = pitchRange;
   const clampPitch = (p: number) => Math.max(pitchRef.current[0], Math.min(pitchRef.current[1], p));
@@ -223,7 +227,7 @@ export function World3D({ setup, deps = [], ground, bounds, start, view = 'walk'
     scene.background = bg;
     const fogObj = new THREE.Fog(bg, 0.01, 1e4);
     scene.fog = fogObj;
-    const cam = new THREE.PerspectiveCamera(62, el.clientWidth / el.clientHeight, 0.004, 200);
+    const cam = new THREE.PerspectiveCamera(fovRef.current, el.clientWidth / el.clientHeight, 0.004, 200);
     cam.rotation.order = 'YXZ';
 
     scene.add(new THREE.HemisphereLight(0xffffff, color3(palette.ink3), palette.dark ? 0.7 : 0.9));
@@ -335,6 +339,10 @@ export function World3D({ setup, deps = [], ground, bounds, start, view = 'walk'
         }
       }
 
+      if (cam.fov !== fovRef.current) {
+        cam.fov = fovRef.current;
+        cam.updateProjectionMatrix();
+      }
       const gy = g(w.x, w.z);
       const sky = viewRef.current === 'sky';
       if (sky) {
