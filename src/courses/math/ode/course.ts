@@ -45,6 +45,15 @@ const lessons: Lesson[] = [
     Component: lazy(() => import('./lessons/NonlinearChaos')),
   },
   {
+    id: 'lorenz-walk',
+    part: 'systems',
+    title: '로렌츠 끌개 안에 서기',
+    en: 'Inside the Lorenz Attractor',
+    lede: '두 평형점이 놓인 유리 바닥에 서서 발밑에 점 구름을 풀어 놓습니다. 구름이 실처럼 늘어나며 끌개에 감기는 것과, 출발 자리에 따라 갈라지는 빠르기가 몇십 배 다른 것을 보고, 궤적이 바닥을 뚫은 자리로 푸앵카레 단면을 만듭니다.',
+    learn: ['점 구름으로 보는 초깃값 민감성', '발산과 부피 수축, 늘이기와 접기', '푸앵카레 단면과 평형점의 안정성'],
+    Component: lazy(() => import('./lessons/LorenzWalk')),
+  },
+  {
     id: 'laplace',
     part: 'tools',
     title: '라플라스 변환',

@@ -64,6 +64,15 @@ interface Props {
   speed?: number;
   /** Distance of the sky camera behind and above the walker. */
   skyDistance?: number;
+  /** A fixed sky camera instead of one that follows the walker, e.g. to see a whole maze at once. */
+  skyCamera?: { pos: [number, number, number]; target: [number, number, number] };
+  /**
+   * Limits walking (keys and stick, not `glideTo`): gets the walker's position before and after a
+   * move and returns where it may actually go, e.g. to stop at the walls of a maze.
+   */
+  constrain?: (x0: number, z0: number, x1: number, z1: number) => [number, number];
+  /** Draw the walker as a pawn in the sky view. Turn it off when the lesson draws its own. */
+  pawn?: boolean;
   /** Lowest and highest look angle in radians. */
   pitchRange?: [number, number];
   /** Vertical field of view of the reader's eye, in degrees. */
@@ -109,7 +118,7 @@ const MOVE_KEYS: Record<string, [number, number, number, number]> = {
   pagedown: [0, 0, 0, -1],
 };
 
-export function World3D({ setup, deps = [], ground, bounds, start, view = 'walk', fog = Infinity, eye = 0.1, speed = 0.5, skyDistance = 2.4, pitchRange = [-1.25, 0.9], fov = 62, height = 480, api, onMove, onKey, label, children }: Props) {
+export function World3D({ setup, deps = [], ground, bounds, start, view = 'walk', fog = Infinity, eye = 0.1, speed = 0.5, skyDistance = 2.4, skyCamera, pitchRange = [-1.25, 0.9], fov = 62, constrain, pawn: showPawn = true, height = 480, api, onMove, onKey, label, children }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const palette = usePalette();
   const [ok] = useState(webglAvailable);
@@ -126,6 +135,12 @@ export function World3D({ setup, deps = [], ground, bounds, start, view = 'walk'
   onMoveRef.current = onMove;
   const onKeyRef = useRef(onKey);
   onKeyRef.current = onKey;
+  const constrainRef = useRef(constrain);
+  constrainRef.current = constrain;
+  const pawnRef = useRef(showPawn);
+  pawnRef.current = showPawn;
+  const skyCamRef = useRef(skyCamera);
+  skyCamRef.current = skyCamera;
   const viewRef = useRef(view);
   viewRef.current = view;
   const fogRef = useRef(fog);
@@ -333,8 +348,12 @@ export function World3D({ setup, deps = [], ground, bounds, start, view = 'walk'
           const v = (speed * run * dt) / len;
           const sy = Math.sin(w.yaw);
           const cy = Math.cos(w.yaw);
-          w.x = clampXZ(w.x + (-sy * f + cy * r) * v);
-          w.z = clampXZ(w.z + (-cy * f - sy * r) * v);
+          let nx = clampXZ(w.x + (-sy * f + cy * r) * v);
+          let nz = clampXZ(w.z + (-cy * f - sy * r) * v);
+          const c = constrainRef.current;
+          if (c) [nx, nz] = c(w.x, w.z, nx, nz);
+          w.x = nx;
+          w.z = nz;
           moved.current = true;
         }
       }
@@ -345,7 +364,13 @@ export function World3D({ setup, deps = [], ground, bounds, start, view = 'walk'
       }
       const gy = g(w.x, w.z);
       const sky = viewRef.current === 'sky';
-      if (sky) {
+      const sc = skyCamRef.current;
+      if (sky && sc) {
+        cam.position.set(...sc.pos);
+        cam.lookAt(...sc.target);
+        fogObj.near = 0.01;
+        fogObj.far = 1e4;
+      } else if (sky) {
         fwd.set(-Math.sin(w.yaw), 0, -Math.cos(w.yaw));
         cam.position.set(w.x - fwd.x * skyDistance, gy + skyDistance * 1.05, w.z - fwd.z * skyDistance);
         cam.lookAt(w.x + fwd.x * 0.4, gy, w.z + fwd.z * 0.4);
@@ -358,7 +383,7 @@ export function World3D({ setup, deps = [], ground, bounds, start, view = 'walk'
         fogObj.near = Number.isFinite(d) ? d * 0.15 : 0.01;
         fogObj.far = Number.isFinite(d) ? d : 1e4;
       }
-      pawn.visible = sky;
+      pawn.visible = sky && pawnRef.current;
       pawn.position.set(w.x, gy, w.z);
       pawn.rotation.y = w.yaw;
 
