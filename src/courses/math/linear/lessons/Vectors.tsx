@@ -576,7 +576,7 @@ export default function Vectors() {
       <MB note="[p]_B는 '기저 B로 잰 p의 좌표'라고 읽습니다. 우리가 평소 쓰는 (x, y)는 표준 기저 e₁ = (1, 0), e₂ = (0, 1)로 잰 좌표입니다.">{'\\mathbf p = c_1 \\mathbf b_1 + c_2 \\mathbf b_2 \\quad\\Longleftrightarrow\\quad [\\mathbf p]_B = \\begin{pmatrix} c_1 \\\\ c_2 \\end{pmatrix}'}</MB>
       <BasisFigure />
       <p>
-        그림 3에서 기저를 바꿔도 점 p 자체는 움직이지 않는다는 점이 중요합니다. 바뀌는 것은 p를 적는 숫자뿐입니다. 같은 색을 RGB로 적을 수도, HSV로 적을 수도 있는 것과 비슷합니다. 문제에 따라 좋은 기저를 고르면 계산이 극적으로 쉬워지는데, <a href={lessonHref('math-linear-algebra', 'eigen')}>5장 고유벡터</a>와 <a href={lessonHref('math-linear-algebra', 'svd')}>6장 특잇값 분해</a>는 결국 "이 문제에 가장 좋은 기저는 무엇인가"라는 질문입니다.
+        그림 3에서 기저를 바꿔도 점 p 자체는 움직이지 않는다는 점이 중요합니다. 바뀌는 것은 p를 적는 숫자뿐입니다. 같은 색을 RGB로 적을 수도, HSV로 적을 수도 있는 것과 비슷합니다. 문제에 따라 좋은 기저를 고르면 계산이 극적으로 쉬워지는데, <a href={lessonHref('math-linear-algebra', 'eigen')}>5장 고유벡터</a>와 <a href={lessonHref('math-linear-algebra', 'svd')}>7장 특잇값 분해</a>는 결국 "이 문제에 가장 좋은 기저는 무엇인가"라는 질문입니다.
       </p>
       <Code label="2차원 기저에서 좌표 구하기">{`
 // p = c1*b1 + c2*b2 를 만족하는 (c1, c2)를 구한다
@@ -605,7 +605,7 @@ coordsIn([1, 2], [2, 4], [3, 2]);  // null: b2 = 2*b1`}</Code>
         그림 4에서 "가장 잘 맞는 α, β 찾기"는 아는 평점 4개와의 차이 제곱합이 가장 작아지는 계수를 구합니다. 미지수 2개에 식이 4개라 보통은 정확히 맞출 수 없고, 가장 가까운 답을 고르는 <T en="least squares">최소제곱</T> 문제가 됩니다. 이 생각은 <a href={lessonHref('ai-basics', 'linear-regression')}>선형 회귀</a>와 같은 것입니다. 수아처럼 두 원형이 섞인 사용자도 계수만 다를 뿐 같은 방식으로 설명됩니다.
       </p>
       <Callout kind="note">
-        실제 서비스는 원형을 사람이 정하지 않습니다. 수백만 명의 평점 표 전체에서 "가장 많은 사용자를 가장 잘 설명하는 원형 몇 개"를 자동으로 찾는데, 그 도구가 6장의 특잇값 분해입니다. 이렇게 찾은 원형 벡터의 공간이 바로 사용자와 영화의 <a href={lessonHref('ai-basics', 'embeddings')}>임베딩</a> 공간입니다.
+        실제 서비스는 원형을 사람이 정하지 않습니다. 수백만 명의 평점 표 전체에서 "가장 많은 사용자를 가장 잘 설명하는 원형 몇 개"를 자동으로 찾는데, 그 도구가 7장의 특잇값 분해입니다. 이렇게 찾은 원형 벡터의 공간이 바로 사용자와 영화의 <a href={lessonHref('ai-basics', 'embeddings')}>임베딩</a> 공간입니다.
       </Callout>
 
       <Callout kind="key">

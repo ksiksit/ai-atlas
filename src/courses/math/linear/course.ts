@@ -54,6 +54,15 @@ const lessons: Lesson[] = [
     Component: lazy(() => import('./lessons/Eigen')),
   },
   {
+    id: 'room',
+    part: 'spectral',
+    title: '행렬로 방 비틀기',
+    en: 'Twisting a Room with a Matrix',
+    lede: '3×3 행렬이 방 전체를 늘이고, 밀고, 돌리고, 뒤집고, 납작하게 만드는 것을 방 안에 서서 지켜봅니다. 단위 정육면체로 행렬식을 부피로 보고, 시선을 돌려 3차원 고유벡터를 직접 찾습니다.',
+    learn: ['3×3 행렬의 세 열과 공간의 변환', '행렬식은 부피의 배율, 부호는 뒤집힘', '3차원 고유벡터와 고유평면'],
+    Component: lazy(() => import('./lessons/Room')),
+  },
+  {
     id: 'svd',
     part: 'spectral',
     title: '특잇값 분해와 PCA',

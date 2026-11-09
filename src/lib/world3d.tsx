@@ -64,6 +64,8 @@ interface Props {
   speed?: number;
   /** Distance of the sky camera behind and above the walker. */
   skyDistance?: number;
+  /** Lowest and highest look angle in radians. */
+  pitchRange?: [number, number];
   height?: number;
   api?: MutableRefObject<WorldApi | null>;
   /** Called (throttled) whenever the walker moves. */
@@ -89,21 +91,23 @@ const reducedMotion = () => typeof window !== 'undefined' && !!window.matchMedia
 const smooth = (t: number) => t * t * (3 - 2 * t);
 const wrapAngle = (a: number) => Math.atan2(Math.sin(a), Math.cos(a));
 
-const MOVE_KEYS: Record<string, [number, number, number]> = {
-  // [forward, strafe right, turn left]
-  w: [1, 0, 0],
-  s: [-1, 0, 0],
-  a: [0, -1, 0],
-  d: [0, 1, 0],
-  arrowup: [1, 0, 0],
-  arrowdown: [-1, 0, 0],
-  arrowleft: [0, 0, 1],
-  arrowright: [0, 0, -1],
-  q: [0, 0, 1],
-  e: [0, 0, -1],
+const MOVE_KEYS: Record<string, [number, number, number, number]> = {
+  // [forward, strafe right, turn left, look up]
+  w: [1, 0, 0, 0],
+  s: [-1, 0, 0, 0],
+  a: [0, -1, 0, 0],
+  d: [0, 1, 0, 0],
+  arrowup: [1, 0, 0, 0],
+  arrowdown: [-1, 0, 0, 0],
+  arrowleft: [0, 0, 1, 0],
+  arrowright: [0, 0, -1, 0],
+  q: [0, 0, 1, 0],
+  e: [0, 0, -1, 0],
+  pageup: [0, 0, 0, 1],
+  pagedown: [0, 0, 0, -1],
 };
 
-export function World3D({ setup, deps = [], ground, bounds, start, view = 'walk', fog = Infinity, eye = 0.1, speed = 0.5, skyDistance = 2.4, height = 480, api, onMove, onKey, label, children }: Props) {
+export function World3D({ setup, deps = [], ground, bounds, start, view = 'walk', fog = Infinity, eye = 0.1, speed = 0.5, skyDistance = 2.4, pitchRange = [-1.25, 0.9], height = 480, api, onMove, onKey, label, children }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const palette = usePalette();
   const [ok] = useState(webglAvailable);
@@ -126,6 +130,9 @@ export function World3D({ setup, deps = [], ground, bounds, start, view = 'walk'
   fogRef.current = fog;
   const boundsRef = useRef(bounds);
   boundsRef.current = bounds;
+  const pitchRef = useRef(pitchRange);
+  pitchRef.current = pitchRange;
+  const clampPitch = (p: number) => Math.max(pitchRef.current[0], Math.min(pitchRef.current[1], p));
 
   const walker = useRef<Walker>({ ...start });
   const keys = useRef(new Set<string>());
@@ -251,7 +258,7 @@ export function World3D({ setup, deps = [], ground, bounds, start, view = 'walk'
       if (!drag || drag.id !== e.pointerId) return;
       const w = walker.current;
       w.yaw += (e.clientX - drag.x) * 0.006;
-      w.pitch = Math.max(-1.25, Math.min(0.9, w.pitch + (e.clientY - drag.y) * 0.005));
+      w.pitch = clampPitch(w.pitch + (e.clientY - drag.y) * 0.005);
       drag.x = e.clientX;
       drag.y = e.clientY;
       moved.current = true;
@@ -299,12 +306,18 @@ export function World3D({ setup, deps = [], ground, bounds, start, view = 'walk'
         let f = stick.current.y;
         let r = stick.current.x;
         let turn = 0;
+        let look = 0;
         for (const k of keys.current) {
           const m = MOVE_KEYS[k];
           if (!m) continue;
           f += m[0];
           r += m[1];
           turn += m[2];
+          look += m[3];
+        }
+        if (look) {
+          w.pitch = clampPitch(w.pitch + look * 1.2 * dt);
+          moved.current = true;
         }
         const run = keys.current.has('shift') ? 2.5 : 1;
         if (turn) {
@@ -445,7 +458,7 @@ export function World3D({ setup, deps = [], ground, bounds, start, view = 'walk'
             {isFull ? '✕' : '⛶'}
           </button>
           <div className="w3-keys" aria-hidden="true">
-            {focused ? 'W A S D 걷기 · ← → 돌기 · Shift 달리기 · 드래그로 둘러보기' : '눌러서 조작 시작 · 드래그로 둘러보기'}
+            {focused ? 'W A S D 걷기 · ← → 돌기 · PgUp PgDn 위아래 · Shift 달리기 · 드래그로 둘러보기' : '눌러서 조작 시작 · 드래그로 둘러보기'}
           </div>
           <div ref={stickRef} className="w3-stick" aria-hidden="true" onPointerDown={(e) => { e.currentTarget.setPointerCapture(e.pointerId); stickMove(e); }} onPointerMove={(e) => e.buttons && stickMove(e)} onPointerUp={stickEnd} onPointerCancel={stickEnd}>
             <span style={{ transform: `translate(${knob[0] * 28}px, ${knob[1] * 28}px)` }} />

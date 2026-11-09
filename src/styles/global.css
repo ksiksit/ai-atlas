@@ -1311,6 +1311,23 @@ table.tbl td.num {
     display: none;
   }
 }
+/* 3×3 matrix entry (linear algebra room lesson) */
+.mat3-input {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+.mat3-input input {
+  width: 100%;
+  min-width: 0;
+  padding: 5px 6px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  text-align: right;
+}
 /* lesson overlay inside a world: small panel in the top-left corner */
 .w3-hud {
   position: absolute;
