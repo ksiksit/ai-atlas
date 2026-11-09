@@ -181,8 +181,11 @@ export default function MajorPage({ major }: { major: Major }) {
         <span className="major-en">{major.en}</span>
         <h1>{major.name} 이수체계도</h1>
         <p className="hero-lede">{major.blurb}</p>
+        {/* Narrow screens stack the cards in one column without arrows or stage headers (library.css),
+            so the reading hint switches with the layout. */}
         <p className="home-count">
-          <span className="mono">{entries.length}</span>개 과목 · <span className="mono">{lessons}</span>개 장 · 왼쪽 위에서 시작해 화살표를 따라가세요
+          <span className="mono">{entries.length}</span>개 과목 · <span className="mono">{lessons}</span>개 장 · <span className="mj-hint-wide">왼쪽 위에서 시작해 화살표를 따라가세요</span>
+          <span className="mj-hint-narrow">위에서부터 차례로 내려가고, 먼저 들을 과목은 카드의 "선수" 줄을 보세요</span>
         </p>
       </header>
 

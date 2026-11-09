@@ -271,6 +271,10 @@
 .major-page {
   gap: 36px;
 }
+/* the header's reading hint: wide screens point at the arrows; narrow screens, which drop them, at the cards */
+.mj-hint-narrow {
+  display: none;
+}
 
 .mj-wrap {
   position: relative;
@@ -517,8 +521,12 @@
   .mj-hd,
   .mj-slot.empty,
   .mj-links,
-  .mj-legend {
+  .mj-legend,
+  .mj-hint-wide {
     display: none;
+  }
+  .mj-hint-narrow {
+    display: inline;
   }
   .mj-role {
     padding-block: 24px 8px;
