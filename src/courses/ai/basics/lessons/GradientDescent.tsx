@@ -5,6 +5,7 @@ import { Plot, fmt } from '../../../../lib/plot';
 import { alpha, lerpColor, usePalette } from '../../../../lib/theme';
 import { gauss, rng } from '../../../../lib/math';
 import { ThreeView, surfaceMesh, color3, THREE } from '../../../../lib/three';
+import { R, f2, g2 } from './landscape';
 
 /* ─────────────── Figure 1: 1D gradient descent and the learning rate ─────────────── */
 
@@ -184,21 +185,7 @@ function OneDFigure() {
 
 /* ─────────────── Figure 2: 3D optimizer race ─────────────── */
 
-const R = 2.5;
 const ZS = 1.0;
-function f2(x: number, y: number) {
-  return (
-    0.075 * (x * x + y * y) -
-    1.15 * Math.exp(-((x - 1.1) ** 2 + (y - 0.9) ** 2) / 0.7) -
-    0.75 * Math.exp(-((x + 1.25) ** 2 + (y + 0.75) ** 2) / 0.45) -
-    0.55 * Math.exp(-((x + 0.5) ** 2 + (y - 1.55) ** 2) / 0.22) +
-    0.12 * Math.sin(2.1 * x) * Math.sin(1.9 * y)
-  );
-}
-function g2(x: number, y: number): [number, number] {
-  const h = 1e-4;
-  return [(f2(x + h, y) - f2(x - h, y)) / (2 * h), (f2(x, y + h) - f2(x, y - h)) / (2 * h)];
-}
 
 type OptId = 'sgd' | 'mom' | 'adam';
 const OPTS: { id: OptId; name: string; colorVar: 'pos' | 'neg' | 'dl'; css: string }[] = [
@@ -556,6 +543,9 @@ export default function GradientDescent() {
         answer={0}
         explain={<>걸음이 너무 크면 골짜기를 건너뛰어 반대편으로 튕겨 나갑니다. 그림 1에서 η를 2보다 크게 하면 볼 수 있는 현상입니다. 학습률을 낮추면 대개 해결됩니다.</>}
       />
+      <p>
+        지금까지는 지형을 하늘에서 내려다봤습니다. 실제 옵티마이저는 지도 없이 발밑의 경사만 압니다. 다음 장 <a href="#ai-basics/loss-walk">안개 속 손실 지형 걷기</a>에서는 그림 2의 지형 위에 직접 서서 공의 눈높이로 내려가 봅니다.
+      </p>
     </>
   );
 }

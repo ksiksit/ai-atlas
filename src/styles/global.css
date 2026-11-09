@@ -1215,6 +1215,155 @@ table.tbl td.num {
   text-align: center;
 }
 
+/* immersive 3D world (src/lib/world3d.tsx) */
+.w3-box {
+  position: relative;
+  width: 100%;
+  border: 1px solid var(--line);
+  overflow: hidden;
+  background: var(--surface);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  outline: none;
+}
+.w3-box:focus-visible {
+  box-shadow: 0 0 0 2px var(--accent);
+}
+.w3-box:fullscreen,
+.w3-box.w3-css-full {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  border: 0;
+}
+.w3-box.w3-css-full {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+}
+.w3-canvas {
+  display: block;
+  cursor: grab;
+}
+.w3-canvas:active {
+  cursor: grabbing;
+}
+.w3-full-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0.88;
+}
+.w3-full-btn:hover {
+  opacity: 1;
+}
+.w3-keys {
+  position: absolute;
+  right: 10px;
+  bottom: 8px;
+  max-width: calc(100% - 20px);
+  font-size: 0.75rem;
+  color: var(--ink-3);
+  pointer-events: none;
+  text-align: right;
+}
+.w3-stick {
+  display: none;
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+  touch-action: none;
+}
+.w3-stick span {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 36px;
+  height: 36px;
+  margin: -18px 0 0 -18px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.85;
+  pointer-events: none;
+}
+@media (pointer: coarse) {
+  .w3-stick {
+    display: block;
+  }
+  .w3-keys {
+    display: none;
+  }
+}
+/* 3×3 matrix entry (linear algebra room lesson) */
+.mat3-input {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+.mat3-input input {
+  width: 100%;
+  min-width: 0;
+  padding: 5px 6px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  text-align: right;
+}
+/* lesson overlay inside a world: small panel in the top-left corner */
+.w3-hud {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  max-width: calc(100% - 60px);
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--surface) 86%, transparent);
+  font-size: var(--fs-xs);
+  line-height: 1.5;
+  color: var(--ink-2);
+  pointer-events: none;
+}
+.w3-hud strong {
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-weight: 600;
+}
+.w3-hud-bar {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+}
+@media (pointer: coarse) {
+  .w3-hud-bar {
+    left: auto;
+    right: 14px;
+    transform: none;
+  }
+}
+
 /* code listings in lessons */
 .code {
   margin: 0.4em 0 1.4em;

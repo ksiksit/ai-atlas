@@ -91,6 +91,15 @@ const lessons: Lesson[] = [
     Component: lazy(() => import('./lessons/GradientDescent')),
   },
   {
+    id: 'loss-walk',
+    part: 'ml',
+    title: '안개 속 손실 지형 걷기',
+    en: 'Walking the Loss Landscape',
+    lede: '경사하강법의 공이 되어 손실 지형 위를 직접 걷습니다. 발밑의 기울기만 보이는 안개 속에서 골짜기, 협곡, 안장점, 고원을 1인칭으로 지나갑니다.',
+    learn: ['그래디언트는 발밑의 정보', '지역 최솟값과 안장점', '협곡의 지그재그와 모멘텀'],
+    Component: lazy(() => import('./lessons/LossWalk')),
+  },
+  {
     id: 'logistic-regression',
     part: 'ml',
     title: '로지스틱 회귀와 분류',
